@@ -1,0 +1,249 @@
+/* =====================================================
+   PROJECTS · FX  ·  projects-fx.css
+   Projects-page layout on top of the shared ax- system
+   (about-fx.css is linked first for the hero / marquee /
+   kicker / index primitives). Scoped to .projects-page.
+   ===================================================== */
+
+/* ---- hero: shorter than the about hero ---- */
+.projects-page .ax-hero {
+  min-height: auto;
+  padding: 172px 0 84px;
+}
+.projects-page .ax-hero-ghost { bottom: -10vh; }
+/* Flush-left hero content (match Contact/About): the shared .ax-hero is a flex row
+   that shrink-wraps .container; force it full-width so content aligns to the left. */
+.projects-page .ax-hero .container { width: 100%; }
+
+/* ---- sticky filter / count toolbar ---- */
+.ax-toolbar {
+  position: sticky;
+  top: 72px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+  margin-bottom: 40px;
+  background: color-mix(in oklab, var(--cloud-white) 86%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cloud-fog);
+}
+.ax-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--cloud-dusk);
+}
+.ax-count b {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--cloud-ink);
+  font-size: 15px;
+  margin-right: 4px;
+}
+.ax-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.ax-filter {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--cloud-fog);
+  background: var(--cloud-white);
+  color: var(--cloud-dusk);
+  cursor: pointer;
+  transition: color 200ms var(--ax-ease), border-color 200ms var(--ax-ease), background 200ms var(--ax-ease), transform 200ms var(--ax-ease);
+}
+.ax-filter:hover { color: var(--accent); border-color: var(--accent-line); transform: translateY(-1px); }
+.ax-filter.active {
+  background: var(--cloud-ink);
+  color: #fff;
+  border-color: var(--cloud-ink);
+}
+
+/* ---- grid ---- */
+.ax-proj-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+/* base card override (keeps .proj-card for scroll-fx glow + reveal) */
+.projects-page .proj-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--cloud-surface);
+  border: 0.5px solid var(--card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-cloud);
+  padding: 30px 30px 26px;
+  overflow: hidden;
+  transition: transform 380ms var(--ax-ease), box-shadow 380ms var(--ax-ease), border-color 380ms var(--ax-ease);
+}
+.projects-page .proj-card::before { display: none; }
+.projects-page .proj-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-cloud-hover);
+  border-color: var(--accent-line);
+}
+.projects-page .proj-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.projects-page .proj-card h3 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--cloud-ink);
+  margin: 0 0 10px;
+  transition: color 240ms var(--ax-ease);
+}
+.projects-page a.proj-card:hover h3 { color: var(--accent-strong); }
+.projects-page .proj-card p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--cloud-slate);
+  margin: 0 0 18px;
+  max-width: 46ch;
+}
+.projects-page .proj-card .tag-row { margin-top: auto; }
+.projects-page .proj-card .actions { margin-top: 18px; }
+.projects-page .proj-card .arrow-link { color: var(--accent); font-size: 13.5px; }
+
+/* big ghost index watermark inside each card */
+.ax-card-ghost {
+  position: absolute;
+  top: -10px; right: 6px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 6.5rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--cloud-ink);
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+}
+.projects-page .proj-card > * { position: relative; z-index: 1; }
+
+/* ---- featured card (dark, spans both columns) ---- */
+.projects-page .proj-card.is-featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+  background: var(--feature-bg);
+  border-color: transparent;
+  padding: 48px 48px 46px;
+  position: relative;
+}
+.projects-page .proj-card.is-featured::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 80% at 85% 20%, rgba(52,211,153,0.16), transparent 70%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+.projects-page .proj-card.is-featured > * { position: relative; z-index: 1; }
+.projects-page .proj-card.is-featured .num { color: var(--feature-accent); }
+.projects-page .proj-card.is-featured h3 {
+  color: var(--feature-fg);
+  font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+  line-height: 1.12;
+}
+.projects-page a.proj-card.is-featured:hover h3 { color: var(--feature-accent); }
+.projects-page .proj-card.is-featured p { color: var(--feature-muted); font-size: 15.5px; max-width: 52ch; }
+.projects-page .proj-card.is-featured .arrow-link { color: var(--feature-accent); font-size: 14.5px; }
+.projects-page .proj-card.is-featured:hover { transform: translateY(-6px); }
+
+/* dark feature-band tags inside the featured card */
+.projects-page .proj-card.is-featured .tag {
+  background: rgba(52,211,153,0.10);
+  border: 1px solid rgba(52,211,153,0.22);
+  color: var(--feature-fg);
+}
+
+/* the visual / index block on the featured card's right */
+.ax-feat-figure {
+  align-self: stretch;
+  min-height: 200px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(164,187,174,0.18);
+  background:
+    linear-gradient(180deg, rgba(52,211,153,0.08), rgba(52,211,153,0.02));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.ax-feat-figure .ax-feat-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, 9vw, 7rem);
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(52,211,153,0.40);
+}
+.ax-feat-figure .ax-feat-tag {
+  position: absolute;
+  bottom: 16px; left: 18px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--feature-accent);
+}
+
+/* coming-soon cards read a touch quieter */
+.projects-page .proj-card.is-soon { background: var(--cloud-mist); }
+.projects-page .proj-card.is-soon .num { color: var(--cloud-dusk); }
+.projects-page .proj-card.is-soon .arrow-link { color: var(--cloud-dusk); }
+.ax-soon-badge {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 9px;
+  border-radius: 100px;
+  background: var(--cloud-fog);
+  color: var(--cloud-dusk);
+}
+
+/* hide on filter */
+.proj-card.is-hidden { display: none !important; }
+
+/* ---- AI band (dark, glowing) reuses .aif-feature from styles.css ---- */
+.projects-page .ai-band .aif-strip-inner {
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 900px) {
+  .ax-proj-grid { grid-template-columns: 1fr; }
+  .projects-page .proj-card.is-featured { grid-template-columns: 1fr; gap: 28px; padding: 36px 30px; }
+  .ax-feat-figure { min-height: 150px; }
+  .projects-page .ai-band .aif-strip-inner { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 720px) {
+  .projects-page .ax-hero { padding: 130px 0 64px; }
+  .ax-toolbar { top: 64px; }
+}

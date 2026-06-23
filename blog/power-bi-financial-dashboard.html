@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+  <title>Power BI Financial Dashboard: How I Build One Finance Teams Use (5-Page Blueprint) | Meet Patel</title>
+  <meta name="description" content="How to build a Power BI financial dashboard finance teams actually use: the star-schema data model, the DAX measures, and the five-page layout, drawn from real client work." />
+  <link rel="canonical" href="https://meetpatel.dev/blog/power-bi-financial-dashboard.html" />
+  <meta name="author" content="Meet Patel" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://meetpatel.dev/blog/power-bi-financial-dashboard.html" />
+  <meta property="og:title" content="Power BI Financial Dashboard: How I Build One in 5 Pages Finance Teams Use" />
+  <meta property="og:description" content="The star-schema model, DAX measures, and a five-page layout for a Power BI financial dashboard finance teams actually open." />
+  <meta property="article:published_time" content="2026-04-09" />
+  <meta property="article:author" content="Meet Patel" />
+  <meta property="article:tag" content="Power BI" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://meetpatel.dev/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://meetpatel.dev/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "How to Build a Power BI Dashboard for Financial Data", "item": "https://meetpatel.dev/blog/power-bi-financial-dashboard.html" }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Power BI Financial Dashboard: How I Build One in 5 Pages Finance Teams Use",
+    "url": "https://meetpatel.dev/blog/power-bi-financial-dashboard.html",
+    "datePublished": "2026-04-09",
+    "dateModified": "2026-04-09",
+    "description": "Step-by-step walkthrough of financial dashboarding in Power BI: data modelling in star schema, DAX measures for YTD and rolling averages, and layout decisions that make reports readable to non-technical stakeholders.",
+    "keywords": ["Power BI", "DAX", "financial dashboard", "data modelling", "star schema", "business intelligence", "DATESYTD"],
+    "timeRequired": "PT10M",
+    "wordCount": 2500,
+    "inLanguage": "en-CA",
+    "author": {
+      "@type": "Person",
+      "name": "Meet Patel",
+      "url": "https://meetpatel.dev/",
+      "hasCredential": [
+        { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure Solutions Architect Expert (AZ-305)" },
+        { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure Data Fundamentals (DP-900)" }
+      ]
+    },
+    "publisher": { "@type": "Person", "name": "Meet Patel", "url": "https://meetpatel.dev/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://meetpatel.dev/blog/power-bi-financial-dashboard.html" },
+    "speakable": { "@type": "SpeakableSpecification", "cssSelector": [".lede", ".post-faq"] }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the best data model for a financial Power BI dashboard?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A star schema with three core tables: a transactions fact table, a chart-of-accounts dimension, and a separate calendar dimension. The calendar dimension is critical — it enables DAX functions like DATESYTD, SAMEPERIODLASTYEAR, and fiscal-year calculations without filter contortion. Never embed dates as a column in the fact table and stop there." }
+      },
+      {
+        "@type": "Question",
+        "name": "How many pages should a financial Power BI dashboard have?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Five pages is the ideal structure: Overview (five KPIs, no scrolling), Revenue (trends and breakdowns), Expenses (mirrored structure to Revenue), Cash and Working Capital (AR/AP aging, cash position), and Detail (flat transaction table for verification). Every page should respect the same three global filters — fiscal period, business unit, and currency — placed in the same position on each page." }
+      },
+      {
+        "@type": "Question",
+        "name": "What DAX measures are essential for a financial dashboard in Power BI?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The five essential DAX measures are: Revenue (SUM filtered to revenue accounts), Revenue YoY (CALCULATE with SAMEPERIODLASTYEAR), Revenue YoY % change (DIVIDE of the variance over prior year), YTD Revenue (TOTALYTD), and YTD Last Year (TOTALYTD wrapped in SAMEPERIODLASTYEAR). Materialize any measure called more than once per page to avoid redundant aggregation." }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../scroll-fx.css" />
+  <link rel="stylesheet" href="post.css" />
+</head>
+<body>
+
+<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+<div id="site-nav"></div>
+
+<main>
+
+  <header class="post-hero" data-screen-label="Post hero">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../Portfolio Animated v2.html">Home</a>
+        <span class="sep">·</span>
+        <a href="index.html">Blog</a>
+        <span class="sep">·</span>
+        <span aria-current="page">Data &amp; Dashboards</span>
+      </nav>
+
+      <span class="badge bi">Power BI · Data Analytics</span>
+
+      <h1><em>Power BI Financial Dashboard:</em> How I Build One Finance Teams Actually Use</h1>
+
+      <p class="lede">How I build a Power BI financial dashboard finance teams actually open: the data model, the DAX measures, and the five-page layout, drawn from dashboards I have shipped for real clients.</p>
+
+      <div class="post-author-row">
+        <span class="post-av" aria-hidden="true">MP</span>
+        <div class="post-author-stack">
+          <span class="post-author-name">Meet Patel</span>
+          <span class="post-author-creds">AZ-305 · DP-900 · Data Analyst</span>
+        </div>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Apr 9, 2026
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          10 min read
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">~2,500 words</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-layout">
+    <div class="container">
+      <div class="post-cols">
+
+        <article class="post-main" data-screen-label="Post content" id="post-article">
+          <div class="post-main-featured">
+            <image-slot id="post-bi-featured" alt="Power BI financial dashboard overview page with KPI cards and revenue trend" style="width:100%;height:100%;" shape="rounded" radius="14" placeholder="Drop a featured image here (1200 x 480 recommended)"></image-slot>
+          </div>
+          <div class="prose">
+
+            <h2 id="start-with-the-question">Start with the Question, Not the Data</h2>
+            <p>The single biggest mistake I see when someone builds a Power BI financial dashboard is starting with the columns and figuring out the questions later. You end up with thirty pages, eighty visuals, and one finance director who still asks you for the same Excel export every month.</p>
+            <p>Before I open Power BI Desktop, I get the client to commit to five questions the dashboard must answer at a glance. Just five. Everything else can be drill-down.</p>
+
+
+            <h2 id="what-finance-asks">What Finance Actually Asks of a Dashboard</h2>
+            <p>A Power BI financial dashboard fails the moment it tries to answer everything. Finance teams do not want a data lake with an interface on top. They want a small set of questions answered the same way every month, so they can spot the one number that moved and explain it before the board meeting.</p>
+            <p>So I make the client rank their questions out loud. Are we ahead of plan? Where is cash today? Which cost line is growing faster than revenue? Which customers or vendors concentrate our risk? Those four or five questions become the spine of the report, and anything that does not serve them goes into a drill-down or gets cut.</p>
+            <p>This is also where you decide the grain. A report built on monthly summaries behaves very differently from one built on individual transactions, and switching later is painful. I default to transaction grain with pre-aggregated summary tables on top, because finance always eventually wants to click a number and see the rows behind it. A Power BI financial dashboard that cannot drill to the source loses trust the first time someone disputes a figure.</p>
+
+            <h2 id="data-model">The Data Model Behind a Power BI Financial Dashboard</h2>
+            <p>Finance data lives in three shapes, almost always: a transactions fact table, a chart-of-accounts dimension, and a calendar dimension. Get those three right and the rest of the model falls out naturally.</p>
+            <p>A common trap: people put the calendar inside the fact table as a date column and stop there. Don't. A separate calendar dimension lets you write fiscal-year DAX (<code>DATESYTD</code>, <code>SAMEPERIODLASTYEAR</code>) without contorting your filters, and lets you mark fiscal periods, holidays, and quarter cuts as proper attributes.</p>
+            <p>This star schema is the foundation everything else rests on. Get the three tables and their relationships right and the DAX stays short and the visuals stay fast. Get them wrong and you will fight the model on every measure you write for the rest of the project.</p>
+
+            <h3 id="calendar-snippet">A Calendar Table I Reuse Everywhere</h3>
+            <pre><code>Calendar = ADDCOLUMNS(
+  CALENDAR(DATE(2018,1,1), TODAY()),
+  "Year",        YEAR([Date]),
+  "Quarter",     "Q" &amp; QUARTER([Date]),
+  "Month",       FORMAT([Date], "MMM"),
+  "MonthNum",    MONTH([Date]),
+  "FiscalYear",  IF(MONTH([Date]) >= 7,
+                    YEAR([Date]) + 1, YEAR([Date])),
+  "FiscalQtr",   "FQ" &amp;
+                    QUOTIENT(MOD(MONTH([Date])-7,12),3)+1
+)</code></pre>
+
+            <h2 id="dax-measures">DAX That Punches Above Its Weight</h2>
+            <p>Most finance dashboards need the same handful of measures. Get these right early and you'll reuse them across every visual.</p>
+            <ul>
+              <li><strong>Revenue.</strong> Plain sum of transactions, filtered to revenue accounts.</li>
+              <li><strong>Revenue YoY.</strong> <code>CALCULATE([Revenue], SAMEPERIODLASTYEAR(Calendar[Date]))</code></li>
+              <li><strong>Revenue YoY % change.</strong> <code>DIVIDE([Revenue] - [Revenue YoY], [Revenue YoY])</code></li>
+              <li><strong>YTD Revenue.</strong> <code>TOTALYTD([Revenue], Calendar[Date])</code></li>
+              <li><strong>YTD Last Year.</strong> Same as above, wrapped in <code>SAMEPERIODLASTYEAR</code>.</li>
+            </ul>
+
+            <aside class="callout">
+              <span class="label">Performance Tip</span>
+              <p>Materialize anything that gets called more than once per page. A measure that calls another measure that calls another measure can quietly run the underlying aggregation a dozen times. Power Query pre-aggregation is your friend.</p>
+            </aside>
+
+
+            <h2 id="mistakes">Modelling Mistakes That Quietly Break Reports</h2>
+            <p>Almost every slow or wrong report I have been asked to rescue had the same root cause: a model that grew by accident. Someone needed one more column, joined one more table on a text key, and six months later the relationships look like a plate of spaghetti and nobody can say which number is authoritative.</p>
+            <p>The first mistake is many-to-many relationships used as a shortcut. They feel convenient and they quietly double-count revenue. The second is calculated columns doing work that belongs in a measure, which bloats the model and freezes the logic at refresh time instead of query time. The third is burying business rules in visuals, so the same "net revenue" means three different things on three pages.</p>
+            <p>The fix is boring and it works: one fact table at a known grain, conformed dimensions, measures for everything that calculates, and a single documented definition for every figure finance cares about. A model you can explain on a whiteboard in two minutes is a model that will still make sense a year from now.</p>
+
+            <h2 id="layout">Layout: A Five-Page Power BI Financial Dashboard</h2>
+            <p>Every finance dashboard I ship follows the same five-page skeleton:</p>
+            <ol>
+              <li><strong>Overview.</strong> One screen, five KPIs, no scrolling. This is the page the CFO opens on their phone.</li>
+              <li><strong>Revenue.</strong> Trend, breakdowns by product line, top customers.</li>
+              <li><strong>Expenses.</strong> Same shape as revenue, mirrored. Trend, breakdowns, top vendors.</li>
+              <li><strong>Cash &amp; Working Capital.</strong> AR aging, AP aging, cash position.</li>
+              <li><strong>Detail.</strong> A flat transaction table for the people who want to verify the numbers.</li>
+            </ol>
+            <p>Every page respects the same three global filters: fiscal period, business unit, and currency. Slicers go in the same place on every page. That's it. That's the rule. Inconsistent slicer placement is the #1 reason finance teams give up on a dashboard.</p>
+
+
+            <h2 id="overview-page">Designing the Overview Page</h2>
+            <p>The overview page is the only page most executives will ever look at, so it carries a disproportionate share of the value. I treat it as a single, scroll-free screen with no more than five numbers, each paired with a direction and a comparison. A revenue figure on its own is noise. Revenue against plan, with last year as a faint reference line, is a story.</p>
+            <p>I keep the visual vocabulary boring on purpose. Cards for the headline KPIs, one trend line, one variance bar, and a single breakdown. Executives read this page the way they read a clock: a glance should answer "are we fine?" and only then invite a closer look. Anything that needs a legend or a second read does not belong on the overview.</p>
+            <p>Colour does real work here. I reserve one accent for "needs attention" and let everything else stay neutral, so the eye lands on the one cost line growing faster than revenue. A page that colours everything communicates nothing.</p>
+
+            <h2 id="performance">Performance: Keeping the Dashboard Fast</h2>
+            <p>Nobody trusts a Power BI financial dashboard that takes eight seconds to load a page. Speed is a credibility feature in finance, where the audience is impatient and senior. Most slowness comes from the same few places, and they are all fixable before launch.</p>
+            <p>The first culprit is measures that call measures that call measures. Each layer can silently re-run the underlying aggregation, so a single KPI card might scan the fact table a dozen times. I flatten the hot paths and pre-aggregate in Power Query, trading a slightly larger model for pages that render instantly. The second culprit is high-cardinality columns dragged into visuals: a transaction ID on a slicer will bring any report to its knees. Keep that detail off the interactive surface and on the detail page where it belongs.</p>
+            <p>The last is the calendar. A clean, marked date table is not just a DAX convenience, it lets the engine fold time intelligence efficiently instead of recomputing ranges row by row. On every Power BI financial dashboard I have shipped, fixing the model did more for speed than any visual-level tweak.</p>
+
+            <h2 id="shipping">Shipping It So Finance Keeps Using It</h2>
+            <p>The technical build is maybe half the job. A Power BI financial dashboard only succeeds if finance opens it instead of exporting to Excel, and that is a behaviour problem as much as a data problem. I ship the smallest credible version first, sit with the actual users while they click, and watch where they get stuck or reach for a spreadsheet.</p>
+            <div class="table-wrap">
+              <p class="table-caption">Table 1: What I track in the first month after launch</p>
+              <table>
+                <thead><tr><th>Signal</th><th>Healthy</th><th>Trouble</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Weekly active finance users</strong></td><td>Rising</td><td>Flat after week 1</td></tr>
+                  <tr><td><strong>Excel exports of the same data</strong></td><td>Falling</td><td>Steady or rising</td></tr>
+                  <tr><td><strong>Overview page load</strong></td><td>Under 2s</td><td>Over 5s</td></tr>
+                  <tr><td><strong>Incoming requests</strong></td><td>Specific asks</td><td>"Just put everything on"</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>If exports keep climbing, the report is not answering the real question, and no amount of polish will fix that. The wins always came from deleting visuals and tightening the five questions, never from adding more. The best Power BI financial dashboard is usually the one you had the discipline to keep small.</p>
+
+            <h2 id="handover">Refreshes, Security, and Handover</h2>
+            <p>A report that only runs on your laptop is a demo, not a deliverable. Getting a financial report into production means a scheduled refresh that pulls from the source on a cadence finance trusts, row-level security so a regional manager sees only their unit, and a clear owner once you hand it over. I treat all three as launch blockers, not nice-to-haves.</p>
+            <p>Refresh is where most handovers quietly fail. If the gateway credentials expire or a source schema drifts, the numbers silently go stale and the finance team stops trusting the whole thing. I document the refresh, alert on failures, and make sure someone other than me can fix a broken pull. Row-level security is the other piece people skip: define roles against the dimension tables early, test them with real accounts, and never rely on hiding a visual to hide data.</p>
+            <p>Finally, write the thing down. A one-page data dictionary that defines every measure, names the source, and states the refresh schedule is what lets a finance team own the report after you leave. The version that survives a year is the one whose definitions are documented, not the one with the cleverest DAX.</p>
+
+            <h2 id="closing">Closing Thought</h2>
+            <p>A finance dashboard is a product. Treat it like one — name the user, define the five questions, ship the smallest version, and iterate based on what people actually click. The best dashboards I've built were the ones I deleted half of in week two.</p>
+
+          </div>
+
+          <section class="post-faq" aria-label="Frequently asked questions">
+            <p class="post-faq-title">Frequently Asked</p>
+
+            <details class="faq-item">
+              <summary>
+                <span>What is the best data model for a financial Power BI dashboard?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>A <strong>star schema</strong> with three core tables: transactions fact, chart-of-accounts dimension, and a separate calendar dimension. The calendar enables <code>DATESYTD</code>, <code>SAMEPERIODLASTYEAR</code>, and fiscal-year calculations without filter contortion. Never embed dates only as a column in the fact table.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>How many pages should a financial Power BI dashboard have?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p><strong>Five pages</strong>: Overview (5 KPIs, no scrolling), Revenue (trends + breakdowns), Expenses (mirrored to Revenue), Cash &amp; Working Capital (AR/AP aging), and Detail (flat transaction table). Same three global filters — fiscal period, business unit, currency — in the same position on every page.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>What DAX measures are essential for a financial dashboard?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>The five essentials: <strong>Revenue</strong> (SUM filtered to revenue accounts), <strong>Revenue YoY</strong> (<code>CALCULATE</code> with <code>SAMEPERIODLASTYEAR</code>), <strong>Revenue YoY %</strong> (<code>DIVIDE</code> of the variance), <strong>YTD Revenue</strong> (<code>TOTALYTD</code>), and <strong>YTD Last Year</strong>. Materialize any measure called more than once per page.</p>
+              </div>
+            </details>
+          </section>
+
+          <div class="post-share">
+            <span class="share-label">Share</span>
+            <button class="share-btn" id="copyLinkBtn" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Copy Link
+            </button>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmeetpatel.dev%2Fblog%2Fpower-bi-financial-dashboard.html" rel="noopener" target="_blank" class="share-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.29 2.38 4.29 5.48v6.26zM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+              Share on LinkedIn
+            </a>
+          </div>
+
+          <nav class="post-bottom-nav" aria-label="Post navigation">
+            <div class="post-nav-grid">
+              <a href="index.html" class="pn-link back-all">
+                <span class="pn-dir">← Back to Blog</span>
+                <span class="pn-arr" aria-hidden="true">→</span>
+              </a>
+              <a href="podcast-review-platform-seo.html" class="pn-link">
+                <span class="pn-dir">Also Read</span>
+                <span class="pn-title">How I Built an SEO-Optimized Podcast Review Platform</span>
+              </a>
+              <a href="ats-resume-optimizer-gpt4.html" class="pn-link">
+                <span class="pn-dir">Also Read</span>
+                <span class="pn-title">ATS Resume Optimization with GPT-4</span>
+              </a>
+            </div>
+          </nav>
+        </article>
+
+        <aside class="post-sidebar" aria-label="Post sidebar" data-screen-label="Post sidebar">
+          <div class="widget">
+            <div class="widget-head"><h3>Contents</h3></div>
+            <div class="widget-body">
+              <nav aria-label="Table of contents">
+                <ul class="toc-list" id="toc-list">
+                  <li><a href="#start-with-the-question" class="toc-link">Start with the Question</a></li>
+                  <li><a href="#data-model" class="toc-link">The Data Model</a></li>
+                  <li class="h3-item"><a href="#calendar-snippet" class="toc-link">Calendar Table</a></li>
+                  <li><a href="#dax-measures" class="toc-link">DAX Measures</a></li>
+                  <li><a href="#layout" class="toc-link">Five-Page Layout</a></li>
+                  <li><a href="#closing" class="toc-link">Closing Thought</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="widget">
+            <div class="widget-head"><h3>Author</h3></div>
+            <div class="widget-body">
+              <div class="sw-top">
+                <div class="sw-av" aria-hidden="true">MP</div>
+                <div>
+                  <p class="sw-name">Meet Patel</p>
+                  <p class="sw-role">Azure Architect · Developer · Analyst</p>
+                </div>
+              </div>
+              <p class="sw-bio">7+ years building web systems and data pipelines. NBCC postgrad, Azure-certified. Writing about architecture, not abstractions.</p>
+              <div class="sw-certs">
+                <span class="sw-cert">AZ-305</span>
+                <span class="sw-cert">AZ-900</span>
+                <span class="sw-cert">DP-900</span>
+                <span class="sw-cert">AI-900</span>
+                <span class="sw-cert">IBM Cloud</span>
+              </div>
+              <a href="https://www.linkedin.com/in/meet-patel-a483501b4/" rel="noopener" target="_blank" class="sw-link">
+                LinkedIn
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="widget">
+            <div class="widget-head"><h3>Related Posts</h3></div>
+            <div class="widget-body" style="padding-top:10px;padding-bottom:10px;">
+              <div class="related-list">
+                <a href="podcast-review-platform-seo.html" class="related-post">
+                  <span class="rp-badge seo">SEO</span>
+                  <div>
+                    <p class="rp-title">SEO-Optimized Podcast Review Platform</p>
+                    <p class="rp-meta">May 12, 2026 · 8 min</p>
+                  </div>
+                </a>
+                <a href="ats-resume-optimizer-gpt4.html" class="related-post">
+                  <span class="rp-badge ai">AI</span>
+                  <div>
+                    <p class="rp-title">ATS Resume Optimization with GPT-4</p>
+                    <p class="rp-meta">Apr 28, 2026 · 6 min</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+  <section class="section tight" data-screen-label="AI Fluency Note">
+    <div class="container">
+      <div class="aif-note reveal" style="max-width:780px; margin:0 auto;">
+        <span class="eyebrow aif-eyebrow">Behind This Post</span>
+        <p>This work is deliberately model-free: Power BI, DAX, and Python cleaning doing the heavy lifting. <strong>Knowing the AI toolset also means knowing when a dashboard beats a language model</strong>, and Power BI Copilot is in the kit for the moments it genuinely earns its place.</p>
+        <div class="aif-cloud"><span class="aif-tag">Power BI · DAX</span><span class="aif-tag">Python</span><span class="aif-tag">Power BI Copilot</span><span class="aif-tag">Right-Tool Judgment</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-cta"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>window.__currentPage = "blog";</script>
+<script src="../scroll-fx.js"></script>
+<script src="../partials.js"></script>
+<script>
+  const bar = document.getElementById('readingProgress');
+  const article = document.getElementById('post-article');
+  window.addEventListener('scroll', () => {
+    const top = article.getBoundingClientRect().top + window.scrollY;
+    const bottom = top + article.offsetHeight;
+    const pct = Math.min(100, Math.max(0, ((window.scrollY - top) / (bottom - top - window.innerHeight)) * 100));
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = document.querySelectorAll('#post-article h2[id], #post-article h3[id]');
+  const tocObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('.toc-link[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px' });
+  headings.forEach(h => tocObs.observe(h));
+
+  document.getElementById('copyLinkBtn').addEventListener('click', function() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      this.textContent = 'Copied!';
+      this.classList.add('copied');
+      setTimeout(() => { this.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link'; this.classList.remove('copied'); }, 2000);
+    });
+  });
+
+  document.querySelectorAll('.faq-item').forEach(d => {
+    d.addEventListener('toggle', () => { d.querySelector('.faq-icon').textContent = d.open ? '×' : '+'; });
+  });
+</script>
+</body>
+</html>

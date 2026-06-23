@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Backend Architecture & Security Specification · Meet Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --white:#fff; --mist:#F3F6F3; --fog:#E4EAE4; --border:#E2E9E2;
+    --dusk:#6F7670; --slate:#3B423C; --ink:#16201A;
+    --accent:#0E8A6B; --accent-strong:#0A6E55; --accent-soft:rgba(14,138,107,0.10); --accent-line:rgba(14,138,107,0.22);
+    --feature-bg:#0C1F18; --feature-fg:#ECF4EF; --feature-muted:#A4BBAE; --feature-accent:#34D399;
+    --warn:#C9821F; --warn-bg:rgba(201,130,31,0.12); --bad:#C0392B; --bad-bg:rgba(192,57,43,0.10); --good:#1F8A5B; --good-bg:rgba(31,138,91,0.10); --info:#2A6FB0; --info-bg:rgba(42,111,176,0.10);
+    --font:"Geist",ui-sans-serif,system-ui,sans-serif;
+    --mono:"Geist Mono",ui-monospace,monospace;
+  }
+  body { margin:0; background:#fff; color:var(--slate); font-family:var(--font); font-size:15px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .doc { box-sizing:border-box; max-width:8.5in; margin:0 auto; background:inherit; padding:48px clamp(24px,5vw,0.75in) 96px; }
+  .doc-frame { width:100%; border-collapse:collapse; }
+  .doc-frame td { padding:0; }
+  .running-hdr, .running-ftr, .hdr-space, .ftr-space { display:none; }
+
+  h1,h2,h3,h4 { text-wrap:balance; color:var(--ink); letter-spacing:-0.02em; line-height:1.18; }
+  p,li { text-wrap:pretty; }
+  h1 { font-size:34px; font-weight:700; margin:0 0 6px; }
+  h2 { font-size:21px; font-weight:700; margin:46px 0 14px; padding-top:18px; border-top:2px solid var(--ink); display:flex; align-items:baseline; gap:12px; }
+  h2 .n { font-family:var(--mono); font-size:13px; font-weight:600; color:var(--accent); flex-shrink:0; }
+  h3 { font-size:16.5px; font-weight:700; margin:26px 0 8px; }
+  h4 { font-size:13.5px; font-weight:700; margin:18px 0 6px; color:var(--slate); font-family:var(--mono); text-transform:uppercase; letter-spacing:0.04em; }
+  p { margin:0 0 12px; }
+  strong { color:var(--ink); font-weight:600; }
+  a { color:var(--accent-strong); }
+  code { font-family:var(--mono); font-size:0.86em; background:var(--mist); border:1px solid var(--fog); border-radius:5px; padding:1px 5px; color:var(--accent-strong); }
+  pre { background:var(--feature-bg); color:var(--feature-fg); border-radius:10px; padding:16px 18px; overflow-x:auto; font-family:var(--mono); font-size:12.5px; line-height:1.6; margin:10px 0; }
+  pre code { background:none; border:none; color:inherit; padding:0; font-size:inherit; }
+  ul,ol { margin:0 0 14px; padding-left:22px; }
+  li { margin:4px 0; }
+
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); font-weight:600; margin:0 0 14px; }
+  .lede { font-size:17px; line-height:1.6; color:var(--slate); margin:14px 0 0; }
+  .cover-meta { display:flex; flex-wrap:wrap; gap:8px 10px; margin:22px 0 6px; font-family:var(--mono); font-size:11.5px; color:var(--dusk); }
+  .cover-meta span { background:var(--mist); border:1px solid var(--border); border-radius:100px; padding:5px 12px; }
+  .cover-rule { height:3px; background:var(--accent); border-radius:3px; width:64px; margin:26px 0 0; }
+
+  .toc { background:var(--mist); border:1px solid var(--border); border-radius:12px; padding:18px 22px; margin:30px 0 8px; }
+  .toc-h { font-family:var(--mono); font-size:11px; letter-spacing:0.13em; text-transform:uppercase; color:var(--dusk); margin:0 0 10px; }
+  .toc ol { margin:0; padding-left:20px; columns:2; column-gap:30px; font-size:13px; }
+  .toc li { margin:3px 0; }
+  .toc a { color:var(--slate); text-decoration:none; }
+
+  table.tbl { width:100%; border-collapse:collapse; margin:12px 0 16px; font-size:13px; }
+  table.tbl th { text-align:left; font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--dusk); font-weight:600; padding:9px 11px; border-bottom:2px solid var(--ink); vertical-align:bottom; }
+  table.tbl td { padding:9px 11px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--slate); }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl code { font-size:11.5px; }
+  .tbl-cap, figcaption { font-family:var(--mono); font-size:10.5px; color:var(--dusk); margin:4px 0 0; }
+
+  .badge { font-family:var(--mono); font-size:9.5px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:2px 7px; border-radius:100px; white-space:nowrap; }
+  .badge.crit { background:var(--bad-bg); color:var(--bad); }
+  .badge.high { background:var(--warn-bg); color:var(--warn); }
+  .badge.med { background:var(--info-bg); color:var(--info); }
+  .badge.low { background:var(--mist); color:var(--dusk); }
+  .badge.ok { background:var(--good-bg); color:var(--good); }
+
+  .callout { border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:0 10px 10px 0; background:var(--mist); padding:13px 16px; margin:14px 0; font-size:13.5px; }
+  .callout .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600; color:var(--accent-strong); display:block; margin-bottom:5px; }
+  .callout p { margin:0; }
+  .callout.warn { border-left-color:var(--warn); } .callout.warn .lbl { color:var(--warn); }
+  .callout.bad { border-left-color:var(--bad); } .callout.bad .lbl { color:var(--bad); }
+
+  .feature { background:var(--feature-bg); color:var(--feature-fg); border-radius:14px; padding:24px 26px; margin:18px 0; }
+  .feature h3 { color:#fff; margin-top:0; }
+  .feature p { color:var(--feature-muted); }
+  .feature .lbl { font-family:var(--mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--feature-accent); }
+
+  /* architecture diagram */
+  .arch { border:1px solid var(--border); border-radius:14px; padding:20px; margin:14px 0; background:#fff; }
+  .tier { margin:0 0 10px; }
+  .tier-lbl { font-family:var(--mono); font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--dusk); margin:0 0 7px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .node { flex:1; min-width:120px; border:1px solid var(--border); border-radius:10px; padding:11px 13px; background:var(--mist); }
+  .node .nt { font-size:12.5px; font-weight:700; color:var(--ink); }
+  .node .ns { font-size:11px; color:var(--dusk); margin-top:2px; }
+  .node.acc { background:var(--accent-soft); border-color:var(--accent-line); }
+  .node.dark { background:var(--feature-bg); border-color:var(--feature-bg); }
+  .node.dark .nt { color:#fff; } .node.dark .ns { color:var(--feature-muted); }
+  .flowdown { text-align:center; color:var(--accent); font-size:15px; line-height:1; margin:3px 0; }
+
+  .kv { display:grid; grid-template-columns:max-content 1fr; gap:4px 16px; font-size:13px; margin:10px 0; }
+  .kv dt { font-family:var(--mono); font-size:11.5px; color:var(--accent-strong); }
+  .kv dd { margin:0; color:var(--slate); }
+
+  .phase { border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin:10px 0; }
+  .phase .ph-h { display:flex; align-items:baseline; gap:10px; margin-bottom:4px; }
+  .phase .ph-n { font-family:var(--mono); font-size:11px; font-weight:600; color:#fff; background:var(--accent); border-radius:100px; padding:2px 9px; }
+  .phase .ph-t { font-size:14px; font-weight:700; color:var(--ink); }
+  .phase .ph-w { font-family:var(--mono); font-size:10.5px; color:var(--dusk); margin-left:auto; }
+
+  .toolbar { position:fixed; top:16px; right:16px; z-index:50; display:flex; gap:8px; }
+  .toolbar button { font-family:var(--font); font-size:13px; font-weight:600; border:1px solid var(--border); background:#fff; color:var(--ink); border-radius:9px; padding:9px 15px; cursor:pointer; box-shadow:0 4px 14px rgba(16,32,26,.08); }
+  .toolbar button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  @page { size:letter; margin:0; }
+  @media print {
+    html { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    html,body { margin:0; padding:0; }
+    .doc { max-width:none !important; margin:0 !important; padding:0 0.75in !important; box-shadow:none !important; border:none !important; }
+    .hdr-space, .ftr-space { display:table-cell; height:0.75in !important; }
+    .running-hdr, .running-ftr { display:flex !important; justify-content:space-between; align-items:baseline; position:fixed !important; left:0; right:0; margin:0 !important; font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--dusk); font-family:var(--mono); }
+    .running-hdr { top:0; padding:0.35in 0.75in 0 !important; }
+    .running-ftr { bottom:0; padding:0 0.75in 0.35in !important; }
+    h1,h2,h3,h4 { break-after:avoid; }
+    figure,pre,blockquote,table,tr,.callout,.feature,.arch,.phase,.node { break-inside:avoid; }
+    p,li { orphans:3; widows:3; }
+    .screen-only { display:none !important; }
+    h2 { border-top-color:#000; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar screen-only">
+  <button onclick="window.print()" class="primary">Save as PDF</button>
+</div>
+
+<main class="doc">
+<table class="doc-frame" role="presentation">
+<thead><tr><td class="hdr-space"></td></tr></thead>
+<tbody><tr><td>
+
+<div class="running-hdr"><span>Operator Console · Backend &amp; Security Spec</span><span>Meet Patel</span></div>
+<div class="running-ftr"><span>Confidential · internal</span><span>v1.0 · June 2026</span></div>
+
+<p class="eyebrow">Technical Specification</p>
+<h1>Operator Console: Backend Architecture &amp; Security Specification</h1>
+<p class="lede">A complete plan to take the Operator Console from a browser-only prototype to a production backend on Azure: a Python/FastAPI API, a PostgreSQL data model, real authentication, the blog-automation pipeline, third-party integrations, the public contact pipeline, and a full security-hardening program with an honest audit of the current prototype.</p>
+
+<div class="cover-meta">
+  <span>Author · Meet Patel</span>
+  <span>Saint John, NB</span>
+  <span>Stack · Azure + FastAPI + PostgreSQL</span>
+  <span>Version 1.0</span>
+  <span>June 2026</span>
+</div>
+<div class="cover-rule"></div>
+
+<div class="toc">
+  <p class="toc-h">Contents</p>
+  <ol>
+    <li><a href="#summary">Executive summary</a></li>
+    <li><a href="#goals">Goals &amp; non-goals</a></li>
+    <li><a href="#arch">System architecture</a></li>
+    <li><a href="#stack">Technology stack</a></li>
+    <li><a href="#data">Data model (PostgreSQL)</a></li>
+    <li><a href="#api">API design (FastAPI)</a></li>
+    <li><a href="#auth">Authentication &amp; session security</a></li>
+    <li><a href="#pipeline">Automation pipeline backend</a></li>
+    <li><a href="#integrations">Integrations &amp; secrets</a></li>
+    <li><a href="#contact">Contact form &amp; lead inbox</a></li>
+    <li><a href="#hardening">Security hardening (OWASP)</a></li>
+    <li><a href="#audit">Prototype vulnerability audit</a></li>
+    <li><a href="#privacy">Privacy &amp; compliance</a></li>
+    <li><a href="#devops">DevOps, CI/CD &amp; operations</a></li>
+    <li><a href="#cost">Cost &amp; scaling</a></li>
+    <li><a href="#roadmap">Implementation roadmap</a></li>
+  </ol>
+</div>
+
+<!-- 1 -->
+<h2 id="summary"><span class="n">01</span>Executive summary</h2>
+<p>The Operator Console today is a high-fidelity front-end prototype. Authentication, scoring, and the content pipeline all run in the browser, which is perfect for demonstration but provides no real security and no shared, durable state. This document specifies the backend that turns it into a real product.</p>
+<p>The chosen shape is <strong>serverless and Azure-native</strong>: a static front end on Azure Static Web Apps, a Python <strong>FastAPI</strong> service running on Azure Functions, and a managed <strong>PostgreSQL</strong> database. Secrets live in Azure Key Vault and are reached through a managed identity, never shipped to the browser. The blog-automation pipeline runs as queue-driven and timer-driven Functions so long jobs never block a request. Every external call (WordPress, Google Search Console, Groq, Azure OpenAI, email) moves server-side.</p>
+<p>The security program follows the OWASP Top 10 and OWASP ASVS as its checklist, and Section 12 audits the current prototype line by line so nothing carries forward silently.</p>
+
+<!-- 2 -->
+<h2 id="goals"><span class="n">02</span>Goals &amp; non-goals</h2>
+<h4>Goals</h4>
+<ul>
+  <li>Server-enforced authentication and authorization; the UI gate is never the security boundary.</li>
+  <li>One durable source of truth for posts, pipeline state, leads, media, and rankings.</li>
+  <li>All API keys and credentials held server-side in Key Vault; zero secrets in client code.</li>
+  <li>The automation chain (discover, draft, humanize, SEO, image, review, publish) runs reliably with retries and a full audit trail.</li>
+  <li>Stays inside Azure free / 12-month-free allowances at portfolio traffic, with a clear paid scaling path.</li>
+  <li>Defensible against the OWASP Top 10 and compliant with PIPEDA and GDPR for site visitors.</li>
+</ul>
+<h4>Non-goals (v1)</h4>
+<ul>
+  <li>Multi-tenant SaaS. This is a single-operator console for one site owner plus a small number of roles.</li>
+  <li>Replacing WordPress as the published-content host. WordPress stays; the backend orchestrates it over REST.</li>
+  <li>Real-time collaboration or websockets. The console is single-author and poll/refresh is sufficient.</li>
+</ul>
+
+<!-- 3 -->
+<h2 id="arch"><span class="n">03</span>System architecture</h2>
+<p>Three tiers, all serverless, all within one Azure resource group. Traffic enters through Azure's edge, the UI is served statically, and every dynamic action calls the FastAPI app, which is the only component that touches the database, the secrets store, and third-party APIs.</p>
+
+<div class="arch">
+  <div class="tier">
+    <p class="tier-lbl">Client</p>
+    <div class="row"><div class="node"><div class="nt">Browser</div><div class="ns">Operator Console UI · React · contact form</div></div></div>
+  </div>
+  <div class="flowdown">&#8595; HTTPS / TLS 1.3</div>
+  <div class="tier">
+    <p class="tier-lbl">Edge &amp; delivery</p>
+    <div class="row"><div class="node acc"><div class="nt">Azure Static Web Apps</div><div class="ns">CDN, custom domain, security headers, static assets</div></div></div>
+  </div>
+  <div class="flowdown">&#8595; /api/* (same origin)</div>
+  <div class="tier">
+    <p class="tier-lbl">Application</p>
+    <div class="row">
+      <div class="node acc"><div class="nt">FastAPI on Azure Functions</div><div class="ns">Auth · REST API · validation · authz</div></div>
+      <div class="node"><div class="nt">Queue + Timer Functions</div><div class="ns">Pipeline workers · scheduled jobs</div></div>
+    </div>
+  </div>
+  <div class="flowdown">&#8595;</div>
+  <div class="tier">
+    <p class="tier-lbl">Data &amp; secrets</p>
+    <div class="row">
+      <div class="node dark"><div class="nt">Azure DB for PostgreSQL</div><div class="ns">Flexible Server · private access</div></div>
+      <div class="node dark"><div class="nt">Key Vault</div><div class="ns">Secrets via managed identity</div></div>
+      <div class="node dark"><div class="nt">Blob Storage</div><div class="ns">Media · OG images</div></div>
+    </div>
+  </div>
+  <div class="flowdown">&#8597; server-to-server only</div>
+  <div class="tier">
+    <p class="tier-lbl">External integrations</p>
+    <div class="row">
+      <div class="node"><div class="nt">WordPress REST</div><div class="ns">publish</div></div>
+      <div class="node"><div class="nt">Search Console</div><div class="ns">rankings</div></div>
+      <div class="node"><div class="nt">Groq / Azure OpenAI</div><div class="ns">draft + score</div></div>
+      <div class="node"><div class="nt">Email (ACS / SMTP)</div><div class="ns">OTP + alerts</div></div>
+    </div>
+  </div>
+</div>
+<p class="tbl-cap">Figure 1. Request path and trust boundaries. The browser only ever talks to Static Web Apps and the same-origin <code>/api</code>; the database, Key Vault, and all third-party credentials sit behind the API.</p>
+
+<!-- 4 -->
+<h2 id="stack"><span class="n">04</span>Technology stack</h2>
+<table class="tbl">
+  <thead><tr><th>Layer</th><th>Choice</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Front end</td><td>Existing React console + static portfolio</td><td>Reuse the built UI; serve from CDN</td></tr>
+    <tr><td>Hosting (UI)</td><td>Azure Static Web Apps (Free)</td><td>Free CDN, TLS, custom domain, header control</td></tr>
+    <tr><td>API runtime</td><td>Python 3.12 · FastAPI on Azure Functions</td><td>Async, typed, great for the AI pipeline; consumption plan free grant</td></tr>
+    <tr><td>Validation</td><td>Pydantic v2</td><td>Schema-validates every request and response</td></tr>
+    <tr><td>Database</td><td>Azure DB for PostgreSQL Flexible Server</td><td>Relational integrity; 12-month free offer</td></tr>
+    <tr><td>ORM / migrations</td><td>SQLAlchemy 2.0 + Alembic</td><td>Parameterized queries (anti-SQLi) + versioned schema</td></tr>
+    <tr><td>Auth</td><td>Argon2id + JWT (httpOnly cookies) + OTP</td><td>Modern hashing, server sessions, email reset</td></tr>
+    <tr><td>Secrets</td><td>Azure Key Vault + managed identity</td><td>No secret ever reaches client or repo</td></tr>
+    <tr><td>Jobs</td><td>Azure Queue Storage + Timer/Durable Functions</td><td>Decouple long pipeline work from requests</td></tr>
+    <tr><td>Media</td><td>Azure Blob Storage + SAS</td><td>Cheap object storage for hero/OG images</td></tr>
+    <tr><td>Observability</td><td>Application Insights</td><td>Tracing, logs, alerts (free quota)</td></tr>
+    <tr><td>CI/CD &amp; IaC</td><td>GitHub Actions + Bicep</td><td>Reproducible deploys; infra as code</td></tr>
+  </tbody>
+</table>
+
+<!-- 5 -->
+<h2 id="data"><span class="n">05</span>Data model (PostgreSQL)</h2>
+<p>The schema is normalized around the console's real objects. UUID primary keys, <code>created_at</code>/<code>updated_at</code> on every table, soft-delete (<code>deleted_at</code>) where history matters, and foreign keys with explicit <code>ON DELETE</code> rules. All timestamps are stored in UTC (<code>timestamptz</code>).</p>
+
+<table class="tbl">
+  <thead><tr><th>Table</th><th>Purpose</th><th>Key columns</th></tr></thead>
+  <tbody>
+    <tr><td><code>users</code></td><td>Operators &amp; roles</td><td>id, email (unique), pw_hash, role, mfa_secret, status</td></tr>
+    <tr><td><code>sessions</code></td><td>Active refresh sessions</td><td>id, user_id&#8594;users, refresh_hash, ip, ua, expires_at, revoked_at</td></tr>
+    <tr><td><code>otp_codes</code></td><td>Reset / verification codes</td><td>id, user_id, code_hash, purpose, attempts, expires_at, consumed_at</td></tr>
+    <tr><td><code>posts</code></td><td>Blog posts &amp; drafts</td><td>id, title, slug (unique), body_md, status, focus_keyword, seo_score, meta_title, meta_desc, wp_post_id</td></tr>
+    <tr><td><code>pipeline_jobs</code></td><td>Automation runs per post</td><td>id, post_id&#8594;posts, stage, state, attempts, last_error, payload, scheduled_at</td></tr>
+    <tr><td><code>trends</code></td><td>Discovered topics</td><td>id, title, source, volume, difficulty, relevance, queued</td></tr>
+    <tr><td><code>leads</code></td><td>Contact-form submissions</td><td>id, name, email, company, subject, body, tag, status, ip, spam_score</td></tr>
+    <tr><td><code>media_assets</code></td><td>Images in Blob</td><td>id, post_id, kind, blob_url, alt, width, height, bytes</td></tr>
+    <tr><td><code>keyword_rankings</code></td><td>GSC snapshots</td><td>id, keyword, url, position, clicks, impressions, captured_on</td></tr>
+    <tr><td><code>integrations</code></td><td>Connected services state</td><td>id, name, enabled, config_ref (Key Vault), last_ok_at</td></tr>
+    <tr><td><code>audit_log</code></td><td>Security &amp; change trail</td><td>id, actor_id, action, entity, entity_id, ip, meta, created_at</td></tr>
+  </tbody>
+</table>
+<p class="tbl-cap">Table 1. Core entities. <code>config_ref</code> stores a Key Vault secret name, never the secret itself.</p>
+
+<h4>Representative DDL</h4>
+<pre><code>CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE users (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email       citext UNIQUE NOT NULL,
+  pw_hash     text   NOT NULL,            -- argon2id
+  role        text   NOT NULL DEFAULT 'editor'
+              CHECK (role IN ('owner','editor','viewer')),
+  mfa_secret  text,                       -- TOTP, encrypted at rest
+  status      text   NOT NULL DEFAULT 'active',
+  created_at  timestamptz NOT NULL DEFAULT now(),
+  updated_at  timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE sessions (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id       uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  refresh_hash  text NOT NULL,            -- SHA-256 of the refresh token
+  ip            inet, ua text,
+  expires_at    timestamptz NOT NULL,
+  revoked_at    timestamptz,
+  created_at    timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX ON sessions (user_id) WHERE revoked_at IS NULL;
+
+CREATE TABLE posts (
+  id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title          text NOT NULL,
+  slug           text UNIQUE NOT NULL,
+  body_md        text,
+  status         text NOT NULL DEFAULT 'discover',
+  focus_keyword  text,
+  seo_score      int  CHECK (seo_score BETWEEN 0 AND 100),
+  meta_title     text, meta_desc text,
+  wp_post_id     bigint,
+  created_at     timestamptz NOT NULL DEFAULT now(),
+  updated_at     timestamptz NOT NULL DEFAULT now(),
+  deleted_at     timestamptz
+);</code></pre>
+<p class="tbl-cap">Listing 1. Schema excerpt. Alembic owns all migrations; nothing is hand-altered in production.</p>
+
+<!-- 6 -->
+<h2 id="api"><span class="n">06</span>API design (FastAPI)</h2>
+<p>A versioned REST surface under <code>/api/v1</code>. Every endpoint declares a Pydantic request and response model, an auth requirement, and a role. Mutating routes require a valid session and pass CSRF defense (Section 7). List endpoints page and filter; they never return more than they should for the caller's role.</p>
+<table class="tbl">
+  <thead><tr><th>Method &amp; path</th><th>Purpose</th><th>Auth</th></tr></thead>
+  <tbody>
+    <tr><td><code>POST /auth/login</code></td><td>Email + password &#8594; session cookies</td><td><span class="badge low">public</span></td></tr>
+    <tr><td><code>POST /auth/logout</code></td><td>Revoke current session</td><td><span class="badge ok">session</span></td></tr>
+    <tr><td><code>POST /auth/refresh</code></td><td>Rotate access token</td><td><span class="badge ok">refresh</span></td></tr>
+    <tr><td><code>POST /auth/reset/request</code></td><td>Send OTP to account email</td><td><span class="badge low">public</span></td></tr>
+    <tr><td><code>POST /auth/reset/verify</code></td><td>Verify OTP, set new password</td><td><span class="badge low">public</span></td></tr>
+    <tr><td><code>GET /posts</code> · <code>POST /posts</code></td><td>List / create posts</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>GET·PATCH·DELETE /posts/{id}</code></td><td>Read / update / soft-delete</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>POST /posts/{id}/score</code></td><td>Run SEO analysis server-side</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>POST /posts/{id}/publish</code></td><td>Push to WordPress</td><td><span class="badge high">owner</span></td></tr>
+    <tr><td><code>GET /pipeline</code></td><td>Pipeline board state</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>GET /trends</code> · <code>POST /trends/{id}/queue</code></td><td>Discovered topics</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>GET /leads</code> · <code>PATCH /leads/{id}</code></td><td>Lead inbox + triage</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>POST /public/contact</code></td><td>Public form intake</td><td><span class="badge low">public · throttled</span></td></tr>
+    <tr><td><code>POST /media</code> · <code>GET /media</code></td><td>Upload / list assets</td><td><span class="badge med">editor</span></td></tr>
+    <tr><td><code>GET /rankings</code></td><td>GSC snapshots</td><td><span class="badge med">editor</span></td></tr>
+  </tbody>
+</table>
+<p class="tbl-cap">Table 2. Endpoint surface. Roles are checked server-side on every call; the UI hiding a button is convenience, not control.</p>
+
+<!-- 7 -->
+<h2 id="auth"><span class="n">07</span>Authentication &amp; session security</h2>
+<p>This section replaces the prototype's browser gate with a real, server-enforced scheme.</p>
+<h4>Passwords</h4>
+<p>Hashed with <strong>Argon2id</strong> (memory-hard, tuned cost), unique salt per user, never logged. Minimum length 12, checked against a breached-password list. No password is ever returned by any endpoint.</p>
+<h4>Sessions &amp; tokens</h4>
+<p>On login the server issues a short-lived <strong>access JWT</strong> (about 15 minutes) and a long-lived <strong>refresh token</strong>, both delivered as <code>HttpOnly; Secure; SameSite=Strict</code> cookies so JavaScript cannot read them. The refresh token is stored only as a hash in <code>sessions</code> and is <strong>rotated</strong> on every use; reuse of an old token revokes the whole family (theft detection). Logout and "sign out everywhere" revoke server-side.</p>
+<h4>OTP password reset</h4>
+<p>Reset generates a 6-digit code, stores only its hash with a 10-minute expiry and a 5-attempt cap, and emails it server-side (Section 9). Codes are single-use and rate-limited per account and per IP. Requesting a reset never reveals whether an email exists.</p>
+<h4>Defense in depth</h4>
+<ul>
+  <li><strong>MFA (TOTP)</strong> available for the owner role; secret encrypted at rest.</li>
+  <li><strong>Rate limiting + lockout</strong>: progressive backoff on failed logins, temporary lock after repeated failures.</li>
+  <li><strong>CSRF</strong>: double-submit token on all cookie-authenticated mutations, plus <code>SameSite=Strict</code>.</li>
+  <li><strong>Audit</strong>: every login, logout, reset, role change, and publish is written to <code>audit_log</code> with actor and IP.</li>
+</ul>
+<div class="callout"><span class="lbl">Migration note</span><p>The prototype's default credentials and demo banner are removed in production. The first owner account is created by a one-time seeded invite, then forced through a password set on first login.</p></div>
+
+<!-- 8 -->
+<h2 id="pipeline"><span class="n">08</span>Automation pipeline backend</h2>
+<p>The pipeline (discover, plan, draft, humanize, SEO, image prompt, review, publish) becomes a chain of small workers instead of one long request. An API call only enqueues work; Functions do the rest.</p>
+<div class="kv">
+  <dt>Queue</dt><dd>Each stage drops a message for the next on success; Azure Queue Storage decouples producers from workers.</dd>
+  <dt>Scheduling</dt><dd>A Timer Function runs daily discovery; a poller advances eligible jobs.</dd>
+  <dt>Idempotency</dt><dd>Each job has a stable key; re-delivery is safe and never double-publishes.</dd>
+  <dt>Retries</dt><dd>Exponential backoff with a max attempt count; exhausted jobs land in a dead-letter state surfaced in the UI.</dd>
+  <dt>Human gate</dt><dd>The <code>review</code> stage blocks on operator approval; nothing reaches WordPress without it.</dd>
+  <dt>Observability</dt><dd>Every transition writes <code>pipeline_jobs.state</code> and an App Insights event for tracing.</dd>
+</div>
+<div class="callout warn"><span class="lbl">Cost guard</span><p>AI calls (Groq, Azure OpenAI) are the only metered step. The worker enforces a per-day token budget and short-circuits when exceeded, so a runaway loop cannot generate a surprise bill.</p></div>
+
+<!-- 9 -->
+<h2 id="integrations"><span class="n">09</span>Integrations &amp; secrets</h2>
+<p>Every third-party credential lives in <strong>Key Vault</strong> and is read at runtime through the Function's <strong>managed identity</strong>. None are in the repo, in environment files committed to source, or in client code.</p>
+<table class="tbl">
+  <thead><tr><th>Integration</th><th>Use</th><th>Credential handling</th></tr></thead>
+  <tbody>
+    <tr><td>WordPress REST</td><td>Publish approved posts</td><td>Application Password in Key Vault; least-privilege author account</td></tr>
+    <tr><td>Google Search Console</td><td>Rankings &amp; indexation</td><td>Service-account JSON in Key Vault; read-only scope</td></tr>
+    <tr><td>Groq / Azure OpenAI</td><td>Draft + SEO scoring</td><td>Keys in Key Vault; server-side calls only; token budget</td></tr>
+    <tr><td>Email (ACS / SMTP)</td><td>OTP + operator alerts</td><td>Connection string in Key Vault; SPF/DKIM/DMARC on the domain</td></tr>
+  </tbody>
+</table>
+<div class="callout bad"><span class="lbl">Prototype gap closed</span><p>The current OTP demo uses an EmailJS <em>public</em> key embedded in the browser, which anyone can read and abuse. In production the browser never sees an email credential; all sending is server-side through Azure Communication Services or authenticated SMTP.</p></div>
+
+<!-- 10 -->
+<h2 id="contact"><span class="n">10</span>Contact form &amp; lead inbox</h2>
+<p>The public form posts to <code>POST /public/contact</code>, the only unauthenticated write in the system, so it is the most defended.</p>
+<ul>
+  <li><strong>Validation</strong>: Pydantic checks field shapes and lengths; the body is treated as untrusted text and stored escaped.</li>
+  <li><strong>Spam control</strong>: a hidden honeypot field, a minimum fill-time check, per-IP rate limiting, and an optional Cloudflare Turnstile / hCaptcha challenge. A computed <code>spam_score</code> auto-files likely junk.</li>
+  <li><strong>Storage</strong>: rows land in <code>leads</code>; the operator triages them in the existing Query Inbox UI.</li>
+  <li><strong>Notification</strong>: a new genuine lead emails the owner; replies are sent from the server, never exposing the inbox address in markup.</li>
+  <li><strong>Privacy</strong>: IP is stored only for abuse handling and purged on a retention timer (Section 13).</li>
+</ul>
+
+<!-- 11 -->
+<h2 id="hardening"><span class="n">11</span>Security hardening (OWASP Top 10)</h2>
+<p>The build maps to the OWASP Top 10 (2021) as its working checklist.</p>
+<table class="tbl">
+  <thead><tr><th>Risk</th><th>Mitigation in this design</th></tr></thead>
+  <tbody>
+    <tr><td>A01 Broken access control</td><td>Server-side role checks on every route; object-level ownership checks; deny by default</td></tr>
+    <tr><td>A02 Cryptographic failures</td><td>TLS 1.2+ everywhere, HSTS; Argon2id passwords; secrets in Key Vault; DB encrypted at rest</td></tr>
+    <tr><td>A03 Injection</td><td>SQLAlchemy parameterized queries only; Pydantic input validation; output encoding in the UI</td></tr>
+    <tr><td>A04 Insecure design</td><td>Threat model per feature; human gate before publish; least-privilege integration accounts</td></tr>
+    <tr><td>A05 Security misconfiguration</td><td>Hardened headers (CSP, X-Content-Type-Options, Referrer-Policy, frame-ancestors), no debug in prod</td></tr>
+    <tr><td>A06 Vulnerable components</td><td>Dependabot + <code>pip-audit</code> in CI; pinned versions; monthly patch window</td></tr>
+    <tr><td>A07 Auth failures</td><td>Rotating refresh tokens, lockout, MFA, generic error messages, short access tokens</td></tr>
+    <tr><td>A08 Integrity failures</td><td>Signed deploys via GitHub OIDC; IaC reviewed; no unsigned third-party scripts</td></tr>
+    <tr><td>A09 Logging &amp; monitoring</td><td>App Insights traces, <code>audit_log</code>, alerts on auth spikes and 5xx</td></tr>
+    <tr><td>A10 SSRF</td><td>Outbound allow-list to known integration hosts; no user-supplied URLs fetched server-side</td></tr>
+  </tbody>
+</table>
+<h4>HTTP security headers (set at Static Web Apps + API)</h4>
+<pre><code>Content-Security-Policy: default-src 'self';
+  script-src 'self' https://unpkg.com;
+  style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+  font-src https://fonts.gstatic.com; img-src 'self' data: blob:;
+  connect-src 'self'; frame-ancestors 'none'; base-uri 'self'
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), camera=(), microphone=()</code></pre>
+<p class="tbl-cap">Listing 2. Baseline response headers. CSP is tightened to the exact hosts the app loads from.</p>
+
+<!-- 12 -->
+<h2 id="audit"><span class="n">12</span>Prototype vulnerability audit</h2>
+<p>An honest review of the current browser-only build. None of these are defects in a <em>prototype</em>; they are simply the things a real backend must own. Each has a fix above.</p>
+<table class="tbl">
+  <thead><tr><th>Finding</th><th>Sev.</th><th>Resolution</th></tr></thead>
+  <tbody>
+    <tr><td>Auth runs entirely in the browser; anyone can bypass it via dev tools or by editing local storage</td><td><span class="badge crit">Critical</span></td><td>Move auth + authz server-side (&sect;7); the gate becomes UX only</td></tr>
+    <tr><td>EmailJS public key embedded in client code can be read and abused to send mail</td><td><span class="badge high">High</span></td><td>Server-side email via ACS/SMTP, key in Key Vault (&sect;9)</td></tr>
+    <tr><td>OTP code hash and session stored in <code>localStorage</code>; no server validation</td><td><span class="badge high">High</span></td><td>Server-issued, HttpOnly cookies; OTP verified server-side (&sect;7)</td></tr>
+    <tr><td>Default credentials shown on the login screen</td><td><span class="badge high">High</span></td><td>Removed; invite-based first owner, forced password set</td></tr>
+    <tr><td>No rate limiting or lockout on login / reset</td><td><span class="badge med">Medium</span></td><td>Per-IP and per-account throttling + backoff (&sect;7)</td></tr>
+    <tr><td>All "data" is static and client-held; no integrity or backup</td><td><span class="badge med">Medium</span></td><td>PostgreSQL with backups and audit log (&sect;5, &sect;14)</td></tr>
+    <tr><td>Third-party API calls would run from the browser, exposing keys</td><td><span class="badge high">High</span></td><td>All integration calls move server-side (&sect;9)</td></tr>
+    <tr><td>No security headers / CSP on the static host</td><td><span class="badge low">Low</span></td><td>Header set applied at Static Web Apps (&sect;11)</td></tr>
+  </tbody>
+</table>
+<p class="tbl-cap">Table 3. Audit findings mapped to their fix section. Severity assumes the prototype were exposed as-is to the public internet.</p>
+
+<!-- 13 -->
+<h2 id="privacy"><span class="n">13</span>Privacy &amp; compliance</h2>
+<p>The site collects personal data through the contact form and stores operator accounts, so it falls under Canada's <strong>PIPEDA</strong> and, for any EU visitors, the <strong>GDPR</strong>.</p>
+<ul>
+  <li><strong>Data inventory</strong>: leads (name, email, message, IP), user accounts, audit logs. Nothing sensitive beyond contact details.</li>
+  <li><strong>Lawful basis &amp; consent</strong>: a plain-language notice on the form; no pre-ticked boxes; analytics only with consent.</li>
+  <li><strong>Retention</strong>: lead IPs purged after 30 days; closed leads archived then deleted on a schedule; audit logs kept 12 months.</li>
+  <li><strong>Rights</strong>: a documented path to export or delete a person's data on request (DSAR), satisfied by simple queries on <code>leads</code>.</li>
+  <li><strong>Minimization</strong>: only fields the form needs; no third-party trackers by default.</li>
+</ul>
+
+<!-- 14 -->
+<h2 id="devops"><span class="n">14</span>DevOps, CI/CD &amp; operations</h2>
+<div class="kv">
+  <dt>Source</dt><dd>GitHub; protected <code>main</code>; PR review required.</dd>
+  <dt>CI</dt><dd>Lint, type-check, tests, <code>pip-audit</code>, and a build run on every PR.</dd>
+  <dt>CD</dt><dd>GitHub Actions deploys to Azure via OIDC (no stored cloud secret); staging slot then swap to production.</dd>
+  <dt>Infra</dt><dd>Bicep templates define every resource; environments are reproducible from code.</dd>
+  <dt>Migrations</dt><dd>Alembic runs on deploy, forward-only, reviewed.</dd>
+  <dt>Monitoring</dt><dd>App Insights dashboards; alerts on 5xx rate, auth-failure spikes, queue backlog, and DB connection saturation.</dd>
+  <dt>Backups / DR</dt><dd>PostgreSQL automated backups with point-in-time restore; Blob versioning; documented restore runbook.</dd>
+</div>
+
+<!-- 15 -->
+<h2 id="cost"><span class="n">15</span>Cost &amp; scaling</h2>
+<p>At portfolio traffic the whole system fits inside free and 12-month-free allowances. Costs appear only as usage grows; nothing here requires an upfront paid tier.</p>
+<table class="tbl">
+  <thead><tr><th>Component</th><th>Free-tier position</th><th>First paid step</th></tr></thead>
+  <tbody>
+    <tr><td>Static Web Apps</td><td>Free plan: app + API + custom domain</td><td>Standard plan for SLA / more env</td></tr>
+    <tr><td>Azure Functions</td><td>Consumption free grant (generous monthly executions)</td><td>Pay-per-use beyond the grant</td></tr>
+    <tr><td>PostgreSQL Flexible Server</td><td>12-month free Burstable B1ms + storage</td><td>~Small Burstable instance after year one</td></tr>
+    <tr><td>Blob Storage</td><td>Free grant covers portfolio media</td><td>Pennies per GB beyond</td></tr>
+    <tr><td>Key Vault / App Insights</td><td>Free operation + log quota</td><td>Per-operation / per-GB beyond quota</td></tr>
+  </tbody>
+</table>
+<div class="callout"><span class="lbl">Reality check</span><p>Free tiers throttle (cold starts, the app may idle) and the exact quotas change over time. Confirm current numbers on the Azure pricing pages before launch, and budget a small Burstable Postgres instance for month thirteen onward.</p></div>
+
+<!-- 16 -->
+<h2 id="roadmap"><span class="n">16</span>Implementation roadmap</h2>
+<div class="phase"><div class="ph-h"><span class="ph-n">1</span><span class="ph-t">Foundation</span><span class="ph-w">~ week 1</span></div><p>Bicep for the resource group, Static Web Apps, Functions, Postgres, Key Vault. CI/CD with OIDC. Empty FastAPI app deploying green.</p></div>
+<div class="phase"><div class="ph-h"><span class="ph-n">2</span><span class="ph-t">Auth &amp; data</span><span class="ph-w">~ week 2</span></div><p>Schema + Alembic. Argon2 login, rotating sessions, OTP reset, MFA, rate limiting, audit log. Wire the existing UI gate to the real API.</p></div>
+<div class="phase"><div class="ph-h"><span class="ph-n">3</span><span class="ph-t">Core console API</span><span class="ph-w">~ weeks 3&ndash;4</span></div><p>Posts, pipeline board, media, rankings, server-side SEO scoring, lead inbox. Replace the prototype's static data with live endpoints.</p></div>
+<div class="phase"><div class="ph-h"><span class="ph-n">4</span><span class="ph-t">Pipeline &amp; integrations</span><span class="ph-w">~ weeks 5&ndash;6</span></div><p>Queue/timer workers; WordPress publish; GSC sync; Groq/Azure OpenAI with token budget; ACS email. Public contact form with spam defense.</p></div>
+<div class="phase"><div class="ph-h"><span class="ph-n">5</span><span class="ph-t">Harden &amp; launch</span><span class="ph-w">~ week 7</span></div><p>Headers/CSP, dependency scan, pen-test pass against the OWASP checklist, monitoring + alerts, backup/restore drill, privacy notice. Production swap.</p></div>
+
+<div class="callout"><span class="lbl">Where this leaves you</span><p>This spec is buildable as written and stays free at your scale while showcasing exactly the Azure architecture skills your certifications cover. The single most important change is Section 7: until authentication is enforced on the server, the console is a demo, not a protected system.</p></div>
+
+</td></tr></tbody>
+<tfoot><tr><td class="ftr-space"></td></tr></tfoot>
+</table>
+</main>
+</body>
+</html>

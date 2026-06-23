@@ -1,0 +1,150 @@
+/* =====================================================
+   SCROLL FX  ·  Cinematic scroll layer (no dependencies)
+   Loaded AFTER styles.css / enhancements.css on every page.
+   Pairs with scroll-fx.js. Pure transform + opacity work,
+   GPU-composited, and fully reduced-motion safe.
+   ===================================================== */
+
+/* ---------- 1 · Scroll progress bar ---------- */
+.sfx-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(var(--sfx-sp, 0));
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--cloud-dusk), var(--cloud-ink));
+  z-index: 120;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---------- 2 · Reveal — refined timing + directional variants ----------
+   Base .reveal/.in toggling still lives in styles.css + the page scripts.
+   We only refine the curve and seed directional/scale START transforms.
+   On .in, styles.css resets transform to translateY(0) → animates to rest. */
+.reveal {
+  transition:
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Two-column listings: alternate cards drift in from the sides */
+.listing-grid.cols-2 > .reveal:nth-child(odd)  { transform: translate(-30px, 26px); }
+.listing-grid.cols-2 > .reveal:nth-child(even) { transform: translate(30px, 26px); }
+
+/* Single-column listings (e.g. blog index): lift + subtle scale */
+.listing-grid > .reveal { transform: translateY(36px) scale(0.985); }
+
+/* Card grids: a touch more travel + subtle scale for weight */
+.proj-grid > .reveal,
+.blog-grid > .reveal,
+.svc-grid > .reveal,
+.skills-grid > .reveal {
+  transform: translateY(40px) scale(0.985);
+}
+
+/* Stat / result figures: rise + scale so the count-up lands with impact */
+.stat-grid > .reveal,
+.results-grid > .reveal {
+  transform: translateY(34px) scale(0.96);
+}
+
+/* Prose blocks & callouts: gentle lift */
+.prose.reveal,
+.callout.reveal { transform: translateY(30px); }
+
+/* Section headers lift a little further for emphasis */
+.section-header.reveal { transform: translateY(28px); }
+
+/* ---------- 3 · Word-mask headline reveal ---------- */
+.sfx-wm { opacity: 1 !important; transform: none !important; }
+.sfx-line {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.06em;
+  margin: 0 -0.06em;
+  line-height: inherit;
+}
+.sfx-word {
+  display: inline-block;
+  transform: translateY(118%);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.sfx-wm.sfx-in .sfx-word { transform: translateY(0); }
+
+/* ---------- 4 · Ambient depth for inner-page heroes ----------
+   .page-hero gets a soft, slow-drifting monochrome glow that
+   scroll-fx.js parallaxes. Stays within the ink/slate palette. */
+.page-hero { overflow: hidden; }
+.page-hero .sfx-aura,
+.post-hero .sfx-aura {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 130%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 60% at 78% 18%, rgba(9, 9, 11, 0.05), transparent 70%),
+    radial-gradient(46% 64% at 14% 8%, rgba(63, 63, 70, 0.045), transparent 72%);
+  will-change: transform;
+}
+.page-hero .container { position: relative; z-index: 1; }
+
+/* ---------- 5 · Cursor-tracked glow on cards (hover devices) ---------- */
+@media (hover: hover) {
+  .proj-card,
+  .blog-card,
+  .result-card,
+  .svc-card,
+  .skill-card,
+  .stat-card,
+  .np-card { position: relative; }
+
+  .proj-card::after,
+  .blog-card::after,
+  .result-card::after,
+  .svc-card::after,
+  .skill-card::after,
+  .stat-card::after,
+  .np-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      460px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(9, 9, 11, 0.05),
+      transparent 62%
+    );
+    opacity: 0;
+    transition: opacity 360ms var(--ease-cloud);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .proj-card:hover::after,
+  .blog-card:hover::after,
+  .result-card:hover::after,
+  .svc-card:hover::after,
+  .skill-card:hover::after,
+  .stat-card:hover::after,
+  .np-card:hover::after { opacity: 1; }
+}
+
+/* Keep card content above the glow layer */
+.np-card > * { position: relative; z-index: 1; }
+
+/* Parallax-able decorative hooks (transforms applied via JS) */
+[data-sfx-parallax] { will-change: transform; }
+
+/* ---------- 6 · Reduced motion — show everything, no movement ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .sfx-progress { display: none; }
+  .reveal { transition: none; transform: none !important; }
+  .sfx-word { transform: none !important; transition: none; }
+  .page-hero .sfx-aura { display: none; }
+  [data-sfx-parallax] { transform: none !important; }
+}

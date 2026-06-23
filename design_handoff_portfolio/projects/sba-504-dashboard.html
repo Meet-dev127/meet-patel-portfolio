@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+  <title>SBA 504 Power BI Dashboard | Meet Patel</title>
+  <meta name="description" content="A financial analytics dashboard built on top of the SBA's public 504 loan dataset, surfacing trends across regions, lenders, and industries that were previously invisible inside flat CSV exports." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../scroll-fx.css">
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<main>
+  <section class="page-hero" data-screen-label="sba-504-dashboard hero">
+    <div class="container">
+      <nav class="crumbs reveal" aria-label="Breadcrumb">
+        <a href="index.html">Projects</a><span class="sep">·</span><span>SBA 504 Dashboard</span>
+      </nav>
+      
+      <h1 class="reveal">SBA 504 <em>Power BI</em> Dashboard</h1>
+      <p class="lede reveal">A financial analytics dashboard built on top of the SBA's public 504 loan dataset, surfacing trends across regions, lenders, and industries that were previously invisible inside flat CSV exports.</p>
+
+      <div class="actions reveal">
+        <a href="#" class="btn btn-primary">View Dashboard ↗</a><a href="#" class="btn btn-outline">Read Methodology</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-meta" data-screen-label="sba-504-dashboard meta">
+    <div class="container">
+      <div class="cs-meta-grid">
+        <div class="cs-meta-item"><span class="label">Year</span><span class="val">2024</span></div><div class="cs-meta-item"><span class="label">Role</span><span class="val">Data & BI Engineer</span></div><div class="cs-meta-item"><span class="label">Type</span><span class="val">BI Dashboard</span></div><div class="cs-meta-item"><span class="label">Timeline</span><span class="val">6 weeks</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-screen-label="sba-504-dashboard body">
+    <div class="container">
+      <article class="prose reveal">
+        <h2>The Brief</h2>
+        <p>A small-business advisory client needed a way to identify lending patterns across the SBA 504 program, which lenders were active in which regions, what industries were getting funded, and how loan sizes were trending year over year. The source data was a sprawling public dataset, exported as flat files with messy joins and inconsistent column types.</p>
+        <h2>Approach</h2>
+        <p>I started by treating the dashboard as a product, not a report. That meant five clear questions it had to answer at a glance, then everything else hidden behind drill-down. The five questions:</p>
+        <ul><li>Which states are getting the most 504 funding right now?</li><li>Which industries are driving that funding?</li><li>Which Certified Development Companies (CDCs) are the most active in each state?</li><li>How are average loan sizes trending year over year?</li><li>What does the lender concentration look like in each region?</li></ul>
+        <h3>The Stack</h3>
+        <div class="stack-grid"><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Power BI Desktop</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>DAX</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Power Query</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Excel</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Python (cleaning)</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Azure Storage</div></div>
+        <h2>What I Built</h2>
+        <p>Five linked pages: an overview, a regional map, an industry breakdown, a CDC lender view, and a year-over-year trends page. Every chart respects the same global filter set so a user can scope to a single state or NAICS code and the entire dashboard reflows.</p>
+        <aside class="callout"><span class="label">Performance Note</span><p>The raw dataset has 70k+ rows. Pushing the heaviest aggregations into Power Query, and pre-computing rolling averages with DAX measures, cut interactive filter response time from 4–6 seconds down to under 400ms.</p></aside>
+        <h2>Outcome</h2>
+        <p>The client now uses the dashboard during weekly strategy calls to identify under-served markets and reach out to active CDCs in specific NAICS codes. Two months in, it had directly contributed to three signed engagements they say wouldn't have happened with the old spreadsheet workflow.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="results-strip" data-screen-label="sba-504-dashboard results">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Results</span>
+        <h2 class="h2">What It Moved.</h2>
+      </div>
+      <div class="results-grid">
+        <div class="result-card reveal"><div class="num">70<em>k+</em></div><div class="lbl">Loan records cleaned and modeled</div></div><div class="result-card reveal"><div class="num"><em>5</em></div><div class="lbl">Linked dashboard pages with global filtering</div></div><div class="result-card reveal"><div class="num">&lt;400<em>ms</em></div><div class="lbl">Interactive response time after optimization</div></div><div class="result-card reveal"><div class="num"><em>3</em></div><div class="lbl">New client engagements sourced through the dashboard</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="next-project" data-screen-label="sba-504-dashboard next">
+    <div class="container">
+      <a href="contentos.html" class="np-card reveal">
+        <div>
+          <div class="dir">Next Project →</div>
+        </div>
+        <div>
+          <div class="title">ContentOS AI Dashboard</div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <div id="site-cta"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>window.__currentPage = "projects";</script>
+<script src="../scroll-fx.js"></script>
+<script src="../partials.js"></script>
+</body>
+</html>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="./" />
+  <title>Contact Meet Patel | Let's Work Together</title>
+  <meta name="description" content="Get in touch with Meet Patel, cloud-certified web developer and data analyst based in Saint John, NB. Responding within 24 hours on weekdays." />
+  <link rel="canonical" href="https://meetpatel.dev/contact" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="enhancements.css">
+  <link rel="stylesheet" href="scroll-fx.css">
+  <link rel="stylesheet" href="about-fx.css">
+  <script src="scroll-fx.js" defer></script>
+  <script src="about-fx.js" defer></script>
+  <script>window.__currentPage = 'contact';</script>
+
+  <style>
+    /* ── Contact page layout ── */
+    .contact-hero {
+      position: relative;
+      padding: 160px 0 72px;
+      overflow: hidden;
+      background: var(--cloud-white);
+    }
+    .contact-hero .container { position: relative; z-index: 1; }
+    .contact-hero h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.4rem, 4.5vw, 3.2rem);
+      line-height: 1.08;
+      color: var(--cloud-ink);
+      letter-spacing: -0.03em;
+      margin: 0 0 20px;
+      text-wrap: balance;
+    }
+    .contact-hero h1 em {
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-weight: 500;
+    }
+    .contact-hero .lede {
+      font-size: 17px;
+      color: var(--cloud-slate);
+      line-height: 1.75;
+      max-width: 540px;
+    }
+
+    /* two-column layout */
+    .contact-body { padding: 72px 0 96px; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* ── Form ── */
+    .form-card {
+      background: var(--cloud-surface);
+      border: 0.5px solid rgba(200,210,220,0.5);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-cloud);
+      padding: 44px 40px;
+    }
+    .form-title {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--cloud-ink);
+      letter-spacing: -0.02em;
+      margin: 0 0 6px;
+    }
+    .form-subtitle {
+      font-size: 14px;
+      color: var(--cloud-slate);
+      margin: 0 0 36px;
+      line-height: 1.6;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .form-group { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+    .form-group:last-of-type { margin-bottom: 0; }
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cloud-ink);
+      font-weight: 500;
+    }
+    .form-input,
+    .form-select,
+    .form-textarea {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      color: var(--cloud-ink);
+      background: var(--cloud-mist);
+      border: 1px solid var(--cloud-fog);
+      border-radius: var(--radius-sm);
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 200ms var(--ease-cloud), box-shadow 200ms var(--ease-cloud), background 200ms var(--ease-cloud);
+      width: 100%;
+      box-sizing: border-box;
+      line-height: 1.5;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--cloud-shadow); }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--cloud-ink);
+      background: var(--cloud-white);
+      box-shadow: 0 0 0 3px rgba(9,9,11,0.07);
+    }
+    .form-textarea { resize: vertical; min-height: 148px; }
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--cloud-dusk);
+      pointer-events: none;
+    }
+    .form-select { padding-right: 36px; cursor: pointer; }
+    .form-select option { background: var(--cloud-white); }
+    .form-actions { margin-top: 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .form-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--cloud-dusk);
+      letter-spacing: 0.04em;
+    }
+
+    /* success state */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .form-success .success-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #F0FDF4;
+      border: 1.5px solid #BBF7D0;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      color: #15803D;
+    }
+    .form-success h3 { font-size: 20px; font-weight: 700; color: var(--cloud-ink); margin: 0 0 8px; }
+    .form-success p { font-size: 15px; color: var(--cloud-slate); line-height: 1.65; margin: 0; }
+
+    /* ── Sidebar ── */
+    .contact-sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+    .info-card {
+      background: var(--cloud-surface);
+      border: 0.5px solid rgba(200,210,220,0.5);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-cloud);
+      padding: 28px;
+    }
+    .info-card-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cloud-dusk);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .info-items { display: flex; flex-direction: column; gap: 0; }
+    .info-item {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--cloud-fog);
+    }
+    .info-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-item:first-child { padding-top: 0; }
+    .info-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--cloud-mist);
+      border: 0.5px solid var(--cloud-fog);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cloud-ink);
+      flex: none;
+    }
+    .info-key {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cloud-dusk);
+      margin-bottom: 3px;
+    }
+    .info-val {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--cloud-ink);
+      line-height: 1.5;
+    }
+    .info-val a { color: var(--cloud-ink); border-bottom: 1px solid var(--cloud-shadow); transition: border-color 180ms; }
+    .info-val a:hover { border-bottom-color: var(--cloud-ink); }
+
+    /* availability */
+    .avail-card {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: var(--radius-card);
+      padding: 22px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .avail-card .dot-wrap {
+      flex: none;
+      margin-top: 3px;
+    }
+    .avail-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #22C55E;
+      position: relative;
+      display: block;
+    }
+    .avail-dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #22C55E;
+      animation: pulse 2s infinite ease-out;
+    }
+    .avail-text-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #15803D;
+      margin-bottom: 4px;
+    }
+    .avail-text-desc {
+      font-size: 13.5px;
+      color: #166534;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* ── What to expect ── */
+    .expect-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .expect-item {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--cloud-fog);
+      align-items: start;
+    }
+    .expect-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .expect-item:first-child { padding-top: 0; }
+    .expect-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cloud-dusk);
+      padding-top: 2px;
+    }
+    .expect-title { font-size: 15px; font-weight: 600; color: var(--cloud-ink); margin-bottom: 4px; }
+    .expect-desc { font-size: 13.5px; color: var(--cloud-slate); line-height: 1.6; margin: 0; }
+
+    /* ── FAQ ── */
+    .contact-faq { max-width: 760px; margin: 0 auto; }
+
+    /* ── Modern editorial hero (matches About / Projects) ── */
+    .contact-hero-v2 { min-height: auto; padding: 150px 0 70px; display: block; }
+    .contact-hero-v2 .ax-hero-inner { max-width: 780px; }
+    .contact-hero-v2 .ax-title { font-size: clamp(2.3rem, 5.2vw, 4rem); margin-bottom: 26px; }
+    .contact-hero-v2 .crumbs { margin-bottom: 24px; }
+    .contact-hero-v2 .ax-hero-actions { align-items: center; }
+    .contact-hero-v2 .ax-avail { margin-left: 2px; }
+
+    /* ── Modern form + sidebar micro-interactions ── */
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      background: var(--cloud-white);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .form-group:focus-within .form-label { color: var(--accent); transition: color 180ms var(--ease-cloud); }
+    .form-card { transition: box-shadow 360ms var(--ease-cloud), border-color 360ms var(--ease-cloud); }
+    .form-card:hover { box-shadow: var(--shadow-cloud-hover); }
+    .info-card { transition: transform 340ms var(--ease-cloud), box-shadow 340ms var(--ease-cloud), border-color 340ms var(--ease-cloud); }
+    .info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-cloud-hover); border-color: var(--accent-line); }
+    .info-icon { transition: background 220ms var(--ease-cloud), color 220ms var(--ease-cloud), border-color 220ms var(--ease-cloud); }
+    .info-item:hover .info-icon { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-line); }
+    .expect-num { transition: color 220ms var(--ease-cloud); }
+    .expect-item:hover .expect-num { color: var(--accent); }
+
+    /* Staggered field entrance (base visible; animates only once the card reveals) */
+    @keyframes cfRise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: no-preference) {
+      .form-card.reveal.in form > * { animation: cfRise 0.6s var(--ease-cloud) both; }
+      .form-card.reveal.in form > *:nth-child(1) { animation-delay: 0.04s; }
+      .form-card.reveal.in form > *:nth-child(2) { animation-delay: 0.10s; }
+      .form-card.reveal.in form > *:nth-child(3) { animation-delay: 0.16s; }
+      .form-card.reveal.in form > *:nth-child(4) { animation-delay: 0.22s; }
+      .form-card.reveal.in form > *:nth-child(5) { animation-delay: 0.28s; }
+      .form-card.reveal.in form > *:nth-child(6) { animation-delay: 0.34s; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .contact-sidebar { flex-direction: row; flex-wrap: wrap; }
+      .contact-sidebar > * { flex: 1 1 300px; }
+    }
+    @media (max-width: 720px) {
+      .contact-hero { padding-top: 120px; padding-bottom: 48px; }
+      .contact-body { padding: 48px 0 72px; }
+      .form-card { padding: 28px 22px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .contact-sidebar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body class="about-page">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div id="site-nav"></div>
+
+<main id="main">
+
+<!-- ================================================== -->
+<!-- HERO                                                -->
+<!-- ================================================== -->
+<section class="ax-hero contact-hero-v2" data-screen-label="Contact Hero">
+  <div class="ax-aura" data-ax-parallax="0.05" aria-hidden="true"></div>
+  <div class="ax-hero-ghost" data-ax-parallax="0.14" aria-hidden="true">HELLO</div>
+
+  <div class="ax-hero-rail" aria-hidden="true">
+    <span class="ax-rail-text">Replies within 24h · Saint John, NB</span>
+  </div>
+
+  <div class="container">
+    <div class="ax-hero-inner">
+      <nav class="crumbs reveal" aria-label="Breadcrumb">
+        <a href="Portfolio Animated v2.html">Home</a>
+        <span class="sep">·</span>
+        <span>Contact</span>
+      </nav>
+      <p class="ax-kicker reveal">Get In Touch</p>
+      <h1 class="ax-title reveal">
+        <span class="ax-tl"><span>Let's build something</span></span>
+        <span class="ax-tl"><span>that <em>actually works.</em></span></span>
+      </h1>
+      <p class="ax-lede reveal">
+        Need a web platform, a Power BI dashboard, an AI automation workflow, or just want to
+        talk through an idea? <strong>Send a message below.</strong> I read every one and reply
+        within one business day.
+      </p>
+
+      <div class="ax-hero-meta reveal">
+        <div class="ax-meta-item">
+          <span class="ax-meta-k">Email</span>
+          <span class="ax-meta-v">patelmeet20112000@gmail.com</span>
+        </div>
+        <span class="ax-meta-sep"></span>
+        <div class="ax-meta-item">
+          <span class="ax-meta-k">Response</span>
+          <span class="ax-meta-v">Within 24 hours</span>
+        </div>
+        <span class="ax-meta-sep"></span>
+        <div class="ax-meta-item">
+          <span class="ax-meta-k">Based in</span>
+          <span class="ax-meta-v">Saint John, NB</span>
+        </div>
+      </div>
+
+      <div class="ax-hero-actions reveal">
+        <a href="#contactForm" class="btn btn-primary" data-magnetic>
+          Start a Message
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="mailto:patelmeet20112000@gmail.com" class="btn btn-outline">Email Directly</a>
+        <span class="ax-avail"><span class="dot"></span>Currently available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- CONTACT BODY                                        -->
+<!-- ================================================== -->
+<section class="contact-body" data-screen-label="Contact Form">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- ── FORM ── -->
+      <div class="form-card reveal" id="formCard">
+        <h2 class="form-title">Send a Message</h2>
+        <p class="form-subtitle">Fill in the details below and I'll get back to you within one business day.</p>
+
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fname">First Name <span aria-hidden="true">*</span></label>
+              <input class="form-input" id="fname" name="fname" type="text" placeholder="Meet" autocomplete="given-name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lname">Last Name</label>
+              <input class="form-input" id="lname" name="lname" type="text" placeholder="Patel" autocomplete="family-name" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address <span aria-hidden="true">*</span></label>
+            <input class="form-input" id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="subject">What can I help with?</label>
+            <div class="select-wrap">
+              <select class="form-select form-input" id="subject" name="subject">
+                <option value="" disabled selected>Choose a topic</option>
+                <option value="web">Web Development (PHP, WordPress, Node.js)</option>
+                <option value="data">Data Analytics or Power BI Dashboard</option>
+                <option value="ai">AI Automation or Azure Integration</option>
+                <option value="seo">SEO Strategy or Content Architecture</option>
+                <option value="ml">Machine Learning or Python Analytics</option>
+                <option value="hire">Full-time or Contract Role</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="budget">Approximate Budget (optional)</label>
+            <div class="select-wrap">
+              <select class="form-select form-input" id="budget" name="budget">
+                <option value="" disabled selected>Select a range</option>
+                <option value="lt1k">Under $1,000</option>
+                <option value="1-5k">$1,000 – $5,000</option>
+                <option value="5-15k">$5,000 – $15,000</option>
+                <option value="15kplus">$15,000+</option>
+                <option value="na">Not applicable (job inquiry)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message">Your Message <span aria-hidden="true">*</span></label>
+            <textarea class="form-textarea" id="message" name="message" placeholder="Describe your project, problem, or idea. The more context, the more useful my reply will be." required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submitBtn">
+              Send Message
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+            </button>
+            <span class="form-note">No spam. No mailing list.</span>
+          </div>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <h3>Message Sent</h3>
+          <p>Thanks for reaching out. I'll reply to <strong id="successEmail"></strong> within one business day.</p>
+        </div>
+      </div>
+
+      <!-- ── SIDEBAR ── -->
+      <div class="contact-sidebar">
+
+        <!-- Direct contact -->
+        <div class="info-card reveal">
+          <span class="info-card-label">Direct Contact</span>
+          <div class="info-items">
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8l10 6 10-6"/></svg>
+              </div>
+              <div>
+                <div class="info-key">Email</div>
+                <div class="info-val"><a href="mailto:patelmeet20112000@gmail.com">patelmeet20112000@gmail.com</a></div>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.29 2.38 4.29 5.48v6.26zM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+              </div>
+              <div>
+                <div class="info-key">LinkedIn</div>
+                <div class="info-val"><a href="https://linkedin.com/in/meet-patel-a483501b4" target="_blank" rel="noopener">meet-patel-a483501b4</a></div>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 21C12 21 5 14.5 5 10a7 7 0 1 1 14 0c0 4.5-7 11-7 11z"/></svg>
+              </div>
+              <div>
+                <div class="info-key">Location</div>
+                <div class="info-val">Saint John, New Brunswick, Canada</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div>
+                <div class="info-key">Response Time</div>
+                <div class="info-val">Within 24 hours on weekdays</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Availability -->
+        <div class="avail-card reveal" role="status">
+          <div class="dot-wrap"><span class="avail-dot" aria-hidden="true"></span></div>
+          <div>
+            <p class="avail-text-label">Currently Available</p>
+            <p class="avail-text-desc">Open to full-time IT roles across Canada (remote or hybrid). NB Graduate Stream (NBPNP) eligible. Also taking freelance projects.</p>
+          </div>
+        </div>
+
+        <!-- What to expect -->
+        <div class="info-card reveal">
+          <span class="info-card-label">What Happens Next</span>
+          <div class="expect-list">
+            <div class="expect-item">
+              <div class="expect-num">01</div>
+              <div>
+                <p class="expect-title">You send a message</p>
+                <p class="expect-desc">Use the form or email directly. The more context you share, the faster we can move.</p>
+              </div>
+            </div>
+            <div class="expect-item">
+              <div class="expect-num">02</div>
+              <div>
+                <p class="expect-title">I reply within 24 hours</p>
+                <p class="expect-desc">I read every message and respond on weekdays. If it's urgent, say so in the subject line.</p>
+              </div>
+            </div>
+            <div class="expect-item">
+              <div class="expect-num">03</div>
+              <div>
+                <p class="expect-title">We scope the work</p>
+                <p class="expect-desc">A short call or email thread to understand the problem, timelines, and what success looks like.</p>
+              </div>
+            </div>
+            <div class="expect-item">
+              <div class="expect-num">04</div>
+              <div>
+                <p class="expect-title">We build it</p>
+                <p class="expect-desc">Clear deliverables, regular updates, and a working system at the end.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- FAQ                                                 -->
+<!-- ================================================== -->
+<section class="section mist tight" data-screen-label="Contact FAQ" aria-labelledby="cfaq-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Common Questions</span>
+      <h2 class="h2" id="cfaq-heading">Before You Reach Out.</h2>
+    </div>
+
+    <div class="contact-faq">
+      <div class="faq-list">
+        <details class="faq-item reveal" open>
+          <summary><span>What kinds of projects do you take on?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>Web platforms (PHP, WordPress, Node.js, Django), Power BI and Tableau dashboards, AI automation workflows using Azure AI and OpenAI, SEO architecture, and Python analytics pipelines. If you're unsure whether your project fits, just send a message and describe the problem.</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>Are you available for full-time roles?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>Yes. I'm completing a Post-Graduate Diploma at NBCC in April 2026 and actively looking for full-time IT roles across Canada, remote or hybrid. I'm also eligible for the <strong>NB Graduate Stream (NBPNP)</strong>. Select "Full-time or Contract Role" in the form above.</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>How quickly can you start?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>For freelance projects, I can typically start within one to two weeks of scoping. For full-time roles, I'm available immediately after NBCC graduation (April 2026) or potentially sooner depending on the arrangement.</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>Do you work with clients outside Canada?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>Yes. Freelance and contract work is fully remote and I've worked with clients across time zones since 2018. For full-time employment, I'm focused on Canadian-based roles (remote or in-person in New Brunswick).</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>What information helps you respond faster?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>For project work: a brief description of the problem, your approximate timeline, and any technology constraints (must use WordPress, must integrate with existing Salesforce, etc.). For job inquiries: the role title, company, and whether it's remote, hybrid, or in-person.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- AI CAPABILITY                                       -->
+<!-- ================================================== -->
+<section class="section tight" data-screen-label="AI Capability">
+  <div class="container">
+    <div class="aif-strip-inner reveal">
+      <div class="aif-strip-lead">
+        <span class="eyebrow aif-eyebrow">AI Capability</span>
+        <h2 class="h2">Building With AI? I Know the Whole Stack.</h2>
+        <p class="aif-lede">
+          Language models, transcription, retrieval, orchestration, and the data work behind them.
+          I bring deep, hands-on familiarity with the full toolset, and the judgment to use it well.
+        </p>
+      </div>
+      <div class="aif-cloud">
+        <span class="aif-tag">GPT-4o / GPT-4</span>
+        <span class="aif-tag">Claude</span>
+        <span class="aif-tag">Gemini</span>
+        <span class="aif-tag">Azure OpenAI</span>
+        <span class="aif-tag">Whisper</span>
+        <span class="aif-tag">LangChain</span>
+        <span class="aif-tag">RAG · Vector DBs</span>
+        <span class="aif-tag">Fine-tuning</span>
+        <span class="aif-tag">Python</span>
+        <span class="aif-tag">Power BI Copilot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+</button>
+
+<script src="partials.js"></script>
+<script>
+  /* back to top */
+  const btt = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => btt.classList.toggle('show', window.scrollY > 400), { passive: true });
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  /* form submit — mailto fallback + visual confirmation */
+  const form = document.getElementById('contactForm');
+  const formCard = document.getElementById('formCard');
+  const formSuccess = document.getElementById('formSuccess');
+  const successEmail = document.getElementById('successEmail');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const fname   = document.getElementById('fname').value.trim();
+    const lname   = document.getElementById('lname').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const subject = document.getElementById('subject');
+    const budget  = document.getElementById('budget');
+    const message = document.getElementById('message').value.trim();
+
+    // Basic validation
+    if (!fname) { document.getElementById('fname').focus(); return; }
+    if (!email || !email.includes('@')) { document.getElementById('email').focus(); return; }
+    if (!message) { document.getElementById('message').focus(); return; }
+
+    const subjectLabel = subject.options[subject.selectedIndex]?.text || 'General Enquiry';
+    const budgetLabel  = budget.options[budget.selectedIndex]?.text  || '';
+
+    const body = [
+      'Hi Meet,',
+      '',
+      'Name: ' + fname + (lname ? ' ' + lname : ''),
+      'Email: ' + email,
+      'Topic: ' + subjectLabel,
+      budgetLabel ? 'Budget: ' + budgetLabel : '',
+      '',
+      message,
+    ].filter(Boolean).join('\n');
+
+    const mailtoHref = 'mailto:patelmeet20112000@gmail.com'
+      + '?subject=' + encodeURIComponent('[Portfolio] ' + subjectLabel)
+      + '&body='    + encodeURIComponent(body);
+
+    window.location.href = mailtoHref;
+
+    // show success UI
+    successEmail.textContent = email;
+    form.style.display = 'none';
+    formSuccess.style.display = 'block';
+  });
+</script>
+</body>
+</html>

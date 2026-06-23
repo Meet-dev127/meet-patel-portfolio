@@ -1,0 +1,223 @@
+/* =====================================================
+   PREMIUM ANIMATION LAYER — Cinematic motion system
+   Layered on top of styles.css. Loaded after it.
+   =====================================================
+
+   Strategy:
+   - <html class="js-anim"> is set inline in <head> BEFORE paint.
+   - Initial states for animated elements are opacity:0 ONLY while
+     .js-anim is on the root. Once GSAP runs, its inline styles
+     override these (animating to visible).
+   - If JS fails, .js-anim is removed by a 1.2s safety net so the
+     page is never permanently hidden.
+   - prefers-reduced-motion entirely opts out (handled in animations.js).
+   ===================================================== */
+
+/* ---------- Initial hidden states (intro targets) ---------- */
+html.js-anim .hero .eyebrow,
+html.js-anim .hero .lede,
+html.js-anim .hero .trust-row,
+html.js-anim .hero .cta-row,
+html.js-anim .hero h1 .an-word,
+html.js-anim .preview-card,
+html.js-anim .float-pill,
+html.js-anim .hero .cumulus,
+html.js-anim .scroll-indicator,
+html.js-anim .navbar,
+html.js-anim [data-anim-scroll],
+html.js-anim .an-mask > .an-word {
+  opacity: 0;
+}
+
+/* Word-mask: each word lives inside a hidden line so it can rise
+   from below without revealing its descenders. */
+.an-word-line {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.04em;
+  margin: 0 -0.04em;
+  line-height: inherit;
+}
+.an-word {
+  display: inline-block;
+  transform: translateY(110%);
+  will-change: transform, opacity;
+}
+/* Once .js-anim is removed (e.g. reduced motion) words sit naturally */
+html:not(.js-anim) .an-word {
+  transform: none;
+  opacity: 1;
+}
+
+/* ---------- Scroll indicator ---------- */
+.scroll-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cloud-dusk);
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+}
+.scroll-indicator .track {
+  position: relative;
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, var(--cloud-fog), transparent);
+  overflow: hidden;
+}
+.scroll-indicator .bead {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 12px;
+  background: var(--cloud-ink);
+  transform: translateX(-50%);
+  animation: scroll-bead 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes scroll-bead {
+  0%   { transform: translate(-50%, -12px); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translate(-50%, 44px); opacity: 0; }
+}
+@media (max-width: 720px) {
+  .scroll-indicator { display: none; }
+}
+
+/* ---------- Micro-interactions ---------- */
+
+/* Skill card icon: tilt + lift on card hover */
+.skill-card .icon,
+.svc-card .icon {
+  transition: transform 360ms var(--ease-cloud), background 360ms var(--ease-cloud);
+}
+.skill-card:hover .icon,
+.svc-card:hover .icon {
+  transform: translateY(-2px) rotate(-3deg);
+  background: var(--cloud-ink);
+  color: #fff;
+}
+
+/* Tag chips wash on card hover */
+.skill-card .tag,
+.proj-card .tag,
+.featured-card .tag {
+  transition: background 280ms var(--ease-cloud), color 280ms var(--ease-cloud), border-color 280ms var(--ease-cloud);
+}
+.skill-card:hover .tag,
+.proj-card:hover .tag,
+.featured-card:hover .tag {
+  background: var(--cloud-surface);
+  border-color: var(--cloud-shadow);
+  color: var(--cloud-ink);
+}
+
+/* Project card sheen on hover */
+.proj-card,
+.featured-card,
+.blog-card,
+.svc-card,
+.skill-card {
+  position: relative;
+  overflow: hidden;
+}
+.proj-card::after,
+.featured-card::after,
+.blog-card::after,
+.svc-card::after,
+.skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    520px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(9, 9, 11, 0.045),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 320ms var(--ease-cloud);
+  pointer-events: none;
+  z-index: 0;
+}
+.proj-card:hover::after,
+.featured-card:hover::after,
+.blog-card:hover::after,
+.svc-card:hover::after,
+.skill-card:hover::before {
+  opacity: 1;
+}
+.proj-card > *,
+.featured-card > *,
+.blog-card > *,
+.svc-card > *,
+.skill-card > * { position: relative; z-index: 1; }
+
+/* Subtle inner-border lift on hover for featured */
+.featured-card { transition: transform 380ms var(--ease-cloud), box-shadow 380ms var(--ease-cloud), border-color 380ms var(--ease-cloud); }
+.featured-card:hover { border-color: rgba(9, 9, 11, 0.18); }
+
+/* Nav link underline already in styles.css — make a touch snappier */
+.nav-links a::after { transition: width 380ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Buttons: refined press */
+.btn { transition: transform 260ms var(--ease-cloud), box-shadow 260ms var(--ease-cloud), background 260ms var(--ease-cloud), color 260ms var(--ease-cloud), border-color 260ms var(--ease-cloud); }
+.btn-primary:hover, .btn-light:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(9,9,11,0.22);
+}
+.btn-primary:active, .btn-light:active { transform: translateY(0); }
+
+/* Arrow link: tail extension */
+.arrow-link .arrow { transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Featured card bar fill - prepare for animated width */
+.featured-card .bar-fill { transform-origin: left center; }
+
+/* Stat card lift on hover */
+.stat-card {
+  transition: transform 320ms var(--ease-cloud), box-shadow 320ms var(--ease-cloud);
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-cloud-hover);
+}
+
+/* Process step dot pulse when active (set by JS class) */
+.process-step .dot { transition: transform 360ms cubic-bezier(0.34, 1.56, 0.64, 1), background 360ms var(--ease-cloud); }
+.process-step.is-in .dot { transform: scale(1.08); }
+
+/* Float pill: gentle glow on hero hover */
+.hero-visual { transition: transform 600ms var(--ease-cloud); }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim .hero .eyebrow,
+  html.js-anim .hero .lede,
+  html.js-anim .hero .trust-row,
+  html.js-anim .hero .cta-row,
+  html.js-anim .hero h1 .an-word,
+  html.js-anim .preview-card,
+  html.js-anim .float-pill,
+  html.js-anim .hero .cumulus,
+  html.js-anim .scroll-indicator,
+  html.js-anim .navbar,
+  html.js-anim [data-anim-scroll],
+  html.js-anim .an-mask > .an-word {
+    opacity: 1;
+  }
+  .an-word { transform: none !important; }
+  .cumulus.v1, .float-pill, .preview-card { animation: none !important; }
+  .scroll-indicator .bead { animation: none; opacity: 0.6; transform: translate(-50%, 16px); }
+}

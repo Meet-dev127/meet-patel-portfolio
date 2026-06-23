@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Operator Console · Meet Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* =====================================================
+   CLOUD ADMIN — operator console for Meet Patel portfolio
+   Light content area + deep emerald sidebar (hybrid)
+   Palette inherited from the public site design system.
+   ===================================================== */
+
+:root {
+  /* surfaces */
+  --bg:        #F6F8F6;
+  --surface:   #FFFFFF;
+  --mist:      #F1F4F1;
+  --fog:       #E4EAE4;
+  --border:    #E2E9E2;
+  --border-2:  #EDF1ED;
+
+  /* ink */
+  --ink:    #16201A;
+  --slate:  #3B423C;
+  --dusk:   #6F7670;
+  --faint:  #9AA39C;
+
+  /* accent — emerald */
+  --accent:        #0E8A6B;
+  --accent-strong: #0A6E55;
+  --accent-soft:   rgba(14,138,107,0.10);
+  --accent-line:   rgba(14,138,107,0.22);
+
+  /* sidebar — deep emerald-black */
+  --side-bg:    #0C1F18;
+  --side-bg-2:  #0F271D;
+  --side-fg:    #ECF4EF;
+  --side-muted: #8FA89B;
+  --side-line:  rgba(255,255,255,0.07);
+  --side-accent:#34D399;
+
+  /* status / score (rank-math-ish) */
+  --good:   #1F8A5B;
+  --good-bg:rgba(31,138,91,0.10);
+  --warn:   #C9821F;
+  --warn-bg:rgba(201,130,31,0.12);
+  --bad:    #C0392B;
+  --bad-bg: rgba(192,57,43,0.10);
+  --info:   #2A6FB0;
+  --info-bg:rgba(42,111,176,0.10);
+  --purple: #7C3AED;
+
+  --radius:   14px;
+  --radius-sm:9px;
+  --radius-lg:18px;
+  --shadow:   0 1px 2px rgba(16,32,26,.05), 0 4px 14px rgba(16,32,26,.05);
+  --shadow-lg:0 2px 6px rgba(16,32,26,.07), 0 18px 44px rgba(16,32,26,.10);
+  --ease: cubic-bezier(.22,.61,.36,1);
+
+  --font:  "Geist", ui-sans-serif, system-ui, sans-serif;
+  --mono:  "Geist Mono", ui-monospace, monospace;
+
+  --side-w: 248px;
+  --topbar-h: 64px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--slate);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea, select { font-family: inherit; }
+::selection { background: var(--accent-soft); }
+a { color: inherit; text-decoration: none; }
+
+.mono { font-family: var(--mono); }
+
+/* scrollbars */
+.scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.scroll::-webkit-scrollbar-thumb { background: #D4DCD5; border-radius: 8px; border: 3px solid transparent; background-clip: content-box; }
+.scroll::-webkit-scrollbar-thumb:hover { background: #BAC4BB; background-clip: content-box; }
+
+/* ============ App shell ============ */
+.app {
+  display: grid;
+  grid-template-columns: var(--side-w) 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============ Sidebar ============ */
+.sidebar {
+  background: var(--side-bg);
+  color: var(--side-fg);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--side-line);
+  overflow: hidden;
+}
+.side-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--side-line);
+}
+.side-logo {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(150deg, var(--side-accent), var(--accent));
+  display: grid; place-items: center;
+  color: #08130E;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.04em;
+  flex-shrink: 0;
+}
+.side-brand .bt { display: flex; flex-direction: column; line-height: 1.15; }
+.side-brand .bn { font-weight: 700; font-size: 14px; color: var(--side-fg); letter-spacing: -0.02em; }
+.side-brand .br { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--side-muted); margin-top: 2px; }
+
+.side-nav { flex: 1; overflow-y: auto; padding: 12px 12px 8px; }
+.side-nav::-webkit-scrollbar { width: 8px; }
+.side-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 8px; }
+.nav-group-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--side-muted);
+  padding: 16px 12px 8px;
+  opacity: 0.7;
+}
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  color: var(--side-muted);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: left;
+  transition: background .16s var(--ease), color .16s var(--ease);
+  position: relative;
+}
+.nav-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+.nav-item:hover { background: rgba(255,255,255,.05); color: var(--side-fg); }
+.nav-item.active { background: rgba(52,211,153,.12); color: #EAFBF3; }
+.nav-item.active::before {
+  content: ""; position: absolute; left: -12px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 20px; border-radius: 0 3px 3px 0; background: var(--side-accent);
+}
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 100px;
+  background: rgba(255,255,255,.08);
+  color: var(--side-fg);
+}
+.nav-badge.alert { background: var(--side-accent); color: #08130E; }
+
+.side-foot { padding: 12px; border-top: 1px solid var(--side-line); }
+.side-card {
+  background: var(--side-bg-2);
+  border: 1px solid var(--side-line);
+  border-radius: 11px;
+  padding: 12px 13px;
+}
+.side-card .row { display: flex; align-items: center; gap: 8px; }
+.side-card .dot { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; position: relative; flex-shrink: 0; }
+.side-card .dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #22C55E; animation: ping 2s infinite ease-out; }
+@keyframes ping { 0%{transform:scale(1);opacity:.6} 80%,100%{transform:scale(2.6);opacity:0} }
+.side-card .lbl { font-size: 11.5px; color: var(--side-fg); font-weight: 600; }
+.side-card .sub { font-family: var(--mono); font-size: 10px; color: var(--side-muted); margin-top: 6px; }
+.side-card a { color: var(--side-accent); }
+
+/* ============ Main ============ */
+.main { display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+.topbar {
+  height: var(--topbar-h);
+  flex-shrink: 0;
+  background: rgba(255,255,255,.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 28px;
+  z-index: 20;
+}
+.tb-title { display: flex; flex-direction: column; line-height: 1.1; }
+.tb-title h1 { font-size: 17px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.02em; }
+.tb-title .crumb { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dusk); margin-top: 3px; }
+
+.tb-search {
+  margin-left: 8px;
+  display: flex; align-items: center; gap: 9px;
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 13px;
+  width: 280px;
+  color: var(--dusk);
+  transition: border-color .16s, background .16s;
+}
+.tb-search:focus-within { border-color: var(--accent-line); background: #fff; }
+.tb-search svg { width: 15px; height: 15px; flex-shrink: 0; }
+.tb-search input { border: none; outline: none; background: none; font-size: 13px; width: 100%; color: var(--ink); }
+.tb-search kbd { font-family: var(--mono); font-size: 10px; background: #fff; border: 1px solid var(--border); border-radius: 5px; padding: 2px 6px; color: var(--dusk); }
+
+.tb-spacer { flex: 1; }
+.tb-burger {
+  display: none;
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  place-items: center;
+  color: var(--slate);
+  margin-right: 2px;
+}
+.tb-burger:hover { border-color: var(--accent-line); color: var(--accent); }
+.side-close {
+  display: none;
+  margin-left: auto;
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  place-items: center;
+  color: var(--side-muted);
+  background: rgba(255,255,255,.05);
+}
+.side-close:hover { color: var(--side-fg); background: rgba(255,255,255,.1); }
+.nav-scrim { display: none; }
+.tb-actions { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: grid; place-items: center;
+  color: var(--slate);
+  position: relative;
+  transition: border-color .16s, color .16s, background .16s;
+}
+.icon-btn:hover { border-color: var(--accent-line); color: var(--accent); }
+.icon-btn svg { width: 17px; height: 17px; }
+.icon-btn .ping { position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--bad); border: 1.5px solid #fff; }
+
+.tb-user { display: flex; align-items: center; gap: 10px; padding-left: 6px; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(150deg, var(--accent), var(--accent-strong));
+  color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px;
+}
+
+.content { flex: 1; overflow-y: auto; padding: 26px 28px 60px; }
+.view-wrap { max-width: 1280px; margin: 0 auto; }
+
+/* ============ Buttons ============ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 13px; font-weight: 600; line-height: 1;
+  padding: 10px 16px; border-radius: 9px;
+  transition: all .16s var(--ease); white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn svg { width: 15px; height: 15px; }
+.btn-primary { background: var(--accent); color: #fff; box-shadow: 0 1px 2px rgba(10,110,85,.3); }
+.btn-primary:hover { background: var(--accent-strong); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,110,85,.28); }
+.btn-ghost { background: var(--surface); border-color: var(--border); color: var(--slate); }
+.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
+.btn-dark { background: var(--ink); color: #fff; }
+.btn-dark:hover { background: #0b1712; }
+.btn-soft { background: var(--accent-soft); color: var(--accent-strong); }
+.btn-soft:hover { background: rgba(14,138,107,.16); }
+.btn-sm { padding: 7px 12px; font-size: 12px; border-radius: 8px; }
+.btn-lg { padding: 13px 22px; font-size: 14px; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; transform: none !important; }
+
+/* ============ Cards ============ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.card-pad { padding: 20px 22px; }
+.card-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-2);
+}
+.card-head h3 { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+.card-head .sub { font-family: var(--mono); font-size: 10.5px; color: var(--dusk); letter-spacing: 0.04em; }
+.card-head .spacer { flex: 1; }
+
+.section-title { display: flex; align-items: center; gap: 12px; margin: 30px 0 16px; }
+.section-title:first-child { margin-top: 0; }
+.section-title h2 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+.section-title .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.section-title .spacer { flex: 1; }
+.section-title .link { font-family: var(--mono); font-size: 11px; color: var(--dusk); display: inline-flex; align-items: center; gap: 5px; transition: color .16s; }
+.section-title .link:hover { color: var(--accent); }
+
+/* ============ KPI cards ============ */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.kpi {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.kpi:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.kpi .kpi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.kpi .kpi-ic { width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
+.kpi .kpi-ic svg { width: 17px; height: 17px; }
+.kpi .delta { font-family: var(--mono); font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 100px; }
+.kpi .delta.up { color: var(--good); background: var(--good-bg); }
+.kpi .delta.down { color: var(--bad); background: var(--bad-bg); }
+.kpi .delta.flat { color: var(--dusk); background: var(--mist); }
+.kpi .kpi-val { font-size: 28px; font-weight: 700; color: var(--ink); letter-spacing: -0.03em; line-height: 1; }
+.kpi .kpi-val em { font-family: var(--mono); font-style: normal; font-size: 16px; font-weight: 500; color: var(--dusk); }
+.kpi .kpi-lbl { font-size: 12.5px; color: var(--dusk); margin-top: 7px; }
+.kpi .spark { position: absolute; right: 0; bottom: 0; left: 0; height: 30px; opacity: .5; }
+
+/* ============ Pipeline status strip ============ */
+.flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+}
+.flow-step {
+  flex: 1; min-width: 116px;
+  padding: 16px 14px;
+  position: relative;
+  display: flex; flex-direction: column; gap: 8px;
+  border-right: 1px solid var(--border-2);
+}
+.flow-step:last-child { border-right: none; }
+.flow-step .fs-head { display: flex; align-items: center; gap: 8px; }
+.flow-step .fs-ic { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; background: var(--mist); color: var(--dusk); }
+.flow-step .fs-ic svg { width: 14px; height: 14px; }
+.flow-step.auto .fs-ic { background: var(--accent-soft); color: var(--accent); }
+.flow-step.manual .fs-ic { background: var(--warn-bg); color: var(--warn); }
+.flow-step .fs-name { font-size: 11.5px; font-weight: 600; color: var(--ink); }
+.flow-step .fs-tag { font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.flow-step .fs-count { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1; margin-top: 2px; }
+.flow-step .fs-count em { font-style: normal; font-size: 11px; color: var(--dusk); font-family: var(--mono); font-weight: 500; }
+.flow-step .fs-arrow { position: absolute; right: -7px; top: 50%; transform: translateY(-50%); z-index: 2; color: var(--faint); background: var(--surface); }
+.flow-step.manual { background: linear-gradient(180deg, rgba(201,130,31,.05), transparent); }
+
+/* ============ Tables ============ */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--dusk); text-align: left; font-weight: 500;
+  padding: 11px 16px; border-bottom: 1px solid var(--border);
+}
+.tbl td { padding: 13px 16px; border-bottom: 1px solid var(--border-2); font-size: 13px; color: var(--slate); vertical-align: middle; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tbody tr { transition: background .12s; }
+.tbl tbody tr:hover { background: var(--mist); }
+.tbl .t-title { font-weight: 600; color: var(--ink); }
+.tbl .t-sub { font-family: var(--mono); font-size: 11px; color: var(--dusk); }
+.num-cell { font-family: var(--mono); }
+
+/* ============ Badges / chips ============ */
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.02em;
+  padding: 4px 9px; border-radius: 100px; line-height: 1.4;
+  border: 1px solid transparent;
+}
+.chip-dot { width: 6px; height: 6px; border-radius: 50%; }
+.chip.gray  { background: var(--mist); color: var(--dusk); border-color: var(--fog); }
+.chip.green { background: var(--good-bg); color: var(--good); }
+.chip.warn  { background: var(--warn-bg); color: var(--warn); }
+.chip.bad   { background: var(--bad-bg); color: var(--bad); }
+.chip.info  { background: var(--info-bg); color: var(--info); }
+.chip.accent{ background: var(--accent-soft); color: var(--accent-strong); }
+.chip.purple{ background: rgba(124,58,237,.1); color: var(--purple); }
+
+.cat-seo { background: var(--accent-soft); color: var(--accent-strong); }
+.cat-ai  { background: rgba(124,58,237,.1); color: var(--purple); }
+.cat-bi  { background: var(--info-bg); color: var(--info); }
+.cat-cloud { background: rgba(42,111,176,.1); color: var(--info); }
+
+.delta-up { color: var(--good); }
+.delta-down { color: var(--bad); }
+.delta-flat { color: var(--dusk); }
+
+/* ============ Score dial ============ */
+.dial { position: relative; display: grid; place-items: center; }
+.dial svg { transform: rotate(-90deg); }
+.dial .dv { position: absolute; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.dial .dv .n { font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+.dial .dv .l { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dusk); margin-top: 3px; }
+
+/* ============ Checklist (rank-math style) ============ */
+.seo-groups { display: flex; flex-direction: column; }
+.seo-group { border-bottom: 1px solid var(--border-2); }
+.seo-group:last-child { border-bottom: none; }
+.seo-group-h { display: flex; align-items: center; gap: 9px; padding: 12px 4px; font-size: 11px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dusk); }
+.seo-group-h .ct { margin-left: auto; }
+.check { display: flex; align-items: flex-start; gap: 10px; padding: 8px 4px 8px 10px; font-size: 12.5px; color: var(--slate); }
+.check .ci { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+.check .ci svg { width: 11px; height: 11px; }
+.check.ok .ci { background: var(--good-bg); color: var(--good); }
+.check.warn .ci { background: var(--warn-bg); color: var(--warn); }
+.check.bad .ci { background: var(--bad-bg); color: var(--bad); }
+.check b { color: var(--ink); font-weight: 600; }
+
+/* ============ Forms ============ */
+.field { margin-bottom: 16px; }
+.field > label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+.field .hint { font-family: var(--mono); font-size: 10.5px; color: var(--dusk); margin-top: 6px; }
+.field .count { float: right; font-family: var(--mono); font-size: 10.5px; color: var(--dusk); font-weight: 500; }
+.field .count.over { color: var(--bad); }
+.field .count.ok { color: var(--good); }
+.inp, .ta, .sel {
+  width: 100%; border: 1px solid var(--border); border-radius: 9px;
+  padding: 10px 12px; font-size: 13px; color: var(--ink); background: var(--surface);
+  outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.inp:focus, .ta:focus, .sel:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.ta { resize: vertical; min-height: 84px; line-height: 1.6; }
+.serp-url { color: var(--accent-strong); }
+
+/* search-preview (SERP) */
+.serp {
+  border: 1px solid var(--border); border-radius: 11px; padding: 16px 18px; background: var(--surface);
+}
+.serp .u { font-size: 12px; color: #1a7a3f; display: flex; align-items: center; gap: 5px; }
+.serp .t { color: #1a0dab; font-size: 18px; margin: 5px 0 3px; font-weight: 500; line-height: 1.3; }
+.serp .d { font-size: 12.5px; color: #4d5156; line-height: 1.5; }
+
+/* ============ Toggles ============ */
+.toggle { position: relative; width: 38px; height: 22px; border-radius: 100px; background: var(--fog); transition: background .18s; flex-shrink: 0; }
+.toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .18s var(--ease); }
+.toggle.on { background: var(--accent); }
+.toggle.on::after { transform: translateX(16px); }
+
+/* ============ Kanban (pipeline board) ============ */
+.kanban { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; align-items: flex-start; }
+.kan-col { flex: 0 0 248px; background: var(--mist); border: 1px solid var(--border); border-radius: var(--radius); }
+.kan-col-h { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.kan-col-h .nm { font-size: 12px; font-weight: 700; color: var(--ink); }
+.kan-col-h .ct { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--dusk); background: #fff; border: 1px solid var(--border); padding: 1px 8px; border-radius: 100px; }
+.kan-col-h .kc-ic { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; }
+.kan-body { padding: 10px; display: flex; flex-direction: column; gap: 10px; min-height: 60px; max-height: calc(100vh - 280px); overflow-y: auto; }
+.kan-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 13px;
+  box-shadow: 0 1px 2px rgba(16,32,26,.04); cursor: pointer; transition: transform .14s, box-shadow .14s, border-color .14s;
+}
+.kan-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--accent-line); }
+.kan-card .kt { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.35; margin: 8px 0; }
+.kan-card .kmeta { display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--dusk); }
+.kan-card .kbar { height: 4px; background: var(--mist); border-radius: 4px; overflow: hidden; margin-top: 9px; }
+.kan-card .kbar i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+
+/* progress within automation */
+.auto-line { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--accent); }
+.auto-line .spin { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--accent-soft); border-top-color: var(--accent); animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============ Drawer / detail ============ */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(16,32,26,.4); backdrop-filter: blur(2px); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .22s; }
+.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; height: 100vh; width: min(960px, 94vw);
+  background: var(--bg); z-index: 90; box-shadow: -20px 0 60px rgba(16,32,26,.18);
+  transform: translateX(100%); transition: transform .28s var(--ease); display: flex; flex-direction: column;
+}
+.drawer.open { transform: translateX(0); }
+.drawer-top { display: flex; align-items: center; gap: 14px; padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+.drawer-top h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+.drawer-foot { padding: 14px 24px; border-top: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+/* ============ Image slot / dropzone ============ */
+.dropzone {
+  border: 1.5px dashed var(--fog); border-radius: var(--radius); background: var(--mist);
+  padding: 28px; text-align: center; transition: border-color .16s, background .16s; cursor: pointer;
+}
+.dropzone:hover { border-color: var(--accent-line); background: var(--accent-soft); }
+.dropzone .dz-ic { width: 44px; height: 44px; border-radius: 12px; background: #fff; border: 1px solid var(--border); display: grid; place-items: center; margin: 0 auto 12px; color: var(--accent); }
+.dropzone .dz-t { font-size: 13px; font-weight: 600; color: var(--ink); }
+.dropzone .dz-s { font-family: var(--mono); font-size: 11px; color: var(--dusk); margin-top: 5px; }
+
+/* striped placeholder image */
+.ph {
+  background-image: repeating-linear-gradient(45deg, var(--mist), var(--mist) 9px, #E9EEE9 9px, #E9EEE9 18px);
+  border: 1px solid var(--border); border-radius: 10px;
+  display: grid; place-items: center; position: relative;
+}
+.ph .ph-l { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; color: var(--dusk); background: rgba(255,255,255,.82); padding: 4px 9px; border-radius: 5px; border: 1px solid var(--border); }
+
+/* prompt block */
+.prompt-box {
+  background: var(--ink); color: #d6e4dc; border-radius: 11px; padding: 16px 18px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.65; position: relative;
+}
+.prompt-box .copy { position: absolute; top: 12px; right: 12px; }
+
+/* activity feed */
+.feed { display: flex; flex-direction: column; }
+.feed-item { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border-2); }
+.feed-item:last-child { border-bottom: none; }
+.feed-ic { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; display: grid; place-items: center; }
+.feed-ic svg { width: 15px; height: 15px; }
+.feed-tx { flex: 1; font-size: 12.5px; color: var(--slate); line-height: 1.45; }
+.feed-tx b { color: var(--ink); font-weight: 600; }
+.feed-tm { font-family: var(--mono); font-size: 10px; color: var(--faint); white-space: nowrap; }
+
+/* inbox layout */
+.inbox { display: grid; grid-template-columns: 360px 1fr; gap: 0; height: calc(100vh - var(--topbar-h) - 86px); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface); }
+.inbox-list { border-right: 1px solid var(--border); overflow-y: auto; }
+.q-item { padding: 15px 18px; border-bottom: 1px solid var(--border-2); cursor: pointer; transition: background .12s; display: flex; flex-direction: column; gap: 6px; position: relative; }
+.q-item:hover { background: var(--mist); }
+.q-item.active { background: var(--accent-soft); }
+.q-item.active::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+.q-item .q-top { display: flex; align-items: center; gap: 8px; }
+.q-item .q-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.q-item .q-time { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--faint); }
+.q-item .q-subj { font-size: 12.5px; color: var(--slate); font-weight: 500; }
+.q-item .q-prev { font-size: 11.5px; color: var(--dusk); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.q-item .unread { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.inbox-detail { display: flex; flex-direction: column; overflow: hidden; }
+.inbox-detail-body { flex: 1; overflow-y: auto; padding: 26px 30px; }
+.msg-bubble { background: var(--mist); border: 1px solid var(--border-2); border-radius: 12px; padding: 16px 18px; font-size: 13.5px; color: var(--slate); line-height: 1.65; }
+.reply-area { border-top: 1px solid var(--border); padding: 16px 22px; background: var(--surface); }
+
+/* media grid */
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+.media-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--surface); transition: transform .16s, box-shadow .16s; }
+.media-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.media-thumb { height: 120px; position: relative; }
+.media-meta { padding: 10px 12px; }
+.media-meta .mn { font-size: 12px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.media-meta .ms { font-family: var(--mono); font-size: 10px; color: var(--dusk); margin-top: 3px; }
+
+/* settings integrations */
+.intg { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-bottom: 1px solid var(--border-2); }
+.intg:last-child { border-bottom: none; }
+.intg-logo { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; font-weight: 700; flex-shrink: 0; font-size: 16px; }
+.intg-info { flex: 1; }
+.intg-info .in { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+.intg-info .id { font-size: 12px; color: var(--dusk); margin-top: 2px; }
+
+/* trend cards */
+.trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.trend-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); transition: transform .18s, box-shadow .18s; display: flex; flex-direction: column; }
+.trend-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.trend-card .tc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.trend-card h3 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.3; }
+.trend-card .tc-src { font-family: var(--mono); font-size: 10.5px; color: var(--dusk); margin-bottom: 14px; }
+.trend-card .tc-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+.tc-metric { background: var(--mist); border-radius: 8px; padding: 9px 10px; }
+.tc-metric .mn { font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+.tc-metric .ml { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dusk); margin-top: 2px; }
+.trend-card .tc-foot { margin-top: auto; display: flex; gap: 8px; }
+
+/* relevance meter */
+.relev { display: flex; align-items: center; gap: 8px; }
+.relev .bars { display: flex; gap: 2px; }
+.relev .bars i { width: 5px; height: 14px; border-radius: 2px; background: var(--fog); }
+.relev .bars i.on { background: var(--accent); }
+
+/* mini bar chart */
+.minibars { display: flex; align-items: flex-end; gap: 5px; height: 56px; }
+.minibars i { flex: 1; background: var(--accent-soft); border-radius: 3px 3px 0 0; position: relative; transition: background .16s; }
+.minibars i:hover { background: var(--accent); }
+
+/* generic grids */
+.grid-2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; }
+.grid-2b { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+.row { display: flex; align-items: center; gap: 10px; }
+.wrap { flex-wrap: wrap; }
+
+/* projects */
+.proj-row { display: grid; grid-template-columns: 40px 1fr auto; gap: 16px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--border-2); transition: background .12s; }
+.proj-row:hover { background: var(--mist); }
+.proj-row .pn { font-family: var(--mono); font-size: 13px; color: var(--dusk); font-weight: 600; }
+.proj-row .pt { font-size: 14px; font-weight: 600; color: var(--ink); }
+.proj-row .pd { font-size: 12px; color: var(--dusk); margin-top: 2px; }
+
+.empty { text-align: center; padding: 40px; color: var(--dusk); font-size: 13px; }
+
+/* toast */
+.toast-wrap { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.toast { background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 100px; font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 9px; animation: toastIn .3s var(--ease); }
+.toast svg { width: 16px; height: 16px; color: var(--side-accent); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(12px); } }
+
+/* ============ Responsive ============ */
+
+/* Tablet: tighten KPI grid */
+@media (max-width: 1080px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile / small tablet: off-canvas sidebar drawer */
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+
+  .sidebar {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 282px; max-width: 84vw;
+    z-index: 120;
+    transform: translateX(-100%);
+    transition: transform .28s var(--ease);
+    box-shadow: 24px 0 64px rgba(8,19,14,.32);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .side-close { display: grid; }
+
+  .nav-scrim {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(8,19,14,.46);
+    backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+    z-index: 110; opacity: 0; pointer-events: none;
+    transition: opacity .24s var(--ease);
+  }
+  .nav-scrim.open { opacity: 1; pointer-events: auto; }
+
+  .tb-burger { display: grid; }
+  .tb-search { display: none; }
+  .topbar { padding: 0 16px; gap: 12px; }
+  .content { padding: 18px 16px 56px; }
+
+  .grid-2, .grid-2b, .grid-3 { grid-template-columns: 1fr; }
+
+  /* Inbox stacks: list on top (scrolls), detail below */
+  .inbox { grid-template-columns: 1fr; height: auto; }
+  .inbox-list { border-right: none; border-bottom: 1px solid var(--border); max-height: 340px; }
+  .inbox-detail-body { padding: 20px 18px; }
+  .reply-area { padding: 14px 18px; }
+}
+
+/* Phone */
+@media (max-width: 560px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .kpi { padding: 14px 15px; }
+  .kpi .kpi-val { font-size: 23px; }
+  .tb-title .crumb { display: none; }
+  .tb-title h1 { font-size: 15px; }
+  .tb-actions { gap: 8px; }
+  .btn-label { display: none; }
+  .topbar .btn-primary { padding: 10px 12px; }
+  .card-pad { padding: 16px 16px; }
+  .drawer-body { padding: 18px 16px; }
+  .drawer-top, .drawer-foot { padding: 14px 16px; }
+  .reading { gap: 16px; }
+}
+
+/* ============ Rendered article (blog preview) ============ */
+.article { font-size: 14.5px; line-height: 1.78; color: var(--slate); max-width: 760px; }
+.article > *:first-child { margin-top: 0; }
+.article h1, .article h2, .article h3 { color: var(--ink); letter-spacing: -0.01em; line-height: 1.3; }
+.article h2 { font-size: 21px; margin: 30px 0 12px; padding-top: 20px; border-top: 1px solid var(--border-2); }
+.article h3 { font-size: 16px; margin: 22px 0 8px; }
+.article p { margin: 0 0 14px; }
+.article a { color: var(--accent-strong); text-decoration: underline; text-decoration-color: var(--accent-line); text-underline-offset: 2px; }
+.article a:hover { text-decoration-color: var(--accent); }
+.article ul, .article ol { margin: 0 0 14px; padding-left: 20px; }
+.article li { margin: 5px 0; }
+.article strong { color: var(--ink); font-weight: 700; }
+.article code { font-family: var(--mono); font-size: .85em; background: var(--mist); border: 1px solid var(--border); border-radius: 5px; padding: 1px 5px; color: var(--accent-strong); }
+.article pre { background: var(--ink); color: #d6e4dc; border-radius: 11px; padding: 15px 17px; overflow: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; margin: 0 0 16px; }
+.article pre code { background: none; border: none; color: inherit; padding: 0; }
+.article blockquote { margin: 0 0 18px; padding: 15px 22px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 11px 11px 0; }
+.article blockquote p { margin: 0; font-size: 16.5px; font-style: italic; color: var(--ink); line-height: 1.6; }
+.article blockquote cite { display: block; margin-top: 9px; font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; color: var(--accent-strong); }
+.article table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 13px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.article thead th { background: var(--mist); text-align: left; font-weight: 700; color: var(--ink); padding: 10px 13px; border-bottom: 1px solid var(--border); font-size: 12px; }
+.article tbody td { padding: 10px 13px; border-bottom: 1px solid var(--border-2); }
+.article tbody tr:last-child td { border-bottom: none; }
+.article tbody tr:nth-child(even) { background: var(--mist); }
+
+/* callouts inside articles */
+.cal { margin: 0 0 18px; border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); }
+.cal-h { display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 11px; }
+.cal-h svg { width: 15px; height: 15px; }
+.cal p { margin: 0; }
+.cal.tldr { background: linear-gradient(120deg, var(--accent-soft), transparent 70%); border-color: var(--accent-line); }
+.cal.tldr .cal-h { color: var(--accent-strong); }
+.cal.tldr p { font-size: 14.5px; color: var(--ink); }
+.cal.takeaways { background: var(--surface); border-color: var(--accent-line); box-shadow: var(--shadow); }
+.cal.takeaways .cal-h { color: var(--accent-strong); }
+.cal.takeaways ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+.cal.takeaways li { display: flex; gap: 9px; align-items: flex-start; font-size: 13.5px; color: var(--slate); margin: 0; }
+.cal.takeaways li svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.cal.note { background: var(--info-bg); border-color: rgba(42,111,176,.25); }
+.cal.note .cal-h { color: var(--info); }
+.cal.stats { border: none; padding: 0; background: none; }
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.stat-cell { background: var(--ink); color: #fff; border-radius: 12px; padding: 16px 18px; }
+.stat-cell .sv { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: #fff; }
+.stat-cell .sl { font-size: 11.5px; color: #9fb3a9; margin-top: 4px; line-height: 1.4; }
+.cal.faq { background: var(--surface); box-shadow: var(--shadow); }
+.cal.faq .cal-h { color: var(--ink); }
+.faq-item { border-top: 1px solid var(--border-2); padding: 12px 0; }
+.faq-item:last-child { padding-bottom: 0; }
+.faq-q { font-weight: 700; color: var(--ink); font-size: 13.5px; margin-bottom: 5px; display: flex; gap: 8px; }
+.faq-q::before { content: "Q"; font-family: var(--mono); color: var(--accent); font-weight: 700; }
+.faq-a { font-size: 13px; color: var(--slate); padding-left: 18px; line-height: 1.6; }
+
+/* ============ Blueprint controls ============ */
+.bp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.seg { display: inline-flex; background: var(--mist); border: 1px solid var(--border); border-radius: 9px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+.seg button { font-size: 12px; font-weight: 600; padding: 6px 11px; border-radius: 7px; color: var(--dusk); transition: all .14s; }
+.seg button:hover { color: var(--ink); }
+.seg button.on { background: var(--surface); color: var(--accent-strong); box-shadow: var(--shadow); }
+.chipset { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip-tog { font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 100px; border: 1px solid var(--border); color: var(--dusk); background: var(--surface); transition: all .14s; }
+.chip-tog:hover { border-color: var(--accent-line); }
+.chip-tog.on { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-strong); }
+.el-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.el-tog { display: flex; align-items: center; gap: 11px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); cursor: pointer; transition: border-color .14s, background .14s; }
+.el-tog:hover { border-color: var(--accent-line); }
+.el-tog.on { border-color: var(--accent-line); background: linear-gradient(110deg, var(--accent-soft), transparent 80%); }
+.el-tog .el-ic { width: 28px; height: 28px; border-radius: 7px; background: var(--mist); color: var(--dusk); display: grid; place-items: center; flex-shrink: 0; transition: all .14s; }
+.el-tog.on .el-ic { background: var(--accent-soft); color: var(--accent); }
+.el-tog .el-t { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+.el-tog .el-d { font-size: 10.5px; color: var(--dusk); font-family: var(--mono); margin-top: 2px; }
+.rng { width: 100%; accent-color: var(--accent); height: 6px; margin-top: 4px; cursor: pointer; }
+.pf-link { display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+.pf-link:last-child { margin-bottom: 0; }
+.pf-link .pf-t { font-size: 12.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-link .pf-u { font-family: var(--mono); font-size: 10.5px; color: var(--accent-strong); }
+.model-pill .sel { width: auto; padding: 6px 26px 6px 10px; font-size: 12px; }
+
+/* ============ Reading preview (ToC + article) ============ */
+.reading { display: grid; grid-template-columns: 188px 1fr; gap: 22px; align-items: start; }
+.toc { position: sticky; top: 0; }
+.toc-h { font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--dusk); margin-bottom: 11px; }
+.toc nav { display: flex; flex-direction: column; border-left: 2px solid var(--border); }
+.toc-link { font-size: 12px; color: var(--dusk); padding: 6px 0 6px 13px; margin-left: -2px; border-left: 2px solid transparent; cursor: pointer; line-height: 1.35; transition: color .14s, border-color .14s; }
+.toc-link:hover { color: var(--accent-strong); }
+.toc-link.l3 { padding-left: 24px; font-size: 11.5px; }
+.toc-link.active { color: var(--accent-strong); border-left-color: var(--accent); font-weight: 600; }
+.toc-meta { display: flex; flex-direction: column; gap: 4px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-2); font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+.reading-main { min-width: 0; }
+.reading .article { position: relative; }
+.read-progress { height: 3px; background: var(--border-2); border-radius: 3px; overflow: hidden; margin-bottom: 16px; }
+.read-progress i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .12s linear; }
+.article-head h1 { font-size: 25px; font-weight: 700; color: var(--ink); letter-spacing: -0.025em; line-height: 1.22; margin: 6px 0 14px; text-wrap: balance; }
+.byline { display: flex; align-items: center; gap: 11px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-2); }
+.byline .av { width: 36px; height: 36px; border-radius: 9px; background: linear-gradient(150deg, var(--accent), var(--accent-strong)); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+.byline .bn { font-size: 13px; font-weight: 700; color: var(--ink); }
+.byline .bm { font-family: var(--mono); font-size: 10.5px; color: var(--dusk); margin-top: 2px; }
+.article h2[id], .article h3[id] { scroll-margin-top: 12px; }
+
+@media (max-width: 920px) {
+  .reading { grid-template-columns: 1fr; }
+  .toc { display: none; }
+}
+
+/* ============ Rank Math analyzer (SEO Center) ============ */
+.seg { display: inline-flex; background: var(--mist); border: 1px solid var(--border); border-radius: 9px; padding: 3px; gap: 2px; }
+.seg button { font-size: 12px; font-weight: 600; color: var(--dusk); padding: 6px 12px; border-radius: 7px; transition: background .15s, color .15s; }
+.seg button.on { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+
+.rm-grid { display: grid; grid-template-columns: 360px 1fr; gap: 0; align-items: stretch; }
+.rm-left { padding: 20px; border-right: 1px solid var(--border-2); }
+.rm-right { padding: 14px 16px; min-width: 0; }
+
+.rm-score { display: flex; align-items: center; gap: 16px; padding: 16px; margin-top: 4px; background: var(--mist); border: 1px solid var(--border-2); border-radius: var(--radius); }
+.rm-score-side { display: flex; flex-direction: column; gap: 7px; }
+.rm-score-note { font-size: 12px; color: var(--dusk); }
+
+.rm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.rm-stat { background: var(--surface); border: 1px solid var(--border-2); border-radius: 10px; padding: 10px 11px; }
+.rm-stat .v { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; line-height: 1; }
+.rm-stat .k { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dusk); margin-top: 6px; }
+.rm-stat .s { font-size: 10.5px; color: var(--faint); margin-top: 2px; }
+
+.rm-density { margin-top: 14px; }
+.rm-density-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--dusk); margin-bottom: 7px; }
+.rm-density-top b { color: var(--ink); font-family: var(--mono); }
+.rm-bar { position: relative; height: 8px; background: var(--fog); border-radius: 100px; overflow: hidden; }
+.rm-bar-ideal { position: absolute; top: 0; bottom: 0; background: rgba(31,138,91,0.16); }
+.rm-bar-fill { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 100px; transition: width .4s var(--ease), background .3s; }
+.rm-bar-mark { position: absolute; top: -2px; width: 2px; height: 12px; background: var(--ink); border-radius: 2px; transition: left .4s var(--ease); }
+.rm-density-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9.5px; color: var(--faint); margin-top: 6px; }
+.rm-density-scale .ideal { color: var(--good); }
+
+/* checklist */
+.rm-checklist { display: flex; flex-direction: column; }
+.rm-cat { border-bottom: 1px solid var(--border-2); }
+.rm-cat:last-child { border-bottom: none; }
+.rm-cat-h { display: flex; align-items: center; gap: 9px; width: 100%; padding: 13px 6px; text-align: left; }
+.rm-cat-name { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+.rm-cat-meta { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--dusk); }
+.rm-cat-body { padding-bottom: 8px; }
+
+.check .ck-body { flex: 1; min-width: 0; }
+.check .ck-top { display: flex; align-items: center; gap: 8px; }
+.check .ck-top b { font-size: 12.5px; }
+.check .ck-tip { font-size: 11.5px; color: var(--dusk); margin-top: 2px; line-height: 1.45; }
+.rm-pts { margin-left: auto; font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 100px; flex-shrink: 0; }
+.rm-pts i { font-style: normal; font-weight: 500; opacity: .7; }
+.rm-pts.ok { background: var(--good-bg); color: var(--good); }
+.rm-pts.warn { background: var(--warn-bg); color: var(--warn); }
+.rm-pts.fail { background: var(--bad-bg); color: var(--bad); }
+
+.rm-empty { display: flex; align-items: center; gap: 12px; justify-content: center; min-height: 220px; color: var(--dusk); font-size: 13px; text-align: center; padding: 24px; }
+.rm-empty.bad { color: var(--bad); }
+.rm-empty svg { color: var(--accent); }
+.rm-empty.bad svg { color: var(--bad); }
+
+@media (max-width: 880px) {
+  .rm-grid { grid-template-columns: 1fr; }
+  .rm-left { border-right: none; border-bottom: 1px solid var(--border-2); }
+  .rm-stats { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* recommendations panel */
+.rm-recs .rec { display: flex; align-items: flex-start; gap: 12px; padding: 13px 20px; border-bottom: 1px solid var(--border-2); }
+.rm-recs .rec:last-child { border-bottom: none; }
+.rm-recs .rec:hover { background: var(--mist); }
+.rec-sev { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; flex-shrink: 0; margin-top: 1px; }
+.rec-sev.fail { background: var(--bad-bg); color: var(--bad); }
+.rec-sev.warn { background: var(--warn-bg); color: var(--warn); }
+.rec-sev.ok { background: var(--good-bg); color: var(--good); }
+.rec-body { flex: 1; min-width: 0; }
+.rec-top { display: flex; align-items: center; gap: 9px; }
+.rec-top b { font-size: 13px; color: var(--ink); font-weight: 600; }
+.rec-cat { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--dusk); background: var(--mist); padding: 2px 7px; border-radius: 100px; }
+.rec-tip { font-size: 12px; color: var(--dusk); margin-top: 3px; line-height: 1.5; }
+.rec-pts { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent-strong); background: var(--accent-soft); padding: 3px 9px; border-radius: 100px; flex-shrink: 0; }
+.rm-recs-done { display: flex; align-items: center; gap: 12px; padding: 20px; font-size: 13px; color: var(--slate); }
+.rm-recs-done b { color: var(--ink); }
+
+/* ============ User menu (topbar) ============ */
+.umenu-scrim { position: fixed; inset: 0; z-index: 40; }
+.umenu { position: absolute; top: 46px; right: 0; z-index: 50; width: 248px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-lg); overflow: hidden; }
+.umenu-head { display: flex; align-items: center; gap: 11px; padding: 14px; border-bottom: 1px solid var(--border-2); }
+.umenu-av { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(150deg, var(--accent), var(--accent-strong)); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.umenu-id { display: flex; flex-direction: column; min-width: 0; }
+.umenu-name { font-size: 13px; font-weight: 700; color: var(--ink); }
+.umenu-mail { font-family: var(--mono); font-size: 10.5px; color: var(--dusk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.umenu-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px 14px; font-size: 13px; font-weight: 500; color: var(--slate); transition: background .14s; }
+.umenu-item:hover { background: var(--mist); }
+.umenu-item.danger { color: var(--bad); }
+.umenu-item.danger:hover { background: var(--bad-bg); }
+
+/* ============ Login gate ============ */
+.auth-screen { position: fixed; inset: 0; display: grid; grid-template-columns: 1.05fr 1fr; background: var(--bg); z-index: 100; }
+.auth-brand { background: var(--side-bg, #0C1F18); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.auth-brand::before { content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%; background: radial-gradient(circle, rgba(14,138,107,.36), transparent 62%); top: -140px; right: -120px; }
+.auth-brand::after { content: ""; position: absolute; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(52,211,153,.16), transparent 65%); bottom: -160px; left: -120px; }
+.auth-brand-inner { position: relative; z-index: 1; max-width: 360px; padding: 40px; color: #EAF3EE; }
+.auth-logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(150deg, #34D399, var(--accent)); color: #08130E; display: grid; place-items: center; font-weight: 700; font-size: 19px; margin-bottom: 26px; }
+.auth-brand-inner h1 { font-size: 25px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px; color: #fff; }
+.auth-brand-inner > p { font-family: var(--mono); font-size: 12px; color: #7FA593; letter-spacing: 0.02em; margin: 0 0 30px; }
+.auth-points { list-style: none; margin: 0 0 34px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.auth-points li { display: flex; align-items: center; gap: 11px; font-size: 13.5px; color: #C8DBD0; }
+.auth-points li svg { color: #34D399; flex-shrink: 0; }
+.auth-foot { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #5E7E70; }
+
+.auth-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; }
+.auth-card { width: 100%; max-width: 384px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-lg); padding: 30px; }
+.auth-form { display: flex; flex-direction: column; gap: 14px; }
+.auth-head { display: flex; align-items: center; gap: 13px; margin-bottom: 4px; }
+.auth-lock { width: 40px; height: 40px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex-shrink: 0; }
+.auth-head h2 { font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin: 0; }
+.auth-head p { font-size: 12.5px; color: var(--dusk); margin: 2px 0 0; }
+.auth-field { display: flex; flex-direction: column; gap: 7px; }
+.auth-field > span { font-size: 12px; font-weight: 600; color: var(--ink); }
+.auth-pw { position: relative; }
+.auth-pw .inp { padding-right: 42px; }
+.auth-eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; display: grid; place-items: center; color: var(--dusk); border-radius: 7px; }
+.auth-eye:hover { color: var(--accent); background: var(--mist); }
+.auth-submit { width: 100%; justify-content: center; padding: 11px; font-size: 14px; margin-top: 4px; }
+.auth-submit:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
+.auth-link { background: none; border: none; color: var(--accent-strong); font-size: 12.5px; font-weight: 600; cursor: pointer; text-align: center; padding: 2px; }
+.auth-link:hover { text-decoration: underline; }
+.auth-link.subtle { color: var(--dusk); font-weight: 500; }
+.auth-info { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; line-height: 1.45; padding: 10px 12px; border-radius: 9px; }
+.auth-info svg { flex-shrink: 0; margin-top: 1px; }
+.auth-info.ok { background: var(--good-bg); color: var(--good); }
+.auth-info.bad { background: var(--bad-bg); color: var(--bad); }
+.auth-demo { display: flex; align-items: center; gap: 7px; justify-content: center; flex-wrap: wrap; font-size: 11px; color: var(--dusk); background: var(--mist); border: 1px dashed var(--border); border-radius: 9px; padding: 9px; margin-top: 6px; }
+.auth-demo b { color: var(--slate); font-family: var(--mono); font-size: 10.5px; }
+.auth-otp { text-align: center; font-family: var(--mono); font-size: 26px; letter-spacing: 0.4em; font-weight: 600; padding-left: 0.4em; }
+.auth-code { text-align: center; font-family: var(--mono); font-size: 30px; font-weight: 700; letter-spacing: 0.28em; color: var(--accent-strong); background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 11px; padding: 14px; padding-left: calc(0.28em + 6px); }
+.auth-disclaimer { max-width: 384px; text-align: center; font-size: 11px; color: var(--faint); margin: 18px 0 0; line-height: 1.5; }
+
+/* EmailJS config (inside reset flow) */
+.auth-cfg { border: 1px solid var(--border); border-radius: 11px; padding: 14px; background: var(--mist); margin-top: 4px; }
+.auth-cfg-head { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink); }
+.auth-x { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 7px; color: var(--dusk); }
+.auth-x:hover { background: var(--fog); color: var(--ink); }
+.auth-cfg-note { font-size: 11.5px; color: var(--dusk); line-height: 1.5; margin: 8px 0 12px; }
+.auth-cfg-note code { font-family: var(--mono); font-size: 10.5px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 4px; color: var(--accent-strong); }
+.auth-cfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.auth-cfg-grid label { display: flex; flex-direction: column; gap: 5px; font-size: 11px; font-weight: 600; color: var(--slate); }
+.auth-cfg-grid .inp { padding: 8px 10px; font-size: 12px; }
+
+@media (max-width: 820px) {
+  .auth-screen { grid-template-columns: 1fr; }
+  .auth-brand { display: none; }
+  .auth-cfg-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#0C1F18"/>
+    <rect x="30" y="30" width="40" height="40" rx="9" fill="#0E8A6B"/>
+    <text x="50" y="57" font-family="sans-serif" font-size="20" font-weight="700" fill="#08130E" text-anchor="middle">MP</text>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script>
+/* =====================================================
+   ADMIN DATA — live API loader.
+   Static config (stages, trends, rankings, site-health)
+   lives here. Dynamic data (posts, projects, queries,
+   media) is fetched from /api/* on load.
+   ===================================================== */
+(function () {
+
+  // ---- Pipeline stages (static config) ----
+  const STAGES = [
+    { id: "discover",  name: "Discover",    tag: "auto",   icon: "radar",    desc: "Scan the web for trending topics in your niche." },
+    { id: "outline",   name: "Plan",        tag: "auto",   icon: "list",     desc: "Build a search-intent outline + angle." },
+    { id: "draft",     name: "Draft",       tag: "auto",   icon: "pen",      desc: "Write a full draft from profile.md context." },
+    { id: "humanize",  name: "Humanize",    tag: "auto",   icon: "sparkle",  desc: "De-robotify: vary cadence, add voice." },
+    { id: "seo",       name: "SEO",         tag: "auto",   icon: "gauge",    desc: "Score on-page SEO, meta, keywords, OG tags." },
+    { id: "image",     name: "Image prompt",tag: "auto",   icon: "image",    desc: "Generate the cover-image prompt." },
+    { id: "review",    name: "Review",      tag: "manual", icon: "eye",      desc: "YOU: read it, drop the image, publish." },
+    { id: "published", name: "Published",   tag: "auto",   icon: "globe",    desc: "Live on the public site." },
+  ];
+
+  // ---- Posts moving through (and out of) the pipeline ----
+  const POSTS = [
+    {
+      id: "p-azure-cost",
+      title: "How I Cut an Azure Bill 38% Without Touching a Single App",
+      category: "cloud", cat: "Cloud",
+      stage: "review",
+      keyword: "reduce azure costs",
+      auto: false,
+      progress: 100,
+      updated: "4 min ago",
+      seoScore: 86,
+      words: 1840, readMin: 8,
+      volume: "8.1K", difficulty: 34, intent: "Informational",
+      metaTitle: "How to Reduce Azure Costs by 38% (Real Audit Walkthrough)",
+      metaDesc: "A practical, no-fluff walkthrough of the exact Azure cost audit I ran: idle resources, rightsizing, reserved instances and the Power BI report that tracks it.",
+      slug: "reduce-azure-costs",
+      imagePrompt: "Editorial wide-angle hero, soft daylight: a clean developer desk with a laptop showing a descending green cost line-chart, a small potted plant, muted emerald and warm-white palette, shallow depth of field, no text, no logos, premium tech-blog aesthetic, 1600x900.",
+      hasImage: false,
+      excerpt: "Companies waste 30%+ of Azure spend on idle resources. Here's the repeatable audit I run.",
+      body: null,
+      ogReady: true,
+    },
+    {
+      id: "p-power-bi-dax",
+      title: "7 DAX Patterns That Made My Financial Dashboards Actually Fast",
+      category: "bi", cat: "Power BI",
+      stage: "review",
+      keyword: "dax patterns power bi",
+      auto: false,
+      progress: 100,
+      updated: "26 min ago",
+      seoScore: 79,
+      words: 2120, readMin: 9,
+      volume: "5.4K", difficulty: 41, intent: "Informational",
+      metaTitle: "7 DAX Patterns for Faster Power BI Financial Dashboards",
+      metaDesc: "Time-intelligence, rolling averages and variance done right. The DAX measures I reuse on every financial model, with the gotchas that slow reports down.",
+      slug: "dax-patterns-financial-dashboards",
+      imagePrompt: "Overhead flat-lay of an analyst workspace, dark slate desk, a monitor edge showing abstract bar + line charts in emerald and amber, a notebook with formula sketches, dramatic side light, no readable text, 1600x900.",
+      hasImage: false,
+      excerpt: "The handful of DAX measures I reuse on every financial model.",
+      body: null,
+      ogReady: true,
+    },
+    {
+      id: "p-rag-eval",
+      title: "Evaluating RAG Pipelines Without a PhD: A Practical Scorecard",
+      category: "ai", cat: "AI",
+      stage: "seo",
+      keyword: "evaluate rag pipeline",
+      auto: true, autoNote: "Scoring on-page SEO…",
+      progress: 72,
+      updated: "just now",
+      seoScore: 64,
+      words: 1610, readMin: 7,
+      volume: "3.2K", difficulty: 38, intent: "Informational",
+      metaTitle: "", metaDesc: "", slug: "evaluate-rag-pipeline",
+      imagePrompt: "", hasImage: false,
+      excerpt: "A lightweight scorecard for judging retrieval quality before it hits production.",
+      body: null, ogReady: false,
+    },
+    {
+      id: "p-sql-window",
+      title: "SQL Window Functions, Explained With One Sales Table",
+      category: "bi", cat: "Power BI",
+      stage: "humanize",
+      keyword: "sql window functions",
+      auto: true, autoNote: "Humanizing draft…",
+      progress: 48,
+      updated: "just now",
+      seoScore: 51,
+      words: 1430, readMin: 6,
+      volume: "12.7K", difficulty: 29, intent: "Informational",
+      metaTitle: "", metaDesc: "", slug: "sql-window-functions",
+      imagePrompt: "", hasImage: false,
+      excerpt: "ROW_NUMBER, RANK, LAG and running totals, taught from a single table.",
+      body: null, ogReady: false,
+    },
+    {
+      id: "p-pydantic",
+      title: "Why I Validate Every API Payload With Pydantic Now",
+      category: "ai", cat: "AI",
+      stage: "draft",
+      keyword: "pydantic validation",
+      auto: true, autoNote: "Writing draft…",
+      progress: 30,
+      updated: "just now",
+      seoScore: null,
+      words: 0, readMin: 0,
+      volume: "2.1K", difficulty: 22, intent: "Informational",
+      metaTitle: "", metaDesc: "", slug: "pydantic-validation",
+      imagePrompt: "", hasImage: false,
+      excerpt: "Type-safe payloads stopped a whole class of production bugs.",
+      body: null, ogReady: false,
+    },
+    {
+      id: "p-nbpnp",
+      title: "The NB Graduate Stream, Demystified for International Students",
+      category: "seo", cat: "SEO",
+      stage: "outline",
+      keyword: "nb graduate stream nbpnp",
+      auto: true, autoNote: "Building outline…",
+      progress: 18,
+      updated: "2 min ago",
+      seoScore: null, words: 0, readMin: 0,
+      volume: "6.6K", difficulty: 31, intent: "Informational",
+      metaTitle: "", metaDesc: "", slug: "nb-graduate-stream",
+      imagePrompt: "", hasImage: false,
+      excerpt: "A clear, current explainer for the NBPNP graduate pathway.",
+      body: null, ogReady: false,
+    },
+    {
+      id: "p-vitals",
+      title: "Core Web Vitals in 2026: What Still Moves Rankings",
+      category: "seo", cat: "SEO",
+      stage: "discover",
+      keyword: "core web vitals 2026",
+      auto: true, autoNote: "Queued from Trend Radar",
+      progress: 6,
+      updated: "8 min ago",
+      seoScore: null, words: 0, readMin: 0,
+      volume: "14.3K", difficulty: 44, intent: "Informational",
+      metaTitle: "", metaDesc: "", slug: "core-web-vitals-2026",
+      imagePrompt: "", hasImage: false,
+      excerpt: "INP replaced FID a while ago. Here's what the data says matters now.",
+      body: null, ogReady: false,
+    },
+    // already live (from the real public site)
+    {
+      id: "p-podcast", title: "How I Built an SEO-Optimized Podcast Review Platform",
+      category: "seo", cat: "SEO", stage: "published", auto: false, progress: 100,
+      updated: "3 days ago", seoScore: 98, words: 1871, readMin: 9,
+      keyword: "podcast review platform", volume: "4.9K", difficulty: 36, intent: "Informational",
+      metaTitle: "Podcast Review Platform SEO: How I Built One That Hit 60,000 Visits/Month", hasImage: true, ogReady: true,
+      excerpt: "From domain structure to AudioObject schema, a complete walkthrough.", slug: "podcast-review-platform-seo",
+      views: "1.2K", rank: 4,
+    },
+    {
+      id: "p-ats", title: "ATS Resume Optimization: How I Automated It with GPT-4",
+      category: "ai", cat: "AI", stage: "published", auto: false, progress: 100,
+      updated: "1 week ago", seoScore: 98, words: 1897, readMin: 9,
+      keyword: "ats resume optimizer", volume: "9.8K", difficulty: 42, intent: "Informational",
+      metaTitle: "ATS Resume Optimizer: How I Built a GPT-4 Pipeline That Beats Resume Bots", hasImage: true, ogReady: true,
+      excerpt: "I built a GPT-4 pipeline that scores resumes against job descriptions.", slug: "ats-resume-optimizer-gpt4",
+      views: "3.4K", rank: 2,
+    },
+    {
+      id: "p-powerbi", title: "How to Build a Power BI Dashboard for Financial Data",
+      category: "bi", cat: "Power BI", stage: "published", auto: false, progress: 100,
+      updated: "2 weeks ago", seoScore: 98, words: 1785, readMin: 9,
+      keyword: "power bi financial dashboard", volume: "11.2K", difficulty: 39, intent: "Informational",
+      metaTitle: "Power BI Financial Dashboard: How I Build One in 5 Pages Finance Teams Use", hasImage: true, ogReady: true,
+      excerpt: "Star schema modelling, DAX measures and the layout decisions that matter.", slug: "power-bi-financial-dashboard",
+      views: "5.1K", rank: 1,
+    },
+  ];
+
+  // ---- Trend radar: auto-discovered topics ----
+  const TRENDS = [
+    { id: "t1", title: "INP optimization techniques", source: "Google Trends · rising", volume: "18.4K", growth: "+212%", difficulty: 33, relevance: 5, why: "Matches your SEO + web-dev authority; low competition spike.", queued: false, cat: "SEO" },
+    { id: "t2", title: "Power BI vs Fabric for SMBs", source: "Reddit r/PowerBI · hot", volume: "9.1K", growth: "+88%", difficulty: 41, relevance: 5, why: "Direct fit for your Power BI Embedded project (#15).", queued: false, cat: "Power BI" },
+    { id: "t3", title: "Azure OpenAI cost control", source: "Hacker News · front page", volume: "7.7K", growth: "+154%", difficulty: 37, relevance: 5, why: "Ties your Azure certs to the cost-optimizer project (#09).", queued: false, cat: "Cloud" },
+    { id: "t4", title: "Scikit-learn churn modelling 2026", source: "Google Trends · breakout", volume: "5.3K", growth: "+64%", difficulty: 28, relevance: 4, why: "You shipped a real telecom churn analysis, strong proof.", queued: true, cat: "AI" },
+    { id: "t5", title: "Open Canada data portal tutorials", source: "X / Twitter · trending CA", volume: "3.9K", growth: "+47%", difficulty: 24, relevance: 4, why: "Listed in your Top Skills (Open Government Data).", queued: false, cat: "SEO" },
+    { id: "t6", title: "ATS resume keywords for tech 2026", source: "LinkedIn · spike", volume: "22.6K", growth: "+39%", difficulty: 46, relevance: 5, why: "Your ATS optimizer post is already ranking #2, extend the cluster.", queued: false, cat: "AI" },
+  ];
+
+  // ---- Query inbox: contact form submissions ----
+  const QUERIES = [
+    { id: "q1", name: "Sarah Whitman", email: "s.whitman@northbridge.ca", company: "Northbridge Analytics", subject: "Power BI embedded for a 40-person team", time: "12m", unread: true, tag: "Lead", budget: "$8–12K", body: "Hi Meet, found your Power BI dashboard write-up and it's exactly the approach we need. We have ~40 staff and can't justify Pro per-user. Could you scope a multi-tenant embedded setup with row-level security? Timeline is Q3. What would discovery look like?" },
+    { id: "q2", name: "Devon Park", email: "devon@parklabs.io", company: "Park Labs", subject: "Azure cost audit: quick question", time: "1h", unread: true, tag: "Lead", budget: "TBD", body: "Read your Azure cost piece. Our monthly spend jumped 60% after a migration. Do you do one-off audits, or is it retainer only? Roughly what do idle-resource audits run?" },
+    { id: "q3", name: "Aleksandra Nowak", email: "a.nowak@gmail.com", company: "·", subject: "NBCC capstone collaboration?", time: "5h", unread: true, tag: "Networking", budget: "·", body: "Hi! I'm also at NBCC (analytics, graduating Dec 2026). Loved your SBA 504 project. Would you be open to a quick coffee chat about ML project structure? No agenda, just learning." },
+    { id: "q4", name: "Marcus Lee", email: "marcus@brightpath.dev", company: "Brightpath", subject: "Freelance WordPress + SEO build", time: "1d", unread: false, tag: "Lead", budget: "$3–5K", body: "We need a fast, SEO-clean marketing site (WordPress is fine). Saw you've done SEO-optimized builds since 2018. Are you taking freelance work alongside studies? 6-page site, content ready." },
+    { id: "q5", name: "Recruiter · TD Bank", email: "talent@td.com", company: "TD Bank", subject: "Data Analyst role · Saint John", time: "2d", unread: false, tag: "Recruiter", budget: "Full-time", body: "Hi Meet, your profile is a strong match for an IT Business Analyst opening on our Saint John data team (NB Graduate Stream friendly). Are you open to a 20-minute intro call next week?" },
+    { id: "q6", name: "Priya Sharma", email: "priya.s@datco.in", company: "DatCo", subject: "Telecom churn methodology", time: "3d", unread: false, tag: "Networking", budget: "·", body: "Your churn analysis across Airtel/BSNL/Jio was thorough. Which features ended up most predictive? Working on something similar and would value a pointer." },
+  ];
+
+  // ---- Projects manager (the 12+ roadmap) ----
+  const PROJECTS = [
+    { id: 1,  num: "01", title: "SBA 504 Loan ML Analysis", status: "live", statusLabel: "In progress", cat: "AI", desc: "500k+ federal loan records · predicts outcomes & regional impact", stack: ["Python", "Scikit-Learn", "Power BI"], visible: true },
+    { id: 2,  num: "02", title: "Airbnb Pricing & Occupancy Dashboard", status: "live", statusLabel: "Shipped", cat: "Power BI", desc: "Cleaned public dataset, BI for hosts", stack: ["Python", "Pandas", "Power BI"], visible: true },
+    { id: 3,  num: "03", title: "Telecom Customer Churn Analysis", status: "live", statusLabel: "Shipped", cat: "AI", desc: "Airtel, BSNL, Vodafone, Jio segmentation", stack: ["Python", "Matplotlib", "EDA"], visible: true },
+    { id: 4,  num: "04", title: "Technomax Client Web Platforms", status: "live", statusLabel: "Shipped", cat: "Cloud", desc: "Full-stack delivery for Ontario clients", stack: ["PHP", "MySQL", "Azure"], visible: true },
+    { id: 5,  num: "05", title: "Freelance Client Sites", status: "live", statusLabel: "Ongoing", cat: "SEO", desc: "SEO-optimized builds since 2018", stack: ["WordPress", "Node.js", "GA"], visible: true },
+    { id: 6,  num: "06", title: "ResumeATS · AI Resume Optimizer", status: "build", statusLabel: "In build", cat: "AI", desc: "Scores resumes vs JD + rewrites weak sections", stack: ["Python", "Azure OpenAI", "spaCy"], visible: true },
+    { id: 7,  num: "07", title: "AutoShare WP Plugin", status: "build", statusLabel: "In build", cat: "SEO", desc: "Cross-posts WP articles to socials", stack: ["PHP", "WP API", "OAuth"], visible: true },
+    { id: 8,  num: "08", title: "SEO Audit Automation", status: "build", statusLabel: "In build", cat: "SEO", desc: "Weekly crawl, scores pages, emails report", stack: ["Python", "GSC API", "Azure"], visible: true },
+    { id: 9,  num: "09", title: "Azure Cost Optimizer", status: "build", statusLabel: "In build", cat: "Cloud", desc: "Scans + flags idle resources, recommends rightsizing", stack: ["Python", "ARM API", "Power BI"], visible: true },
+    { id: 10, num: "10", title: "PodcastBrain · Audio → SEO Blog", status: "planned", statusLabel: "Planned", cat: "AI", desc: "Transcribes + summarizes + publishes episodes", stack: ["Whisper", "Azure OpenAI", "WP REST"], visible: false },
+    { id: 11, num: "11", title: "Inventory Forecasting", status: "planned", statusLabel: "Planned", cat: "AI", desc: "Prophet-based forecast tool with web UI", stack: ["Python", "Prophet", "SQL"], visible: false },
+    { id: 12, num: "12", title: "Lead Scoring Engine", status: "planned", statusLabel: "Planned", cat: "AI", desc: "ML scores + routes SMB sales leads", stack: ["Python", "Azure ML", "HubSpot"], visible: false },
+  ];
+
+  // ---- SEO command center: keyword rankings ----
+  const RANKINGS = [
+    { kw: "power bi financial dashboard", pos: 1, prev: 3, change: 2, vol: "11.2K", url: "/blog/power-bi-financial-dashboard", traffic: "5.1K" },
+    { kw: "ats resume optimization gpt-4", pos: 2, prev: 2, change: 0, vol: "9.8K", url: "/blog/ats-resume-optimizer-gpt4", traffic: "3.4K" },
+    { kw: "podcast review platform seo", pos: 4, prev: 7, change: 3, vol: "4.9K", url: "/blog/podcast-review-platform-seo", traffic: "1.2K" },
+    { kw: "azure solutions architect portfolio", pos: 6, prev: 5, change: -1, vol: "2.4K", url: "/", traffic: "880" },
+    { kw: "it business analyst new brunswick", pos: 3, prev: 9, change: 6, vol: "1.1K", url: "/about", traffic: "640" },
+    { kw: "dax patterns financial model", pos: 12, prev: 18, change: 6, vol: "5.4K", url: "/blog/dax-patterns-financial-dashboards", traffic: "210" },
+    { kw: "telecom churn analysis python", pos: 8, prev: 8, change: 0, vol: "3.6K", url: "/projects/telecom-churn", traffic: "390" },
+    { kw: "hire freelance web developer canada", pos: 14, prev: 22, change: 8, vol: "6.7K", url: "/services", traffic: "180" },
+  ];
+
+  // site-health audit
+  const SITE_HEALTH = [
+    { group: "Indexation", items: [
+      { label: "All key pages indexed in Google", state: "ok", note: "11 / 11 indexed" },
+      { label: "XML sitemap submitted & fresh", state: "ok", note: "Updated 2d ago" },
+      { label: "No noindex on money pages", state: "ok", note: "Clean" },
+    ]},
+    { group: "Performance", items: [
+      { label: "Largest Contentful Paint < 2.5s", state: "ok", note: "1.9s mobile" },
+      { label: "Interaction to Next Paint < 200ms", state: "warn", note: "243ms on /blog" },
+      { label: "Cumulative Layout Shift < 0.1", state: "ok", note: "0.02" },
+    ]},
+    { group: "On-page & schema", items: [
+      { label: "Unique title + meta on every page", state: "ok", note: "11 / 11" },
+      { label: "OG + Twitter cards present", state: "warn", note: "2 pages missing OG image" },
+      { label: "Structured data valid (Person, Article)", state: "ok", note: "No errors" },
+      { label: "Internal links to new posts", state: "bad", note: "3 orphan drafts" },
+    ]},
+  ];
+
+  // ---- Media library ----
+  const MEDIA = [
+    { id: "m1", name: "azure-cost-hero.png", kind: "needed", post: "Azure Cost", size: "·", dim: "1600×900", cat: "cloud" },
+    { id: "m2", name: "dax-patterns-hero.png", kind: "needed", post: "DAX Patterns", size: "·", dim: "1600×900", cat: "bi" },
+    { id: "m3", name: "podcast-platform-og.png", kind: "image", post: "Podcast SEO", size: "284 KB", dim: "1200×630", cat: "seo" },
+    { id: "m4", name: "ats-resume-hero.png", kind: "image", post: "ATS Resume", size: "412 KB", dim: "1600×900", cat: "ai" },
+    { id: "m5", name: "ats-resume-og.png", kind: "image", post: "ATS Resume", size: "198 KB", dim: "1200×630", cat: "ai" },
+    { id: "m6", name: "powerbi-dash-hero.png", kind: "image", post: "Power BI", size: "528 KB", dim: "1600×900", cat: "bi" },
+    { id: "m7", name: "powerbi-dash-og.png", kind: "image", post: "Power BI", size: "221 KB", dim: "1200×630", cat: "bi" },
+    { id: "m8", name: "meet-headshot.png", kind: "image", post: "Brand", size: "340 KB", dim: "800×800", cat: "seo" },
+  ];
+
+  // ---- Activity feed (the automation log) ----
+  const ACTIVITY = [
+    { ic: "globe",   color: "green",  tx: "Auto-published <b>Power BI Financial Dashboard</b> after your approval", tm: "3d" },
+    { ic: "eye",     color: "warn",   tx: "<b>Azure Cost</b> moved to <b>Review</b>, needs image + publish", tm: "4m" },
+    { ic: "gauge",   color: "accent", tx: "SEO pass on <b>RAG Pipelines</b> · score 64, 3 fixes suggested", tm: "just now" },
+    { ic: "sparkle", color: "purple", tx: "Humanized <b>SQL Window Functions</b> draft · readability +18", tm: "1m" },
+    { ic: "pen",     color: "info",   tx: "Drafted <b>Pydantic validation</b> from profile.md context", tm: "6m" },
+    { ic: "radar",   color: "accent", tx: "Trend Radar found <b>4 new topics</b> above your relevance threshold", tm: "12m" },
+    { ic: "list",    color: "info",   tx: "Outline built for <b>NB Graduate Stream</b> explainer", tm: "2m" },
+    { ic: "mail",    color: "accent", tx: "New query from <b>Sarah Whitman</b> · tagged Lead", tm: "12m" },
+  ];
+
+  // 28-day organic clicks sparkline-ish series
+  const TRAFFIC_SERIES = [42,48,45,53,60,58,66,71,69,78,74,82,88,85,93,99,96,104,110,108,117,122,119,128,134,131,142,151];
+
+  // Initialise with static config and empty dynamic collections
+  window.ADMIN = {
+    STAGES, TRENDS, RANKINGS, SITE_HEALTH, TRAFFIC_SERIES,
+    POSTS: [], PROJECTS: [], QUERIES: [], MEDIA: [],
+    ACTIVITY: [
+      { ic: "globe",   color: "green",  tx: "Connected to Azure backend", tm: "now" },
+    ],
+  };
+
+  // Fetch live data from the Azure Functions API
+  async function loadAdminData() {
+    const token = sessionStorage.getItem("mp-jwt");
+    if (!token) return;
+    const h = { "Authorization": "Bearer " + token };
+    try {
+      const [posts, projects, queries, media] = await Promise.all([
+        fetch("/api/posts",    { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch("/api/projects", { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch("/api/queries",  { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch("/api/media",    { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+      ]);
+      window.ADMIN.POSTS    = posts;
+      window.ADMIN.PROJECTS = projects;
+      window.ADMIN.QUERIES  = queries;
+      window.ADMIN.MEDIA    = media;
+    } catch (e) {
+      console.warn("[admin] API fetch failed:", e);
+    }
+  }
+
+  window.ADMIN.load = loadAdminData;
+})();
+
+</script>
+<script>
+/* =====================================================
+   RANK MATH — REAL on-page SEO analysis engine.
+   Pure, deterministic, framework-free. No mock scores:
+   every number is computed from the actual parsed HTML
+   (or pasted content) against a focus keyword.
+   Exposed as window.RankMath.
+   ===================================================== */
+(function () {
+  "use strict";
+
+  var SITE_HOSTS = ["meetpatel.dev", "www.meetpatel.dev"];
+
+  // Power / sentiment words used by the title-readability tests.
+  var POWER_WORDS = ("instantly,actually,proven,guaranteed,effortless,ultimate,essential,powerful,secret," +
+    "remarkable,surprising,exclusive,free,now,today,fast,simple,easy,complete,definitive,practical,real," +
+    "step-by-step,no-fluff,honest,exact,better,best,smart,modern,stop,avoid,boost,cut,save,build,master," +
+    "without,never,always,why,how,what").split(",");
+  var SENTIMENT = ("good,great,better,best,faster,fast,clean,smart,strong,clear,fail,slow,broken,wrong," +
+    "waste,fix,wins,win,gains,gain,risk,danger,trap,mistake").split(",");
+
+  /* ---------------- text utilities ---------------- */
+  function norm(s) {
+    return (s || "").toLowerCase().replace(/[\u2018\u2019]/g, "'").replace(/[^a-z0-9'\s-]/g, " ").replace(/\s+/g, " ").trim();
+  }
+  function wordList(text) { return norm(text).split(" ").filter(Boolean); }
+  function wordCount(text) { return wordList(text).length; }
+
+  // Count phrase occurrences (whole-phrase, order-sensitive, punctuation-insensitive).
+  function countPhrase(text, phrase) {
+    var p = norm(phrase);
+    if (!p) return 0;
+    var t = " " + norm(text) + " ";
+    var needle = " " + p + " ";
+    var i = 0, c = 0;
+    while ((i = t.indexOf(needle, i)) !== -1) { c++; i += needle.length - 1; }
+    return c;
+  }
+  function hasPhrase(text, phrase) { return countPhrase(text, phrase) > 0; }
+
+  function countSyllables(w) {
+    w = w.toLowerCase().replace(/[^a-z]/g, "");
+    if (!w) return 0;
+    if (w.length <= 3) return 1;
+    w = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, "").replace(/^y/, "");
+    var m = w.match(/[aeiouy]{1,2}/g);
+    return m ? m.length : 1;
+  }
+  function flesch(text) {
+    var sentences = (text.match(/[.!?]+(\s|$)/g) || []).length || 1;
+    var ws = wordList(text);
+    var wc = ws.length || 1;
+    var syl = 0;
+    for (var i = 0; i < ws.length; i++) syl += countSyllables(ws[i]);
+    var score = 206.835 - 1.015 * (wc / sentences) - 84.6 * (syl / wc);
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+  function fleschGrade(s) {
+    if (s >= 70) return "Easy to read";
+    if (s >= 60) return "Fairly easy";
+    if (s >= 50) return "Fairly difficult";
+    return "Difficult";
+  }
+
+  /* ---------------- HTML → normalized page ---------------- */
+  function linkKind(href) {
+    if (!href) return null;
+    var h = href.trim();
+    if (h === "" || h[0] === "#") return "anchor";
+    if (h.indexOf("mailto:") === 0 || h.indexOf("tel:") === 0) return "anchor";
+    if (h[0] === "/" || h[0] === ".") return "internal";
+    var m = h.match(/^https?:\/\/([^\/]+)/i);
+    if (!m) return "internal"; // relative
+    var host = m[1].toLowerCase();
+    for (var i = 0; i < SITE_HOSTS.length; i++) if (host.indexOf(SITE_HOSTS[i]) !== -1) return "internal";
+    return "external";
+  }
+
+  function extract(html) {
+    var doc = new DOMParser().parseFromString(html, "text/html");
+    var meta = function (sel) { var el = doc.querySelector(sel); return el ? (el.getAttribute("content") || "") : ""; };
+
+    var seoTitle = meta('meta[property="og:title"]') || doc.title || "";
+    var metaDesc = meta('meta[name="description"]') || meta('meta[property="og:description"]') || "";
+    var canonical = (doc.querySelector('link[rel="canonical"]') || {}).href || "";
+
+    // content root — prefer the semantic article body, then main, then a prose block
+    var root = doc.querySelector("article") || doc.querySelector("main") || doc.querySelector(".prose") || doc.body;
+
+    // detect a table of contents (in or around the content)
+    var toc = !!(doc.querySelector('[class*="toc"], nav[class*="ptm"], .ptm, [aria-label*="contents" i], [aria-label*="Table of contents" i]'));
+    if (!toc) {
+      var navs = doc.querySelectorAll("nav");
+      for (var n = 0; n < navs.length; n++) {
+        if (navs[n].querySelectorAll('a[href^="#"]').length >= 3) { toc = true; break; }
+      }
+    }
+
+    // clean clone for text extraction (drop nav/scripts/styles)
+    var clone = root.cloneNode(true);
+    clone.querySelectorAll("script,style,nav,.ptm,[class*='toc']").forEach(function (e) { e.remove(); });
+
+    var headings = [].map.call(root.querySelectorAll("h2,h3,h4"), function (h) { return h.textContent.trim(); }).filter(Boolean);
+    // count real <img> plus the site's <image-slot> custom elements (its hero/OG images)
+    var imgs = [].map.call(root.querySelectorAll("img, image-slot"), function (im) {
+      return { alt: im.getAttribute("alt") || im.getAttribute("placeholder") || im.getAttribute("aria-label") || "" };
+    });
+    var paras = [].map.call(clone.querySelectorAll("p"), function (p) { return p.textContent.trim(); }).filter(function (t) { return t.length > 0; });
+
+    var links = [].map.call(root.querySelectorAll("a[href]"), function (a) {
+      return { kind: linkKind(a.getAttribute("href")), nofollow: /nofollow/i.test(a.getAttribute("rel") || "") };
+    });
+
+    var h1 = doc.querySelector("h1");
+    var contentText = clone.textContent.replace(/\s+/g, " ").trim();
+
+    return {
+      seoTitle: seoTitle, metaDesc: metaDesc, canonical: canonical, h1: h1 ? h1.textContent.trim() : "",
+      headings: headings, images: imgs, paragraphs: paras, links: links, toc: toc, contentText: contentText,
+    };
+  }
+
+  /* ---------------- the test battery ---------------- */
+  // Each test → { id, cat, label, status:'ok'|'warn'|'fail', got, max, tip }
+  function runTests(page, keyword, url) {
+    var kw = (keyword || "").trim();
+    var hasKw = kw.length > 0;
+    var content = page.contentText || "";
+    var wc = wordCount(content);
+    var title = page.seoTitle || "";
+    var titleN = norm(title);
+    var slug = (url || "").toLowerCase();
+
+    // keyword stats
+    var kwInContent = countPhrase(content, kw);
+    var kwTokens = wordList(kw).length || 1;
+    var density = wc ? ((kwInContent * kwTokens) / wc) * 100 : 0;
+
+    // first 10% of content (min 100 words)
+    var ws = wordList(content);
+    var slice = ws.slice(0, Math.max(100, Math.ceil(ws.length * 0.1))).join(" ");
+    var kwEarly = hasPhrase(slice, kw);
+
+    var kwInHeads = page.headings.filter(function (h) { return hasPhrase(h, kw); }).length;
+    var kwInAlt = page.images.filter(function (im) { return hasPhrase(im.alt, kw); }).length;
+    var imgWithAlt = page.images.filter(function (im) { return im.alt.trim().length > 0; }).length;
+
+    var ext = page.links.filter(function (l) { return l.kind === "external"; });
+    var extDofollow = ext.filter(function (l) { return !l.nofollow; });
+    var internal = page.links.filter(function (l) { return l.kind === "internal"; });
+
+    // title position of keyword
+    var titlePos = hasKw ? titleN.indexOf(norm(kw)) : -1;
+    var titleHalf = titleN.split(" ").length;
+
+    // power / sentiment in title
+    var titleWords = wordList(title);
+    var hasPower = titleWords.some(function (w) { return POWER_WORDS.indexOf(w) !== -1 || SENTIMENT.indexOf(w) !== -1; });
+    var titleHasNum = /\d/.test(title);
+
+    // short paragraphs — fraction over 150 words
+    var longParas = page.paragraphs.filter(function (p) { return wordCount(p) > 150; }).length;
+    var totalParas = page.paragraphs.length || 1;
+    var longFrac = longParas / totalParas;
+
+    var T = [];
+    function add(id, cat, max, status, got, label, tip) { T.push({ id: id, cat: cat, max: max, status: status, got: got, label: label, tip: tip }); }
+    function passFail(cond, full) { return cond ? full : 0; }
+    function st(got, max) { return got >= max ? "ok" : got > 0 ? "warn" : "fail"; }
+
+    /* ---- Basic SEO (50) ---- */
+    (function () {
+      var g = passFail(hasKw && hasPhrase(title, kw), 12);
+      add("kw-title", "Basic SEO", 12, st(g, 12), g, "Focus keyword in the SEO title",
+        g ? "“" + kw + "” is present in the title." : "Add “" + kw + "” to the SEO title, ideally near the start.");
+    })();
+    (function () {
+      var g = passFail(hasKw && hasPhrase(page.metaDesc, kw), 8);
+      add("kw-meta", "Basic SEO", 8, st(g, 8), g, "Focus keyword in the meta description",
+        g ? "Keyword appears in the meta description." : "Work “" + kw + "” into the meta description naturally.");
+    })();
+    (function () {
+      var g = passFail(hasKw && norm(slug.replace(/[-_/]/g, " ")).indexOf(norm(kw)) !== -1, 6);
+      add("kw-url", "Basic SEO", 6, st(g, 6), g, "Focus keyword in the URL",
+        g ? "Slug contains the keyword." : "Include the keyword (hyphenated) in the page slug.");
+    })();
+    (function () {
+      var g = passFail(kwEarly, 8);
+      add("kw-early", "Basic SEO", 8, st(g, 8), g, "Keyword near the beginning of content",
+        g ? "Keyword appears in the first 10% of the copy." : "Use the keyword within the first paragraph / first 10%.");
+    })();
+    (function () {
+      var g = passFail(kwInContent > 0, 6);
+      add("kw-body", "Basic SEO", 6, st(g, 6), g, "Focus keyword in the content",
+        g ? kwInContent + " exact match" + (kwInContent === 1 ? "" : "es") + " in the body." : "The exact keyword phrase does not appear in the body.");
+    })();
+    (function () {
+      var max = 10, g;
+      if (wc >= 2000) g = 10; else if (wc >= 1500) g = 8; else if (wc >= 1000) g = 6; else if (wc >= 600) g = 4; else g = Math.round((wc / 600) * 4);
+      add("length", "Basic SEO", max, st(g, max), g, "Content length",
+        wc + " words. " + (wc >= 1500 ? "Comprehensive." : wc >= 600 ? "Decent, aim for 1,500+ for cornerstone." : "Thin — expand toward 1,000+ words."));
+    })();
+
+    /* ---- Additional (28) ---- */
+    (function () {
+      var g = passFail(kwInHeads > 0, 6);
+      add("kw-subhead", "Additional", 6, st(g, 6), g, "Keyword in subheadings (H2–H4)",
+        g ? "In " + kwInHeads + " subheading" + (kwInHeads === 1 ? "" : "s") + "." : "Add the keyword to at least one H2/H3.");
+    })();
+    (function () {
+      var g = passFail(kwInAlt > 0, 4);
+      add("kw-alt", "Additional", 4, st(g, 4), g, "Keyword in image ALT attribute",
+        page.images.length === 0 ? "No images found in the content." : g ? "Keyword found in an image ALT." : imgWithAlt + " / " + page.images.length + " images have ALT text, none with the keyword.");
+    })();
+    (function () {
+      var max = 6, g, msg;
+      if (density >= 0.75 && density <= 2.5) { g = 6; msg = "Ideal range."; }
+      else if ((density >= 0.3 && density < 0.75) || (density > 2.5 && density <= 3.5)) { g = 3; msg = density > 2.5 ? "Slightly high." : "A touch low."; }
+      else { g = 0; msg = density > 3.5 ? "Too high — risks keyword stuffing." : "Too low."; }
+      add("density", "Additional", max, st(g, max), g, "Keyword density",
+        density.toFixed(2) + "% (" + kwInContent + " / " + wc + " words). " + msg);
+    })();
+    (function () {
+      var len = (url || "").replace(/^https?:\/\/[^\/]+/, "").length;
+      var g = passFail(len > 0 && len <= 75, 3);
+      add("url-len", "Additional", 3, st(g, 3), g, "URL length",
+        len + " chars in the path. " + (len <= 75 ? "Concise." : "Shorten the slug."));
+    })();
+    (function () {
+      var g = passFail(ext.length > 0, 3);
+      add("ext-link", "Additional", 3, st(g, 3), g, "Links to external resources",
+        ext.length + " external link" + (ext.length === 1 ? "" : "s") + ". " + (ext.length ? "" : "Cite a credible external source."));
+    })();
+    (function () {
+      var g = passFail(extDofollow.length > 0, 2);
+      add("ext-dofollow", "Additional", 2, st(g, 2), g, "At least one DoFollow external link",
+        extDofollow.length ? extDofollow.length + " DoFollow external link(s)." : "External links are all nofollow / none present.");
+    })();
+    (function () {
+      var g = passFail(internal.length > 0, 4);
+      add("int-link", "Additional", 4, st(g, 4), g, "Internal links",
+        internal.length + " internal link" + (internal.length === 1 ? "" : "s") + ". " + (internal.length ? "" : "Link to a related post on your site."));
+    })();
+
+    /* ---- Title Readability (12) ---- */
+    (function () {
+      var g = 0, msg;
+      if (hasKw && titlePos === 0) { g = 5; msg = "Keyword starts the title."; }
+      else if (hasKw && titlePos !== -1 && titlePos <= Math.ceil(title.length / 2)) { g = 3; msg = "Keyword is in the first half — move it earlier for max impact."; }
+      else { g = 0; msg = "Move the keyword toward the start of the title."; }
+      add("title-start", "Title Readability", 5, st(g, 5), g, "Keyword at the beginning of the title", msg);
+    })();
+    (function () {
+      var g = passFail(hasPower, 4);
+      add("title-sentiment", "Title Readability", 4, st(g, 4), g, "Title has a power / sentiment word",
+        g ? "Emotive language present." : "Add a power word (e.g. proven, fast, exact) to lift CTR.");
+    })();
+    (function () {
+      var g = passFail(titleHasNum, 3);
+      add("title-number", "Title Readability", 3, st(g, 3), g, "Title contains a number",
+        g ? "Number present." : "Titles with a number tend to earn more clicks.");
+    })();
+
+    /* ---- Content Readability (10) ---- */
+    (function () {
+      var g = passFail(page.toc, 3);
+      add("toc", "Content Readability", 3, st(g, 3), g, "Table of contents",
+        g ? "A table of contents was detected." : "Add a TOC to help long-form navigation & sitelinks.");
+    })();
+    (function () {
+      var max = 4, g;
+      if (longFrac === 0) g = 4; else if (longFrac <= 0.15) g = 3; else if (longFrac <= 0.3) g = 2; else g = 0;
+      add("short-paras", "Content Readability", max, st(g, max), g, "Short paragraphs",
+        longParas === 0 ? "No paragraph exceeds 150 words." : longParas + " of " + totalParas + " paragraphs are long. Break them up.");
+    })();
+    (function () {
+      var g = passFail(page.images.length > 0, 3);
+      add("assets", "Content Readability", 3, st(g, 3), g, "Content has media / images",
+        page.images.length + " image" + (page.images.length === 1 ? "" : "s") + " in the article. " + (page.images.length ? "" : "Add at least one supporting visual."));
+    })();
+
+    return {
+      tests: T,
+      stats: {
+        words: wc, density: density, kwInContent: kwInContent, kwInHeads: kwInHeads,
+        flesch: flesch(content), fleschGrade: fleschGrade(flesch(content)),
+        internalLinks: internal.length, externalLinks: ext.length, images: page.images.length,
+        headings: page.headings.length, paragraphs: page.paragraphs.length, toc: page.toc,
+      },
+    };
+  }
+
+  function scoreOf(tests) {
+    var got = 0, max = 0;
+    tests.forEach(function (t) { got += t.got; max += t.max; });
+    return Math.round(max ? (got / max) * 100 : 0);
+  }
+
+  /* ---------------- public API ---------------- */
+  // analyze({ html?, page?, keyword, url, title?, metaDesc? }) → result
+  function analyze(input) {
+    input = input || {};
+    var page;
+    if (input.page) page = input.page;
+    else if (typeof input.html === "string") page = extract(input.html);
+    else page = { seoTitle: "", metaDesc: "", headings: [], images: [], paragraphs: [], links: [], toc: false, contentText: input.content || "" };
+
+    // allow explicit overrides (editor mode types its own title / meta)
+    if (input.title != null) page.seoTitle = input.title;
+    if (input.metaDesc != null) page.metaDesc = input.metaDesc;
+
+    var r = runTests(page, input.keyword || "", input.url || page.canonical || "");
+    var score = scoreOf(r.tests);
+    var passed = r.tests.filter(function (t) { return t.status === "ok"; }).length;
+    return {
+      score: score,
+      grade: score >= 80 ? "Good" : score >= 50 ? "Needs work" : "Poor",
+      tests: r.tests,
+      passed: passed,
+      total: r.tests.length,
+      stats: r.stats,
+      title: page.seoTitle, metaDesc: page.metaDesc,
+    };
+  }
+
+  // Fetch a same-origin page and analyze it. Resolves even on failure (errored result).
+  async function analyzeUrl(fetchPath, opts) {
+    opts = opts || {};
+    try {
+      var res = await fetch(fetchPath, { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      var html = await res.text();
+      return analyze({ html: html, keyword: opts.keyword, url: opts.url || fetchPath, title: opts.title, metaDesc: opts.metaDesc });
+    } catch (e) {
+      return { error: String(e && e.message || e), score: null, tests: [], stats: null };
+    }
+  }
+
+  window.RankMath = {
+    analyze: analyze, analyzeUrl: analyzeUrl, extract: extract,
+    flesch: flesch, fleschGrade: fleschGrade, wordCount: wordCount, countPhrase: countPhrase, scoreOf: scoreOf,
+    CATEGORIES: ["Basic SEO", "Additional", "Title Readability", "Content Readability"],
+  };
+})();
+
+</script>
+<script>
+/* =====================================================
+   AUTH — client-side gate for the Operator Console.
+   NOTE: this is a prototype gate (state lives in the
+   browser). It is NOT server-grade security. For real
+   protection the backend must enforce auth. What it does
+   provide: a required login, a 12h session, logout, and a
+   password-reset flow with a 6-digit OTP delivered by
+   EmailJS (free, no backend) with an on-screen demo
+   fallback when EmailJS is not configured yet.
+   Exposed as window.Auth.
+   ===================================================== */
+(function () {
+  "use strict";
+
+  var K = {
+    user:    "mp-auth-user",      // { email, pwHash, name }
+    session: "mp-auth-session",   // { email, exp }
+    otp:     "mp-auth-otp",       // { hash, exp, email, tries, verified }
+    email:   "mp-auth-emailcfg",  // { serviceId, templateId, publicKey, fromName }
+  };
+  var DEFAULT_EMAIL = "patelmeet20112000@gmail.com";
+  var DEFAULT_PW = "admin1234";
+  var SESSION_MS = 1000 * 60 * 60 * 12;   // 12 hours
+  var OTP_MS = 1000 * 60 * 10;            // 10 minutes
+
+  function read(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+  function write(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+  async function sha(s) {
+    if (window.crypto && crypto.subtle) {
+      var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(s)));
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+    }
+    // tiny non-crypto fallback (very old browsers); still fine for a prototype gate
+    var h = 0, str = String(s);
+    for (var i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
+    return "x" + (h >>> 0).toString(16);
+  }
+
+  async function ensureSeed() {
+    if (!read(K.user)) {
+      write(K.user, { email: DEFAULT_EMAIL, pwHash: await sha(DEFAULT_PW), name: "Meet Patel" });
+    }
+  }
+  function getUser() { return read(K.user); }
+
+  /* ---------- session ---------- */
+  async function login(email, pw) {
+    await ensureSeed();
+    var u = getUser();
+    if (!u) return { ok: false, error: "No account found." };
+    if (String(email).trim().toLowerCase() !== u.email.toLowerCase()) return { ok: false, error: "Email not recognised." };
+    if (await sha(pw) !== u.pwHash) return { ok: false, error: "Incorrect password." };
+    write(K.session, { email: u.email, exp: Date.now() + SESSION_MS });
+    return { ok: true };
+  }
+  function isAuthed() {
+    var s = read(K.session);
+    if (!s) return false;
+    if (Date.now() > s.exp) { del(K.session); return false; }
+    return true;
+  }
+  function logout() { del(K.session); }
+  function sessionEmail() { var s = read(K.session); return s ? s.email : null; }
+
+  /* ---------- OTP reset ---------- */
+  function genCode() { return String(Math.floor(100000 + Math.random() * 900000)); }
+
+  async function requestOtp(email) {
+    await ensureSeed();
+    var u = getUser();
+    if (String(email).trim().toLowerCase() !== u.email.toLowerCase()) {
+      return { ok: false, error: "That email is not on file for this account." };
+    }
+    var code = genCode();
+    write(K.otp, { hash: await sha(code), exp: Date.now() + OTP_MS, email: u.email, tries: 0, verified: false });
+    var sent = await sendEmail(u.email, code);
+    return { ok: true, delivery: sent.via, devCode: sent.via === "dev" ? code : undefined, error: sent.error };
+  }
+  async function verifyOtp(code) {
+    var o = read(K.otp);
+    if (!o) return { ok: false, error: "Request a code first." };
+    if (Date.now() > o.exp) { del(K.otp); return { ok: false, error: "That code expired. Request a new one." }; }
+    if (o.tries >= 5) { del(K.otp); return { ok: false, error: "Too many attempts. Request a new code." }; }
+    if (await sha(String(code).trim()) !== o.hash) {
+      o.tries++; write(K.otp, o);
+      return { ok: false, error: "Incorrect code. " + (5 - o.tries) + " attempts left." };
+    }
+    o.verified = true; write(K.otp, o);
+    return { ok: true };
+  }
+  async function resetPassword(newPw) {
+    var o = read(K.otp);
+    if (!o || !o.verified) return { ok: false, error: "Verify the code first." };
+    if (String(newPw).length < 8) return { ok: false, error: "Use at least 8 characters." };
+    var u = getUser();
+    write(K.user, { email: u.email, name: u.name, pwHash: await sha(newPw) });
+    del(K.otp);
+    return { ok: true };
+  }
+
+  /* ---------- email delivery (EmailJS REST, free tier) ---------- */
+  function getEmailCfg() { return read(K.email); }
+  function setEmailCfg(cfg) {
+    if (!cfg || (!cfg.serviceId && !cfg.templateId && !cfg.publicKey)) { del(K.email); return; }
+    write(K.email, cfg);
+  }
+  function emailConfigured() {
+    var c = getEmailCfg();
+    return !!(c && c.serviceId && c.templateId && c.publicKey);
+  }
+  async function sendEmail(toEmail, code) {
+    var cfg = getEmailCfg();
+    if (cfg && cfg.serviceId && cfg.templateId && cfg.publicKey) {
+      try {
+        var res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            service_id: cfg.serviceId,
+            template_id: cfg.templateId,
+            user_id: cfg.publicKey,
+            // a broad set of params so most EmailJS templates "just work"
+            template_params: {
+              to_email: toEmail, email: toEmail, to: toEmail, user_email: toEmail,
+              passcode: code, code: code, otp: code, token: code,
+              from_name: cfg.fromName || "Operator Console",
+              subject: "Your Operator Console verification code",
+              time: "10 minutes",
+              message: "Your verification code is " + code + ". It expires in 10 minutes.",
+            },
+          }),
+        });
+        if (res.ok) return { via: "email" };
+        var txt = "";
+        try { txt = await res.text(); } catch (e) {}
+        return { via: "dev", error: "Email provider returned " + res.status + (txt ? ": " + txt.slice(0, 120) : "") };
+      } catch (e) {
+        return { via: "dev", error: "Could not reach the email provider (" + (e && e.message || e) + ")." };
+      }
+    }
+    return { via: "dev" };
+  }
+
+  // expose
+  window.Auth = {
+    login: login, logout: logout, isAuthed: isAuthed, getUser: getUser, sessionEmail: sessionEmail,
+    requestOtp: requestOtp, verifyOtp: verifyOtp, resetPassword: resetPassword,
+    getEmailCfg: getEmailCfg, setEmailCfg: setEmailCfg, emailConfigured: emailConfigured,
+    seed: ensureSeed, DEFAULT_EMAIL: DEFAULT_EMAIL, DEFAULT_PW: DEFAULT_PW,
+  };
+  // seed the default account on load so first login works
+  ensureSeed();
+})();
+
+</script>
+
+<script>
+/* JWT bridge: after the client-side auth gate succeeds, also
+   exchange credentials with the Azure backend to get a JWT.
+   This token is used for all /api/* calls. */
+(function () {
+  function patchAuth() {
+    if (!window.Auth) return;
+    var _login = window.Auth.login;
+    window.Auth.login = async function (email, pw) {
+      var result = await _login.call(window.Auth, email, pw);
+      if (result && result.ok) {
+        try {
+          var r = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email, password: pw }),
+          });
+          if (r.ok) {
+            var data = await r.json();
+            sessionStorage.setItem("mp-jwt", data.token);
+          }
+        } catch (e) {
+          console.warn("[admin] JWT exchange failed (API may be unreachable in dev):", e.message);
+        }
+      }
+      return result;
+    };
+    var _logout = window.Auth.logout;
+    window.Auth.logout = function () {
+      sessionStorage.removeItem("mp-jwt");
+      return _logout.call(window.Auth);
+    };
+  }
+  patchAuth();
+})();
+</script>
+
+<script type="text/babel" src="app.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  const [authed, setAuthed] = useState(() => { try { return window.Auth.isAuthed(); } catch (e) { return false; } });
+  const [view, setView] = useState(() => {
+    try { return localStorage.getItem("mp-admin-view") || "dashboard"; } catch (e) { return "dashboard"; }
+  });
+  const [drawerPost, setDrawerPost] = useState(null);
+  const [navOpen, setNavOpen] = useState(false);
+  const [push, toastNode] = useToasts();
+
+  useEffect(() => { try { localStorage.setItem("mp-admin-view", view); } catch (e) {} }, [view]);
+
+  const openPost = (p) => setDrawerPost(p);
+  const closePost = () => setDrawerPost(null);
+  const publishPost = (p) => { closePost(); };
+
+  const newPost = () => { setView("trends"); push("Pick a topic to start a new post"); };
+  const logout = () => { window.Auth.logout(); setNavOpen(false); setDrawerPost(null); setAuthed(false); };
+
+  if (!authed) return <LoginGate onAuthed={async () => { await window.ADMIN.load(); setAuthed(true); }} />;
+
+  return (
+    <div className="app">
+      <Sidebar view={view} setView={setView} open={navOpen} onClose={() => setNavOpen(false)} />
+      <div className={`nav-scrim ${navOpen ? "open" : ""}`} onClick={() => setNavOpen(false)}></div>
+      <div className="main">
+        <Topbar view={view} onNew={newPost} onMenu={() => setNavOpen(true)} onLogout={logout} userEmail={window.Auth.sessionEmail()} />
+        <div className="content scroll">
+          {view === "dashboard" && <DashboardView setView={setView} openPost={openPost} push={push} />}
+          {view === "pipeline" && <PipelineView openPost={openPost} />}
+          {view === "trends" && <TrendsView push={push} />}
+          {view === "inbox" && <InboxView push={push} />}
+          {view === "seo" && <SeoView />}
+          {view === "projects" && <ProjectsView push={push} />}
+          {view === "media" && <MediaView push={push} />}
+          {view === "settings" && <SettingsView push={push} />}
+        </div>
+      </div>
+      <DraftDrawer post={drawerPost} onClose={closePost} onPublish={publishPost} push={push} />
+      {toastNode}
+    </div>
+  );
+}
+(async function () {
+  // If session is already valid, pre-load API data before the first paint
+  if (window.Auth && window.Auth.isAuthed && window.Auth.isAuthed()) {
+    await window.ADMIN.load();
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+})();
+</script>
+</body>
+</html>

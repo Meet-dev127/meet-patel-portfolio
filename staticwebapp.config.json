@@ -1,0 +1,22 @@
+{
+  "routes": [
+    {
+      "route": "/admin",
+      "redirect": "/admin/Operator%20Console.html",
+      "statusCode": 301
+    },
+    {
+      "route": "/contact-submit",
+      "rewrite": "/api/queries"
+    }
+  ],
+  "platform": {
+    "apiRuntime": "node:18"
+  },
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/index.html",
+      "statusCode": 404
+    }
+  }
+}

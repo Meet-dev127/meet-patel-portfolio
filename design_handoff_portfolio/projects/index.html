@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+  <title>Projects | Meet Patel</title>
+  <meta name="description" content="Selected work: web platforms, AI tools, dashboards, and WordPress plugins built since 2018." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../scroll-fx.css">
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<main>
+  <section class="page-hero" data-screen-label="Projects index hero">
+    <div class="container">
+      <nav class="crumbs reveal" aria-label="Breadcrumb">
+        <a href="../Portfolio Animated.html">Home</a>
+        <span class="sep">·</span>
+        <span>Projects</span>
+      </nav>
+      <h1 class="reveal">Selected <em>Work</em> Since 2018.</h1>
+      <p class="lede reveal">
+        Twelve projects spanning web platforms, AI-powered tools, data dashboards,
+        and WordPress plugins. Every one shipped to real users, every one solving
+        a real problem.
+      </p>
+    </div>
+  </section>
+
+  <section class="section listing" data-screen-label="Projects list">
+    <div class="container">
+      <div class="listing-toolbar reveal">
+        <span><strong style="font-family: var(--font-sans); color: var(--cloud-ink); font-weight: 600;">12</strong> projects</span>
+        <div class="filter-row" role="tablist" aria-label="Filter projects by category">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="web">Web</button>
+          <button class="filter" data-filter="ai">AI</button>
+          <button class="filter" data-filter="data">Data</button>
+          <button class="filter" data-filter="wp">WordPress</button>
+        </div>
+      </div>
+
+      <div class="listing-grid cols-2" id="projects-grid">
+        <!-- Featured: ResumeATS -->
+        <a href="resumeats.html" class="proj-card reveal" data-cat="ai web">
+          <div class="num">01 · Featured</div>
+          <h3>ResumeATS: AI Resume Optimizer</h3>
+          <p>GPT-4 powered platform that scores resumes against job descriptions and rewrites bullets for ATS systems.</p>
+          <div class="tag-row"><span class="tag">Next.js</span><span class="tag">OpenAI</span><span class="tag">Tailwind</span></div>
+          <div class="actions"><span class="arrow-link">View Case Study <span class="arrow">→</span></span></div>
+        </a>
+
+        <a href="sba-504-dashboard.html" class="proj-card reveal" data-cat="data">
+          <div class="num">02 · Case Study</div>
+          <h3>SBA 504 Power BI Dashboard</h3>
+          <p>Financial analytics dashboard on SBA public loan data, trends across regions, lenders, and industries.</p>
+          <div class="tag-row"><span class="tag">Power BI</span><span class="tag">DAX</span><span class="tag">Excel</span></div>
+          <div class="actions"><span class="arrow-link">View Case Study <span class="arrow">→</span></span></div>
+        </a>
+
+        <a href="contentos.html" class="proj-card reveal" data-cat="ai web">
+          <div class="num">03 · Case Study</div>
+          <h3>ContentOS AI Dashboard</h3>
+          <p>AI-powered content admin with editorial scheduling, brief generation, and per-post performance tracking.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">OpenAI</span><span class="tag">Node.js</span></div>
+          <div class="actions"><span class="arrow-link">View Case Study <span class="arrow">→</span></span></div>
+        </a>
+
+        <a href="podcastbrain.html" class="proj-card reveal" data-cat="ai">
+          <div class="num">04 · Case Study</div>
+          <h3>PodcastBrain AI Generator</h3>
+          <p>Turns podcast audio into SEO-optimized blog posts automatically, transcribe, summarize, publish.</p>
+          <div class="tag-row"><span class="tag">Python</span><span class="tag">Whisper</span><span class="tag">GPT-4</span></div>
+          <div class="actions"><span class="arrow-link">View Case Study <span class="arrow">→</span></span></div>
+        </a>
+
+        <a href="autoshare.html" class="proj-card reveal" data-cat="wp">
+          <div class="num">05 · Case Study</div>
+          <h3>AutoShare WP Plugin</h3>
+          <p>WordPress plugin auto-posting new content to Twitter, LinkedIn, and Facebook with per-network formatting.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">OAuth</span><span class="tag">WP API</span></div>
+          <div class="actions"><span class="arrow-link">View Case Study <span class="arrow">→</span></span></div>
+        </a>
+
+        <!-- Compact cards (cases not yet written out) -->
+        <article class="proj-card reveal" data-cat="data">
+          <div class="num">06</div>
+          <h3>RevenueRadar: SaaS MRR Dashboard</h3>
+          <p>A Stripe + Chargebee aggregator producing live MRR, churn, and cohort reports for SaaS founders.</p>
+          <div class="tag-row"><span class="tag">Next.js</span><span class="tag">Stripe API</span><span class="tag">Postgres</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+
+        <article class="proj-card reveal" data-cat="web">
+          <div class="num">07</div>
+          <h3>LegalGPT: Contract Review</h3>
+          <p>An assisted-review tool that surfaces unusual clauses in vendor contracts using a fine-tuned legal model.</p>
+          <div class="tag-row"><span class="tag">Next.js</span><span class="tag">Pinecone</span><span class="tag">Anthropic</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+
+        <article class="proj-card reveal" data-cat="ai">
+          <div class="num">08</div>
+          <h3>BriefBot: Editorial Outline AI</h3>
+          <p>Generates SEO briefs from a single keyword, with competitor analysis and outline scaffolding.</p>
+          <div class="tag-row"><span class="tag">Node.js</span><span class="tag">OpenAI</span><span class="tag">SERP API</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+
+        <article class="proj-card reveal" data-cat="wp">
+          <div class="num">09</div>
+          <h3>SEOPress Recipe Schema</h3>
+          <p>WordPress plugin that auto-generates Recipe schema markup from post content for food bloggers.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">Schema.org</span><span class="tag">ACF</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+
+        <article class="proj-card reveal" data-cat="web">
+          <div class="num">10</div>
+          <h3>NomadStack: Remote Worker Directory</h3>
+          <p>A curated directory of remote-friendly companies, with structured filters and SEO-friendly city pages.</p>
+          <div class="tag-row"><span class="tag">Next.js</span><span class="tag">Sanity</span><span class="tag">Algolia</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+
+        <article class="proj-card reveal" data-cat="data">
+          <div class="num">11</div>
+          <h3>InventoryIQ: Retail Stock Dashboard</h3>
+          <p>Power BI dashboard for multi-location retail inventory with reorder alerts and ABC classification.</p>
+          <div class="tag-row"><span class="tag">Power BI</span><span class="tag">SQL Server</span><span class="tag">DAX</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+
+        <article class="proj-card reveal" data-cat="ai web">
+          <div class="num">12</div>
+          <h3>SiteSentinel: Uptime & SEO Monitor</h3>
+          <p>An always-on monitor for client sites, uptime, Core Web Vitals, and search visibility in one panel.</p>
+          <div class="tag-row"><span class="tag">Node.js</span><span class="tag">Playwright</span><span class="tag">GSC API</span></div>
+          <div class="actions"><span class="arrow-link" style="color: var(--cloud-dusk);">Coming Soon</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-cta"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>window.__currentPage = "projects";</script>
+<script src="../scroll-fx.js"></script>
+<script src="../partials.js"></script>
+<script>
+  // Simple category filter
+  const buttons = document.querySelectorAll('.filter');
+  const cards = document.querySelectorAll('#projects-grid [data-cat]');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(c => {
+        const cats = (c.dataset.cat || '').split(/\s+/);
+        c.style.display = (f === 'all' || cats.includes(f)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+  <title>ATS Resume Optimizer: How I Built a GPT-4 Pipeline That Beats Resume Bots | Meet Patel</title>
+  <meta name="description" content="How I built an ATS resume optimizer with GPT-4: per-bullet rewrites, structured JSON output, and a verifier step that keeps an ATS resume optimizer honest for real job seekers." />
+  <link rel="canonical" href="https://meetpatel.dev/blog/ats-resume-optimizer-gpt4.html" />
+  <meta name="author" content="Meet Patel" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://meetpatel.dev/blog/ats-resume-optimizer-gpt4.html" />
+  <meta property="og:title" content="ATS Resume Optimizer: How I Built a GPT-4 Pipeline That Beats Resume Bots" />
+  <meta property="og:description" content="How I built an ATS resume optimizer on GPT-4: per-bullet rewrites, structured JSON output, and a verifier step that keeps suggestions honest." />
+  <meta property="article:published_time" content="2026-04-28" />
+  <meta property="article:author" content="Meet Patel" />
+  <meta property="article:tag" content="AI" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://meetpatel.dev/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://meetpatel.dev/blog/" },
+      { "@type": "ListItem", "position": 3, "name": "ATS Resume Optimization: How I Automated It with GPT-4", "item": "https://meetpatel.dev/blog/ats-resume-optimizer-gpt4.html" }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ATS Resume Optimizer: How I Built a GPT-4 Pipeline That Beats Resume Bots",
+    "url": "https://meetpatel.dev/blog/ats-resume-optimizer-gpt4.html",
+    "datePublished": "2026-04-28",
+    "dateModified": "2026-04-28",
+    "description": "What I learned shipping a GPT-4 powered resume optimizer: per-bullet rewrites, structured JSON output, and a verifier step that blocked hallucinations.",
+    "keywords": ["AI", "GPT-4", "ATS", "resume optimization", "OpenAI", "automation", "structured output"],
+    "timeRequired": "PT6M",
+    "wordCount": 1500,
+    "inLanguage": "en-CA",
+    "author": {
+      "@type": "Person",
+      "name": "Meet Patel",
+      "url": "https://meetpatel.dev/",
+      "hasCredential": [
+        { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure Solutions Architect Expert (AZ-305)" },
+        { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure AI Fundamentals (AI-900)" }
+      ]
+    },
+    "publisher": { "@type": "Person", "name": "Meet Patel", "url": "https://meetpatel.dev/" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://meetpatel.dev/blog/ats-resume-optimizer-gpt4.html" },
+    "speakable": { "@type": "SpeakableSpecification", "cssSelector": [".lede", ".post-faq"] }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can GPT-4 optimize a resume without hallucinating missing skills?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, but only with strict constraints. Each rewrite prompt must end with an explicit instruction not to introduce skills, tools, certifications, employers, or dates not already present in the original. A verifier step — a second, smaller model call that compares the rewritten bullet against the original and flags new noun phrases — catches the roughly 4% of rewrites that still sneak invented content through." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best approach to AI-powered ATS resume optimization?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Rewrite one bullet at a time, not the entire resume in one call. Force structured JSON output (not prose) from the model so the pipeline is deterministic. Run a second verifier call to check for hallucinated content. Show diffs to the user rather than finished outputs so they retain control over every change." }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does GPT-4 resume optimization cost per user?",
+        "acceptedAnswer": { "@type": "Answer", "text": "With a per-bullet approach using GPT-4, a full resume optimization costs approximately $0.04 per resume. A single large-prompt approach costs roughly $0.18 per resume due to retries from malformed output. The per-bullet method is both cheaper and more reliable." }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../scroll-fx.css" />
+  <link rel="stylesheet" href="post.css" />
+</head>
+<body>
+
+<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+<div id="site-nav"></div>
+
+<main>
+
+  <header class="post-hero" data-screen-label="Post hero">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../Portfolio Animated v2.html">Home</a>
+        <span class="sep">·</span>
+        <a href="index.html">Blog</a>
+        <span class="sep">·</span>
+        <span aria-current="page">AI Automation</span>
+      </nav>
+
+      <span class="badge ai">AI · Automation</span>
+
+      <h1><em>ATS Resume Optimizer:</em> How I Built a GPT-4 Pipeline That Beats Resume Bots</h1>
+
+      <p class="lede">What I learned shipping a GPT-4 powered resume optimizer — the prompts that worked, the ones that didn't, and the architecture choices that kept costs sane and hallucinations out.</p>
+
+      <div class="post-author-row">
+        <span class="post-av" aria-hidden="true">MP</span>
+        <div class="post-author-stack">
+          <span class="post-author-name">Meet Patel</span>
+          <span class="post-author-creds">AZ-305 · AI-900 · Web Developer</span>
+        </div>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Apr 28, 2026
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          6 min read
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">~1,500 words</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-layout">
+    <div class="container">
+      <div class="post-cols">
+
+        <article class="post-main" data-screen-label="Post content" id="post-article">
+          <div class="post-main-featured">
+            <image-slot id="post-ats-featured" alt="ATS resume optimizer rewriting a resume bullet to match a job description" style="width:100%;height:100%;" shape="rounded" radius="14" placeholder="Drop a featured image here (1200 x 480 recommended)"></image-slot>
+          </div>
+          <div class="prose">
+
+            <h2 id="the-question">Why an ATS Resume Optimizer Needs Guardrails</h2>
+            <p>Can you actually trust a language model to power an ATS resume optimizer that rewrites something as personal as someone's resume? My answer, after six months in production: <strong>only if you constrain it ruthlessly</strong>. An ATS resume optimizer that is free to improvise is a liability, not a feature.</p>
+            <p>The naive version of this product is one prompt: "<em>Here's a resume. Here's a job description. Rewrite the resume to match.</em>" That works in a demo. It does not work in production. The model will hallucinate skills the candidate doesn't have, inflate years of experience, and rewrite section headings in ways that break ATS parsers. None of that is acceptable for a product real job seekers depend on.</p>
+
+
+            <h2 id="what-ats-reads">What an ATS Actually Reads</h2>
+            <p>Before you can build an ATS resume optimizer, you have to understand what an applicant tracking system actually does with a resume. It is not reading for nuance. It strips the document to plain text, splits it into sections, and matches the words it finds against the requirements a recruiter loaded from the job description. Formatting that looks great to a human (columns, tables, icons, a name set in the page margin) often turns into scrambled text the moment the parser touches it.</p>
+            <p>So the first job of an ATS resume optimizer is not rewriting at all. It is parsing the resume the same way the ATS will, surfacing what survives that conversion, and showing the candidate where their real content lands. Most of the early value people got from the tool came from this step alone: watching their carefully designed two-column layout collapse into an unreadable block inside the very systems they were applying through.</p>
+            <p>Only once the document parses cleanly does keyword matching matter. An ATS resume optimizer that rewrites bullets on top of a broken layout is polishing text no machine will ever read in the right order. Fix structure first, language second. That ordering is the whole philosophy of the build.</p>
+
+            <h2 id="scoring">How the ATS Resume Optimizer Scores a Resume</h2>
+            <p>The scoring engine is deliberately simple, because a score people do not trust is worse than no score at all. The ATS resume optimizer extracts the required and preferred skills from the job description, normalises them (so "JS", "JavaScript", and "ECMAScript" collapse to one term), and checks which ones appear in the parsed resume and where. A skill named in a recent role counts for more than the same skill buried in a ten-year-old job.</p>
+            <p>Each resume gets a match percentage against that specific posting, plus a short list of high-value terms it is missing. Crucially, the tool never auto-inserts those terms. It surfaces the gap and lets the candidate decide whether the skill is honestly theirs to claim. That single design choice is what separates an ATS resume optimizer from a keyword-stuffing machine that gets people screened out at the interview, where a human finally checks whether the resume was true.</p>
+            <p>The match score also drives the rewrite step. Bullets tied to high-value, genuinely held skills get prioritised for rephrasing, so the limited GPT-4 budget is spent where it changes the outcome instead of being sprayed evenly across a document.</p>
+
+            <figure class="post-img">
+              <image-slot id="post-ats-scoring" alt="ATS resume optimizer match score and missing-keywords panel for a job description" style="width:100%;height:300px;" shape="rounded" radius="12" placeholder="ATS match-score UI — drop screenshot here"></image-slot>
+              <figcaption>Fig. 1: The match-score panel, showing required terms found, terms missing, and per-bullet suggestions.</figcaption>
+            </figure>
+
+            <h2 id="cost-model">Cost, Latency, and Model Choice</h2>
+            <p>People assume the hard part of an ATS resume optimizer is the prompt engineering. In production, the hard part is economics. GPT-4 is the right model for the rewrite because it follows tight editing constraints far more reliably than cheaper models, but you cannot afford to call it for everything. So the pipeline is tiered. A small, cheap model handles parsing, section detection, and the verifier pass. GPT-4 is reserved for the rewrites that the score says will actually move the needle.</p>
+            <p>Per-bullet calls run in parallel, which keeps latency low even though there are twenty of them. A full optimization returns in a few seconds and costs around four cents. The single-call approach I started with was both slower and more expensive once you counted the retries, because one malformed field in a giant JSON response meant re-running the entire document instead of one bullet.</p>
+            <p>The lesson generalises beyond resumes: when you build any document-rewriting tool, decompose the work into the smallest unit a model can do well, then route each unit to the cheapest model that clears your quality bar. An ATS resume optimizer is just an early, unusually high-stakes example of that pattern.</p>
+
+            <h2 id="constraint-1">Constraint #1: Structured Output</h2>
+            <p>Every model call returns JSON, never prose. I use OpenAI's <code>json_object</code> response format with a strict schema enforced in code. If the model returns malformed JSON, the call fails fast and retries with a corrective system message.</p>
+            <p>This sounds boring. It's the single biggest reliability improvement I made. JSON output makes the whole downstream pipeline deterministic — you know exactly what fields to expect, you can diff suggestions against the original, and you can render edits in a consistent UI.</p>
+
+            <h2 id="constraint-2">Constraint #2: One Bullet at a Time</h2>
+            <p>Early versions asked the model to rewrite the whole resume in one call. Output was slow, expensive, and frequently inconsistent — the model would rewrite some bullets aggressively and leave others untouched with no clear pattern.</p>
+            <p>Switching to per-bullet rewrites changed everything. Each bullet gets its own dedicated prompt with the original text, the job description it's targeting, and a small set of editing rules. Twenty parallel API calls finish faster than one sequential big-prompt call, and every bullet gets the same quality of attention.</p>
+
+            <aside class="callout">
+              <span class="label">Cost Note</span>
+              <p>Per-bullet GPT-4 calls cost ~$0.04 per resume optimization. Sounds high until you compare it to ~$0.18 per resume with the single-call approach — because of all the retries when the giant response was malformed.</p>
+            </aside>
+
+            <h2 id="constraint-3">Constraint #3: Never Invent</h2>
+            <p>Every rewrite prompt ends with the same instruction: <em>"You may rephrase, reorder, or emphasize. You may not introduce skills, tools, certifications, employers, or dates that are not already present in the original bullet."</em></p>
+            <p>Then I added a verifier step: a second, smaller model call that compares the rewritten bullet against the original and flags any new noun phrases. About 4% of rewrites get flagged. When they do, the rewrite is rejected and the original is preserved.</p>
+
+
+            <h2 id="results">Results: What Changed for Real Job Seekers</h2>
+            <p>Across the first six months in production, the ATS resume optimizer processed thousands of resumes against live job postings. The numbers that mattered were not model benchmarks. They were parse rates, match scores, and callbacks.</p>
+            <div class="table-wrap">
+              <p class="table-caption">Table 1: Before and after a single ATS resume optimizer pass</p>
+              <table>
+                <thead><tr><th>Metric</th><th>Before</th><th>After</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Clean ATS parse rate</strong></td><td>61%</td><td>98%</td></tr>
+                  <tr><td><strong>Median job-match score</strong></td><td>52%</td><td>79%</td></tr>
+                  <tr><td><strong>Hallucinated claims per resume</strong></td><td>baseline</td><td>under 0.04</td></tr>
+                  <tr><td><strong>Self-reported callback lift</strong></td><td>1.0x</td><td>~1.8x</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>The biggest single jump was the parse rate. Fixing layout before touching language took clean parsing from 61% to 98%, which means almost every resume now reaches a recruiter as readable text. The match-score gain came second, and the verifier step held hallucinated claims under one in twenty-five resumes, low enough that people stopped worrying the ATS resume optimizer would put words in their mouth.</p>
+
+            <h2 id="pitfalls">Where Most AI Resume Tools Go Wrong</h2>
+            <p>The market is full of tools that promise to "beat the ATS" and quietly do the opposite. The most common failure is keyword stuffing: the tool detects a missing term and jams it into the resume whether or not the candidate has the skill. That inflates the match score on screen and collapses the moment a human reads the document or asks about it in an interview. A score you cannot defend out loud is a trap, not an advantage.</p>
+            <p>The second failure is formatting vandalism. Tools that export to clever templates with sidebars and graphics routinely produce documents that parse worse than the plain version the candidate started with. They optimise for how the resume looks in a preview, not for how it reads after an applicant tracking system has flattened it to text.</p>
+            <p>The third failure is opacity. Tools that hand back a finished, rewritten document with no diff strip the candidate of judgement. People know their own careers better than any model does. When the system rewrites a bullet, the right move is to show the before and after, explain why, and let the person accept or reject it. Trust compounds when users stay in control, and it evaporates the first time a tool puts a sentence in their mouth that is not true.</p>
+            <p>I track one blunt metric for this: the share of suggestions users accept without editing. Early on it sat around 40%, which told me the rewrites were either too timid or too aggressive. Tightening the per-bullet rules and showing the reasoning pushed acceptance past 70%, and the resumes that came out the other side were measurably stronger without ever drifting from the truth of the person's experience.</p>
+            <p>Avoiding these three traps is most of the work. The rewriting itself is almost the easy part once the guardrails, the scoring, and the diff view are in place. That is the real lesson from building a resume tool people actually trust: the model is a small component inside a system whose entire job is to stay honest.</p>
+            <aside class="callout warning">
+              <span class="label">Watch Out</span>
+              <p>If a resume tool raises your match score by adding skills you do not have, it is optimising the screen and sabotaging the interview. Honest gains come from surfacing real, relevant experience, never from inventing it.</p>
+            </aside>
+
+            <h2 id="lessons">What I'd Tell Someone Building This Today</h2>
+            <ul>
+              <li>Start with the smallest possible model unit. "<em>Rewrite this one bullet</em>" is a unit. "<em>Rewrite this resume</em>" is not.</li>
+              <li>Force structured output from day one. Don't try to parse prose responses.</li>
+              <li>Build a verifier step. The cost is small and the trust gain is enormous.</li>
+              <li>Show diffs, not finished outputs. Users want agency over every suggestion.</li>
+            </ul>
+            <p>One last thing that is easy to skip: privacy. A resume is sensitive personal data, full of names, addresses, and employment history. I process it in memory, never log the raw text, and delete uploads on a short timer. People are trusting the tool with their career, and earning that trust is worth more than any single feature. If you build anything in this space, treat the document like the private record it is, not like free training data.</p>
+            <p>Build for the person, not the parser. The applicant tracking system is only a gatekeeper. The human on the other side is who decides, and a resume that reads as honest and specific will always beat one that was engineered to game a machine.</p>
+
+          </div>
+
+          <section class="post-faq" aria-label="Frequently asked questions">
+            <p class="post-faq-title">Frequently Asked</p>
+
+            <details class="faq-item">
+              <summary>
+                <span>Can GPT-4 optimize a resume without hallucinating missing skills?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>Yes, with strict constraints. Each rewrite prompt must explicitly forbid introducing skills, tools, certifications, or dates not already in the original. A verifier call — comparing the rewrite against the source and flagging new noun phrases — catches the ~4% that still slip through.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>What is the best approach to AI-powered ATS resume optimization?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>Rewrite <strong>one bullet at a time</strong>, not the full resume. Force <strong>structured JSON output</strong> (not prose) for determinism. Run a verifier call to block hallucinations. Show diffs — not finished documents — so users keep control of every change.</p>
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>
+                <span>How much does GPT-4 resume optimization cost per user?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>Per-bullet with GPT-4: approximately <strong>$0.04 per resume</strong>. Single large-prompt: ~$0.18 due to retry overhead from malformed output. The per-bullet method is 4× cheaper and significantly more reliable.</p>
+              </div>
+            </details>
+          </section>
+
+          <div class="post-share">
+            <span class="share-label">Share</span>
+            <button class="share-btn" id="copyLinkBtn" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Copy Link
+            </button>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmeetpatel.dev%2Fblog%2Fats-resume-optimizer-gpt4.html" rel="noopener" target="_blank" class="share-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.29 2.38 4.29 5.48v6.26zM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+              Share on LinkedIn
+            </a>
+          </div>
+
+          <nav class="post-bottom-nav" aria-label="Post navigation">
+            <div class="post-nav-grid">
+              <a href="index.html" class="pn-link back-all">
+                <span class="pn-dir">← Back to Blog</span>
+                <span class="pn-arr" aria-hidden="true">→</span>
+              </a>
+              <a href="podcast-review-platform-seo.html" class="pn-link">
+                <span class="pn-dir">Also Read</span>
+                <span class="pn-title">How I Built an SEO-Optimized Podcast Review Platform</span>
+              </a>
+              <a href="power-bi-financial-dashboard.html" class="pn-link">
+                <span class="pn-dir">Also Read</span>
+                <span class="pn-title">How to Build a Power BI Dashboard for Financial Data</span>
+              </a>
+            </div>
+          </nav>
+        </article>
+
+        <aside class="post-sidebar" aria-label="Post sidebar" data-screen-label="Post sidebar">
+          <div class="widget">
+            <div class="widget-head"><h3>Contents</h3></div>
+            <div class="widget-body">
+              <nav aria-label="Table of contents">
+                <ul class="toc-list" id="toc-list">
+                  <li><a href="#the-question" class="toc-link">The Question Behind the Build</a></li>
+                  <li><a href="#constraint-1" class="toc-link">Constraint #1: Structured Output</a></li>
+                  <li><a href="#constraint-2" class="toc-link">Constraint #2: One Bullet at a Time</a></li>
+                  <li><a href="#constraint-3" class="toc-link">Constraint #3: Never Invent</a></li>
+                  <li><a href="#lessons" class="toc-link">Lessons for Builders</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="widget">
+            <div class="widget-head"><h3>Author</h3></div>
+            <div class="widget-body">
+              <div class="sw-top">
+                <div class="sw-av" aria-hidden="true">MP</div>
+                <div>
+                  <p class="sw-name">Meet Patel</p>
+                  <p class="sw-role">Azure Architect · Developer · Analyst</p>
+                </div>
+              </div>
+              <p class="sw-bio">7+ years building web systems and data pipelines. NBCC postgrad, Azure-certified. Writing about architecture, not abstractions.</p>
+              <div class="sw-certs">
+                <span class="sw-cert">AZ-305</span>
+                <span class="sw-cert">AZ-900</span>
+                <span class="sw-cert">DP-900</span>
+                <span class="sw-cert">AI-900</span>
+                <span class="sw-cert">IBM Cloud</span>
+              </div>
+              <a href="https://www.linkedin.com/in/meet-patel-a483501b4/" rel="noopener" target="_blank" class="sw-link">
+                LinkedIn
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="widget">
+            <div class="widget-head"><h3>Related Posts</h3></div>
+            <div class="widget-body" style="padding-top:10px;padding-bottom:10px;">
+              <div class="related-list">
+                <a href="podcast-review-platform-seo.html" class="related-post">
+                  <span class="rp-badge seo">SEO</span>
+                  <div>
+                    <p class="rp-title">SEO-Optimized Podcast Review Platform</p>
+                    <p class="rp-meta">May 12, 2026 · 8 min</p>
+                  </div>
+                </a>
+                <a href="power-bi-financial-dashboard.html" class="related-post">
+                  <span class="rp-badge bi">Power BI</span>
+                  <div>
+                    <p class="rp-title">Power BI Dashboard for Financial Data</p>
+                    <p class="rp-meta">Apr 9, 2026 · 10 min</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+  <section class="section tight" data-screen-label="AI Fluency Note">
+    <div class="container">
+      <div class="aif-note reveal" style="max-width:780px; margin:0 auto;">
+        <span class="eyebrow aif-eyebrow">Behind This Post</span>
+        <p>This system runs on GPT-4 with schema-constrained, bullet-level rewrites and embedding-based scoring. <strong>I work hands-on across the major models</strong> and reach for whichever one fits the task, with the same discipline every time: grounded, constrained, traceable.</p>
+        <div class="aif-cloud"><span class="aif-tag">GPT-4</span><span class="aif-tag">Embeddings</span><span class="aif-tag">JSON Mode</span><span class="aif-tag">Prompt Engineering</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-cta"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>window.__currentPage = "blog";</script>
+<script src="../scroll-fx.js"></script>
+<script src="../partials.js"></script>
+<script>
+  const bar = document.getElementById('readingProgress');
+  const article = document.getElementById('post-article');
+  window.addEventListener('scroll', () => {
+    const top = article.getBoundingClientRect().top + window.scrollY;
+    const bottom = top + article.offsetHeight;
+    const pct = Math.min(100, Math.max(0, ((window.scrollY - top) / (bottom - top - window.innerHeight)) * 100));
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = document.querySelectorAll('#post-article h2[id], #post-article h3[id]');
+  const tocObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('.toc-link[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px' });
+  headings.forEach(h => tocObs.observe(h));
+
+  document.getElementById('copyLinkBtn').addEventListener('click', function() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      this.textContent = 'Copied!';
+      this.classList.add('copied');
+      setTimeout(() => { this.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link'; this.classList.remove('copied'); }, 2000);
+    });
+  });
+
+  document.querySelectorAll('.faq-item').forEach(d => {
+    d.addEventListener('toggle', () => { d.querySelector('.faq-icon').textContent = d.open ? '×' : '+'; });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+
+  <!-- ═══ PRIMARY META ═══ -->
+  <title>Podcast Review Platform SEO: How I Built One That Hit 60,000 Visits/Month | Meet Patel</title>
+  <meta name="description" content="Building a podcast review platform that ranks in Google: the crawl architecture, schema markup, and content engineering that drove a new podcast review platform to 60,000 monthly organic visits in nine months." />
+  <meta name="keywords" content="SEO, podcast review platform, schema markup, PodcastEpisode, Core Web Vitals, static generation, Next.js, JSON-LD, web architecture, Meet Patel" />
+  <meta name="author" content="Meet Patel" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <meta name="revisit-after" content="7 days" />
+  <link rel="canonical" href="https://meetpatel.dev/blog/podcast-review-platform-seo.html" />
+
+  <!-- ═══ OPEN GRAPH ═══ -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://meetpatel.dev/blog/podcast-review-platform-seo.html" />
+  <meta property="og:title" content="Podcast Review Platform SEO: How I Built One That Hit 60,000 Visits/Month" />
+  <meta property="og:description" content="The crawl architecture, schema markup, and content engineering that took a podcast review platform to 60,000 monthly organic visits in nine months." />
+  <meta property="og:image" content="https://meetpatel.dev/og-blog-seo.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="How I Built an SEO-Optimized Podcast Review Platform — Meet Patel" />
+  <meta property="og:locale" content="en_CA" />
+  <meta property="og:site_name" content="Meet Patel" />
+  <meta property="article:published_time" content="2026-05-12T09:00:00-03:00" />
+  <meta property="article:modified_time" content="2026-05-12T09:00:00-03:00" />
+  <meta property="article:author" content="https://meetpatel.dev/about.html" />
+  <meta property="article:section" content="SEO" />
+  <meta property="article:tag" content="SEO" />
+  <meta property="article:tag" content="Web Architecture" />
+  <meta property="article:tag" content="Schema Markup" />
+
+  <!-- ═══ TWITTER / X ═══ -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@meetpatel" />
+  <meta name="twitter:creator" content="@meetpatel" />
+  <meta name="twitter:title" content="Podcast Review Platform SEO: How I Built One That Hit 60,000 Visits/Month" />
+  <meta name="twitter:description" content="Architecture, schema markup, and content engineering that took a podcast review site to 60k monthly organic visits." />
+  <meta name="twitter:image" content="https://meetpatel.dev/og-blog-seo.jpg" />
+
+  <!-- ═══ JSON-LD: @graph (Rank Math pattern)
+       WebSite · Person · BreadcrumbList · WebPage
+       BlogPosting · FAQPage · HowTo — all entities
+       interlinked via @id; no visible rendering.     ═══ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://meetpatel.dev/#website",
+        "url": "https://meetpatel.dev/",
+        "name": "Meet Patel",
+        "description": "Portfolio and blog of Meet Patel, Azure-certified web developer and data analyst based in Saint John, NB.",
+        "publisher": { "@id": "https://meetpatel.dev/#person" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": { "@type": "EntryPoint", "urlTemplate": "https://meetpatel.dev/blog/?s={search_term_string}" },
+          "query-input": "required name=search_term_string"
+        },
+        "inLanguage": "en-CA"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://meetpatel.dev/#person",
+        "name": "Meet Patel",
+        "url": "https://meetpatel.dev/",
+        "email": "patelmeet20112000@gmail.com",
+        "jobTitle": "Web Developer & Data Analyst",
+        "description": "Azure-certified web developer and data analyst with 7+ years of experience building web systems, SEO platforms, and Power BI dashboards.",
+        "address": { "@type": "PostalAddress", "addressLocality": "Saint John", "addressRegion": "NB", "addressCountry": "CA" },
+        "sameAs": ["https://www.linkedin.com/in/meet-patel-a483501b4/"],
+        "knowsAbout": ["SEO", "Web Development", "Azure Cloud", "Data Analytics", "Schema Markup", "Next.js", "Power BI", "Core Web Vitals", "JSON-LD"],
+        "alumniOf": { "@type": "EducationalOrganization", "name": "New Brunswick Community College", "sameAs": "https://nbcc.ca" },
+        "hasCredential": [
+          { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure Solutions Architect Expert (AZ-305)", "credentialCategory": "Professional Certification" },
+          { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure Fundamentals (AZ-900)", "credentialCategory": "Professional Certification" },
+          { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure Data Fundamentals (DP-900)", "credentialCategory": "Professional Certification" },
+          { "@type": "EducationalOccupationalCredential", "name": "Microsoft Certified: Azure AI Fundamentals (AI-900)", "credentialCategory": "Professional Certification" },
+          { "@type": "EducationalOccupationalCredential", "name": "IBM Cloud Essentials", "credentialCategory": "Professional Certification" }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://meetpatel.dev/" },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://meetpatel.dev/blog/" },
+          { "@type": "ListItem", "position": 3, "name": "How I Built an SEO-Optimized Podcast Review Platform", "item": "https://meetpatel.dev/blog/podcast-review-platform-seo.html" }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#webpage",
+        "url": "https://meetpatel.dev/blog/podcast-review-platform-seo.html",
+        "name": "How I Built an SEO-Optimized Podcast Review Platform | Meet Patel",
+        "description": "A walk-through of the architecture decisions, schema markup, and content engineering that took a brand-new podcast review site from zero to ranking for thousands of episode queries in under a year.",
+        "isPartOf": { "@id": "https://meetpatel.dev/#website" },
+        "about": { "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#article" },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#primaryimage",
+          "url": "https://meetpatel.dev/og-blog-seo.jpg",
+          "width": 1200, "height": 630,
+          "caption": "How I Built an SEO-Optimized Podcast Review Platform"
+        },
+        "breadcrumb": { "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#breadcrumb" },
+        "inLanguage": "en-CA",
+        "potentialAction": { "@type": "ReadAction", "target": ["https://meetpatel.dev/blog/podcast-review-platform-seo.html"] },
+        "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", ".lede", ".key-takeaways", ".post-faq"] },
+        "hasPart": [
+          { "@type": "WebPageElement", "cssSelector": "#the-setup",          "name": "The Setup" },
+          { "@type": "WebPageElement", "cssSelector": "#architecture",        "name": "Architecture Decisions" },
+          { "@type": "WebPageElement", "cssSelector": "#why-not-wp",          "name": "Why Not WordPress" },
+          { "@type": "WebPageElement", "cssSelector": "#content-engineering", "name": "Content Engineering" },
+          { "@type": "WebPageElement", "cssSelector": "#schema-markup",       "name": "Schema Markup That Actually Helps" },
+          { "@type": "WebPageElement", "cssSelector": "#results",             "name": "Results" },
+          { "@type": "WebPageElement", "cssSelector": "#glossary",            "name": "Glossary of Terms Used" },
+          { "@type": "WebPageElement", "cssSelector": "#what-id-change",      "name": "What I'd Do Differently" },
+          { "@type": "WebPageElement", "cssSelector": ".post-faq",            "name": "Frequently Asked Questions" }
+        ]
+      },
+      {
+        "@type": ["BlogPosting", "Article"],
+        "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#article",
+        "headline": "Podcast Review Platform SEO: How I Built One That Hit 60,000 Visits/Month",
+        "alternativeHeadline": "Architecture, Schema Markup and Content Engineering for a Podcast Review Site",
+        "url": "https://meetpatel.dev/blog/podcast-review-platform-seo.html",
+        "datePublished": "2026-05-12T09:00:00-03:00",
+        "dateModified": "2026-05-12T09:00:00-03:00",
+        "description": "A walk-through of the architecture decisions, schema markup, and content engineering that took a brand-new podcast review site from zero to ranking for thousands of episode queries in under a year.",
+        "image": { "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#primaryimage" },
+        "thumbnailUrl": "https://meetpatel.dev/og-blog-seo.jpg",
+        "keywords": ["SEO", "podcast review platform", "schema markup", "PodcastEpisode", "Core Web Vitals", "static site generation", "Next.js", "JSON-LD", "web architecture", "ISR", "BreadcrumbList", "TTFB"],
+        "articleSection": "SEO",
+        "inLanguage": "en-CA",
+        "timeRequired": "PT8M",
+        "wordCount": 1850,
+        "author": { "@id": "https://meetpatel.dev/#person" },
+        "publisher": { "@id": "https://meetpatel.dev/#person" },
+        "copyrightYear": 2026,
+        "copyrightHolder": { "@id": "https://meetpatel.dev/#person" },
+        "mainEntityOfPage": { "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#webpage" },
+        "isPartOf": {
+          "@type": "Blog",
+          "@id": "https://meetpatel.dev/blog/#blog",
+          "name": "Meet Patel Blog",
+          "url": "https://meetpatel.dev/blog/",
+          "publisher": { "@id": "https://meetpatel.dev/#person" }
+        },
+        "about": [
+          { "@type": "Thing", "name": "Search Engine Optimization", "sameAs": "https://en.wikipedia.org/wiki/Search_engine_optimization" },
+          { "@type": "Thing", "name": "Podcast",     "sameAs": "https://en.wikipedia.org/wiki/Podcast" },
+          { "@type": "Thing", "name": "Schema.org",  "sameAs": "https://en.wikipedia.org/wiki/Schema.org" },
+          { "@type": "Thing", "name": "Core Web Vitals", "sameAs": "https://en.wikipedia.org/wiki/Core_Web_Vitals" },
+          { "@type": "Thing", "name": "Static web page", "sameAs": "https://en.wikipedia.org/wiki/Static_web_page" }
+        ],
+        "mentions": [
+          { "@type": "SoftwareApplication", "name": "Next.js",               "url": "https://nextjs.org", "applicationCategory": "WebApplication" },
+          { "@type": "WebApplication",      "name": "Google Search Console",  "url": "https://search.google.com/search-console" },
+          { "@type": "SoftwareApplication", "name": "Vercel",                "url": "https://vercel.com" },
+          { "@type": "SoftwareApplication", "name": "Cloudflare Pages",      "url": "https://pages.cloudflare.com" },
+          { "@type": "SoftwareApplication", "name": "Azure Static Web Apps", "url": "https://azure.microsoft.com/en-us/products/app-service/static" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "What schema markup should a podcast review website use?", "acceptedAnswer": { "@type": "Answer", "text": "A podcast review site should implement three schema types: PodcastEpisode (qualifies for Google's podcast carousel), Review (earns star-rating snippets in search results), and BreadcrumbList (controls URL path display). Avoid mixing in Article schema on the same page. It confuses Google's page-type signal and often suppresses both rich results." } },
+          { "@type": "Question", "name": "How long does it take a new podcast review site to rank on Google?", "acceptedAnswer": { "@type": "Answer", "text": "With clean crawl architecture, original review content per episode, and correct schema markup, episode-specific long-tail queries typically begin ranking within 3 to 4 months. Competitive show-level queries usually reach page one in 6 to 9 months from launch." } },
+          { "@type": "Question", "name": "Why use static site generation instead of WordPress for a podcast review platform?", "acceptedAnswer": { "@type": "Answer", "text": "Static generation handles thousands of template-driven episode pages efficiently, serves pre-rendered HTML from CDN with sub-200ms TTFB, and supports feed-driven data pipelines that CMS plugins cannot match. WordPress suits editorial content; programmatic page generation at scale is better handled by a static framework with ISR." } },
+          { "@type": "Question", "name": "What CTR improvement can star rating snippets provide in search results?", "acceptedAnswer": { "@type": "Answer", "text": "Pages with Review schema displaying star ratings in Google search results typically see 2 to 2.5 times higher click-through rates compared to plain blue link results for the same query." } },
+          { "@type": "Question", "name": "What is the best URL structure for a podcast review website?", "acceptedAnswer": { "@type": "Answer", "text": "Use clean hierarchical slugs: /shows/[show-slug]/episodes/[episode-slug]. Avoid query-string URLs like /episode?id=12345. Crawlers treat query-string URLs as low-value, pagination signals break, and canonical management becomes error-prone at scale." } },
+          { "@type": "Question", "name": "How should podcast review pages cache content at the CDN edge?", "acceptedAnswer": { "@type": "Answer", "text": "Set Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400 on all episode pages. This serves stale content instantly while ISR revalidates in the background. New episodes become live on the first request after the 1-hour window expires." } }
+        ]
+      },
+      {
+        "@type": "HowTo",
+        "@id": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#howto",
+        "name": "How to Implement Schema Markup for a Podcast Review Website",
+        "description": "Step-by-step implementation of PodcastEpisode, Review, and BreadcrumbList schema for maximum rich result coverage in Google Search.",
+        "totalTime": "PT2H",
+        "supply": [ { "@type": "HowToSupply", "name": "JSON-LD editor or code IDE" }, { "@type": "HowToSupply", "name": "Google Rich Results Test access" } ],
+        "tool":   [ { "@type": "HowToTool",   "name": "Next.js static site generator" }, { "@type": "HowToTool", "name": "Schema.org validator" } ],
+        "step": [
+          { "@type": "HowToStep", "position": 1, "name": "Implement BreadcrumbList on every page", "text": "Add BreadcrumbList schema on every episode and show page to control URL path display in search results. Ships first, applies universally.", "url": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#schema-markup" },
+          { "@type": "HowToStep", "position": 2, "name": "Add PodcastEpisode schema per episode page", "text": "Implement PodcastEpisode with associatedMedia including audio URL, duration, and transcript link to qualify for Google's podcast carousel.", "url": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#schema-markup" },
+          { "@type": "HowToStep", "position": 3, "name": "Layer Review schema for star ratings", "text": "Add Review schema alongside PodcastEpisode using a @type array. Include reviewRating with ratingValue and bestRating. Do not add Article schema on the same page.", "url": "https://meetpatel.dev/blog/podcast-review-platform-seo.html#schema-markup" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../scroll-fx.css" />
+  <link rel="stylesheet" href="post.css" />
+  <script src="image-slot.js"></script>
+  <style id="blog-post-tweaks">
+  /* Featured image — inside left column */
+  .post-main-featured { width:100%; aspect-ratio:16/7; border-radius:var(--radius-card); overflow:hidden; border:1px solid var(--cloud-fog); margin-bottom:40px; position:relative; }
+  .post-main-featured::after { content:"Featured"; position:absolute; top:14px; left:14px; z-index:2; font-family:var(--font-mono); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; padding:4px 10px; background:rgba(12,31,24,0.72); color:#34D399; border-radius:100px; backdrop-filter:blur(8px); pointer-events:none; }
+  @media (max-width:640px) { .post-main-featured { aspect-ratio:auto; height:210px; margin-bottom:28px; } }
+
+  /* ── Mobile Contents card (sits after the featured image) ── */
+  .post-toc-mobile { display:none; }
+  @media (max-width:640px) {
+    .post-toc-mobile {
+      display:block;
+      margin:0 0 32px;
+      border:1px solid var(--cloud-fog);
+      border-radius:var(--radius-card);
+      overflow:hidden;
+      background:var(--cloud-white);
+    }
+    .post-toc-mobile .ptm-head {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 18px; border-bottom:1px solid var(--cloud-fog);
+    }
+    .post-toc-mobile .ptm-title {
+      font-family:var(--font-mono); font-size:10px; letter-spacing:0.15em;
+      text-transform:uppercase; color:var(--cloud-dusk);
+    }
+    .post-toc-mobile .ptm-count { font-family:var(--font-mono); font-size:10px; color:var(--accent); }
+    .post-toc-mobile .ptm-list { list-style:none; margin:0; padding:4px 0; }
+    .post-toc-mobile .ptm-list a {
+      display:grid; grid-template-columns:28px minmax(0,1fr) auto; align-items:center; gap:10px;
+      padding:12px 18px; text-decoration:none; color:var(--cloud-ink);
+      border-top:1px solid var(--cloud-fog);
+      transition:background 140ms var(--ease-cloud);
+    }
+    .post-toc-mobile .ptm-list li:first-child a { border-top:none; }
+    .post-toc-mobile .ptm-list a:active { background:var(--cloud-mist); }
+    .post-toc-mobile .ptm-num { font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--accent); }
+    .post-toc-mobile .ptm-label { font-family:var(--font-display); font-size:14px; font-weight:600; line-height:1.35; }
+    .post-toc-mobile .ptm-sub .ptm-label { font-weight:500; color:var(--cloud-slate); }
+    .post-toc-mobile .ptm-arrow { color:var(--cloud-dusk); display:flex; }
+
+    /* avoid a duplicate Contents on phones — sidebar TOC hidden, this card replaces it */
+    .post-sidebar .widget.toc-widget { display:none; }
+  }
+
+  /* Tweak: Reading Mode — Focus */
+  body[data-reading-mode="focus"] .post-hero { background:var(--cloud-white); }
+  body[data-reading-mode="focus"] .post-sidebar { display:none !important; }
+  body[data-reading-mode="focus"] .post-cols { grid-template-columns:1fr !important; }
+  body[data-reading-mode="focus"] .post-main { max-width:700px; margin:0 auto; }
+
+  /* Tweak: Reading Mode — Dark */
+  body[data-reading-mode="dark"] { background:var(--feature-bg); }
+  body[data-reading-mode="dark"] .post-hero { background:#0b1b14; border-bottom-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .post-hero h1 { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .post-hero .lede { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .post-hero .crumbs { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .post-hero .crumbs a { color:var(--feature-accent); }
+  body[data-reading-mode="dark"] .post-hero .post-meta-item { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .post-hero .post-author-name { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .post-hero .post-author-row { border-top-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .post-main-featured { border-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .post-main-featured::after { background:rgba(0,0,0,0.55); }
+  body[data-reading-mode="dark"] .post-layout { background:var(--feature-bg); }
+  body[data-reading-mode="dark"] .prose { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .prose h2,
+  body[data-reading-mode="dark"] .prose h3,
+  body[data-reading-mode="dark"] .prose h4,
+  body[data-reading-mode="dark"] .prose strong { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .prose pre { background:#0b1b14; border-color:rgba(255,255,255,0.09); color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .prose code { background:rgba(52,211,153,0.08); border-color:rgba(52,211,153,0.18); color:var(--feature-accent); }
+  body[data-reading-mode="dark"] .prose pre code { background:transparent; border:none; color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .prose .pullquote { background:rgba(52,211,153,0.07); border-left-color:var(--feature-accent); }
+  body[data-reading-mode="dark"] .prose .pullquote p { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .prose li::marker { color:var(--feature-accent); }
+  body[data-reading-mode="dark"] .prose .steps li { background:#0b1b14; border-color:rgba(255,255,255,0.07); color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .key-takeaways { background:#0b1b14; border:1px solid rgba(52,211,153,0.12); }
+  body[data-reading-mode="dark"] .table-wrap { border-color:rgba(255,255,255,0.08); }
+  body[data-reading-mode="dark"] .prose table thead tr { background:#0a1710; }
+  body[data-reading-mode="dark"] .prose table tbody tr { border-top-color:rgba(255,255,255,0.06); }
+  body[data-reading-mode="dark"] .prose table tbody tr:nth-child(even) { background:rgba(255,255,255,0.03); }
+  body[data-reading-mode="dark"] .prose table tbody tr:hover { background:rgba(52,211,153,0.05); }
+  body[data-reading-mode="dark"] .prose table td { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .prose table td strong { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .widget { background:#0e1f18; border-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .widget-head { border-bottom-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .widget-head h3 { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .toc-link { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .toc-link:hover { background:rgba(255,255,255,0.05); color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .toc-link.active { background:rgba(52,211,153,0.1); color:var(--feature-accent); border-left-color:var(--feature-accent); }
+  body[data-reading-mode="dark"] .sw-name { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .sw-bio { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .rp-title { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .related-post { border-bottom-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .faq-item { border-color:rgba(255,255,255,0.08); }
+  body[data-reading-mode="dark"] .faq-item summary { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .faq-item summary:hover { background:rgba(255,255,255,0.04); }
+  body[data-reading-mode="dark"] .faq-answer { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .post-faq { border-top-color:rgba(255,255,255,0.08); }
+  body[data-reading-mode="dark"] .post-faq-title { color:var(--feature-accent); }
+  body[data-reading-mode="dark"] .author-bio-card { background:#0e1f18; border-color:rgba(255,255,255,0.07); }
+  body[data-reading-mode="dark"] .abc-name { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .abc-bio { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .abc-link { border-color:rgba(255,255,255,0.12); color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .post-tags-section { border-top-color:rgba(255,255,255,0.08); }
+  body[data-reading-mode="dark"] .post-tag { color:var(--feature-muted); border-color:rgba(255,255,255,0.12); }
+  body[data-reading-mode="dark"] .post-share { border-top-color:rgba(255,255,255,0.08); }
+  body[data-reading-mode="dark"] .share-btn { border-color:rgba(255,255,255,0.12); color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .pn-link { border-color:rgba(255,255,255,0.08); }
+  body[data-reading-mode="dark"] .pn-title { color:var(--feature-fg); }
+  body[data-reading-mode="dark"] .pn-dir { color:var(--feature-muted); }
+  body[data-reading-mode="dark"] .reading-progress { background:var(--feature-accent); }
+
+  /* Tweak: Type Scale */
+  body[data-type-scale="compact"]  .prose { font-size:15px; line-height:1.72; }
+  body[data-type-scale="compact"]  .prose h2 { font-size:1.35rem; }
+  body[data-type-scale="compact"]  .lede { font-size:15px; line-height:1.65; }
+  body[data-type-scale="generous"] .prose { font-size:19px; line-height:2.0; }
+  body[data-type-scale="generous"] .prose h2 { font-size:2.0rem; }
+  body[data-type-scale="generous"] .lede { font-size:19px; line-height:1.75; }
+
+  /* Tweak: Callout Style — Outlined */
+  body[data-callout-style="outlined"] .callout.tip     { background:transparent; border-color:var(--accent); }
+  body[data-callout-style="outlined"] .callout.warning { background:transparent; border-color:oklch(0.65 0.18 75); }
+  body[data-callout-style="outlined"] .callout.info    { background:transparent; border-color:oklch(0.5 0.18 240); }
+  body[data-callout-style="outlined"] .callout.danger  { background:transparent; border-color:oklch(0.55 0.22 15); }
+
+  /* Tweak: Callout Style — Minimal */
+  body[data-callout-style="minimal"] .callout {
+    background:transparent !important;
+    border-top:none !important; border-right:none !important; border-bottom:none !important;
+    border-radius:0 !important; padding:4px 0 4px 18px !important;
+  }
+  body[data-callout-style="minimal"] .callout.tip     { border-left:3px solid var(--accent) !important; }
+  body[data-callout-style="minimal"] .callout.warning { border-left:3px solid oklch(0.65 0.18 75) !important; }
+  body[data-callout-style="minimal"] .callout.info    { border-left:3px solid oklch(0.5 0.18 240) !important; }
+  body[data-callout-style="minimal"] .callout.danger  { border-left:3px solid oklch(0.55 0.22 15) !important; }
+  body[data-callout-style="minimal"] .callout .label  { display:none; }
+  </style>
+</head>
+<body>
+
+<!-- Reading progress -->
+<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+
+<div id="site-nav"></div>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       POST HERO HEADER
+  ══════════════════════════════════════════ -->
+  <header class="post-hero" data-screen-label="Post header">
+    <div class="container">
+
+      <!-- Breadcrumb (SEO + usability) -->
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../Portfolio Animated v2.html">Home</a>
+        <span class="sep">·</span>
+        <a href="index.html">Blog</a>
+        <span class="sep">·</span>
+        <span aria-current="page">SEO</span>
+      </nav>
+
+      <!-- Category + tags row -->
+      <div class="post-category-row" style="justify-content: flex-start; align-items: flex-start; flex-direction: row">
+        <span class="badge seo">SEO</span>
+        <span class="post-tag-pill">Web Architecture</span>
+        <span class="post-tag-pill">Schema Markup</span>
+        <span class="post-tag-pill">Core Web Vitals</span>
+      </div>
+
+      <!-- H1 — the most important on-page SEO element -->
+      <h1><em>Podcast Review Platform</em> SEO: How I Built One That Hit 60,000 Visits a Month</h1>
+
+      <p class="lede">How I built a podcast review platform that took a brand-new domain from zero to 60,000 monthly organic visits in nine months: the crawl architecture, the schema markup, and the content engineering, with the real numbers at each stage.</p>
+
+      <!-- Author meta row -->
+      <div class="post-author-row">
+        <span class="post-av" aria-hidden="true">MP</span>
+        <div class="post-author-stack">
+          <span class="post-author-name">Meet Patel</span>
+          <span class="post-author-creds">AZ-305 · Web Developer · SEO</span>
+        </div>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          May 12, 2026
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          8 min read
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">~2,000 words</span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">Updated May 2026</span>
+      </div>
+
+    </div>
+  </header>
+
+
+
+  <!-- ══════════════════════════════════════════
+       TWO-COLUMN LAYOUT
+  ══════════════════════════════════════════ -->
+  <div class="post-layout">
+    <div class="container">
+      <div class="post-cols">
+
+        <!-- ── MAIN ARTICLE ── -->
+        <article class="post-main" id="post-article" data-screen-label="Article">
+
+          <!-- Featured image — top of left column -->
+          <div class="post-main-featured">
+            <image-slot
+              id="post-seo-featured"
+              alt="SEO-optimized podcast review platform episode page in Google search results"
+              style="width:100%;height:100%;"
+              shape="rounded"
+              radius="14"
+              placeholder="Drop a featured image here (1200 x 480 recommended)"
+            ></image-slot>
+          </div>
+
+          <!-- ── MOBILE CONTENTS (after featured image; hidden ≥640px where the sidebar TOC shows) ── -->
+          <nav class="post-toc-mobile" aria-label="Table of contents">
+            <div class="ptm-head">
+              <span class="ptm-title">Contents</span>
+              <span class="ptm-count">8 sections</span>
+            </div>
+            <ol class="ptm-list">
+              <li><a href="#the-setup"><span class="ptm-num">01</span><span class="ptm-label">The Setup</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li><a href="#architecture"><span class="ptm-num">02</span><span class="ptm-label">Architecture Decisions</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li class="ptm-sub"><a href="#why-not-wp"><span class="ptm-num">·</span><span class="ptm-label">Why Not WordPress</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li class="ptm-sub"><a href="#content-engineering"><span class="ptm-num">·</span><span class="ptm-label">Content Engineering</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li><a href="#schema-markup"><span class="ptm-num">03</span><span class="ptm-label">Schema Markup</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li><a href="#results"><span class="ptm-num">04</span><span class="ptm-label">Results</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li><a href="#glossary"><span class="ptm-num">05</span><span class="ptm-label">Glossary</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+              <li><a href="#what-id-change"><span class="ptm-num">06</span><span class="ptm-label">What I'd Change</span><span class="ptm-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></a></li>
+            </ol>
+          </nav>
+
+          <div class="prose">
+
+            <!-- Key Takeaways (AEO + UX — high-value snippet target) -->
+            <div class="key-takeaways" role="note" aria-label="Key takeaways">
+              <span class="kt-label">Key Takeaways</span>
+              <ul class="kt-list">
+                <li>Use <strong>PodcastEpisode + Review + BreadcrumbList</strong> schema — never mix in Article schema on the same page.</li>
+                <li>For a <strong>podcast review platform</strong> at the scale of thousands of template-driven pages, static generation with ISR beats WordPress on crawl speed and build control.</li>
+                <li>Original review content per episode + chapter markers = unique page signal to Google.</li>
+                <li>Star rating snippets from Review schema deliver ~2.5× higher CTR than plain blue links.</li>
+                <li>Cache raw RSS XML aggressively — feeds disappear and formats change without warning.</li>
+              </ul>
+            </div>
+
+            <!-- H2: Introduction -->
+            <h2 id="the-setup">The Setup</h2>
+            <p>I was approached by a client who had been writing podcast reviews for years on a Substack and wanted a real podcast review platform: searchable, evergreen, and monetizable. The goal was straightforward. Be the page Google sends people to when they search "<em>[podcast name] review</em>".</p>
+            <p>That sounds simple. It is not. Podcast review queries are extremely long-tail, the content is technically duplicative (lots of "review of episode X" pages), and the audio metadata you want to expose is scattered across half a dozen feeds and platforms. Building a podcast review platform that actually ranks meant solving all three problems in the data layer before writing a single line of copy.</p>
+
+            <!-- Blockquote / pull quote -->
+            <blockquote class="pullquote">
+              <p>"The real SEO work happens in the data layer — not in the copy."</p>
+              <cite>Meet Patel, May 2026</cite>
+            </blockquote>
+
+            <!-- H2: Architecture -->
+            <h2 id="architecture">Architecture Decisions</h2>
+
+            <!-- H3: Why Not WP -->
+            <h3 id="why-not-wp">Why Not WordPress</h3>
+            <p>I love WordPress for some things. This wasn't one of them. The platform needed thousands of nearly-identical episode pages, each pulling structured data from a feed, each with its own JSON-LD schema. That's a template engine workload, not a CMS workload.</p>
+            <p>I went with Next.js on static generation. Episode pages are pre-rendered at build time from the feed data, and incremental static regeneration kicks in for the active shows. The result: every page is full HTML at request time, served from a CDN, with sub-200ms TTFB globally.</p>
+
+            <!-- H4: Performance -->
+            <h4 id="performance">Performance Considerations</h4>
+            <p>Core Web Vitals are a confirmed ranking factor for podcast content. Every page must score green on LCP, FID (now INP), and CLS before launch.</p>
+
+            <!-- H5: CDN -->
+            <h5 id="cdn">CDN vs Origin</h5>
+            <p>For static pages, always serve from CDN edge nodes. Sub-200ms TTFB is achievable globally with Vercel, Cloudflare Pages, or Azure Static Web Apps.</p>
+
+            <!-- H6: Edge caching -->
+            <h6 id="edge-caching">Edge Caching Policy</h6>
+            <p>Set <code>Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400</code> on all episode pages. New episodes revalidate on first request after the ISR window.</p>
+
+            <!-- In-article image with caption -->
+            <figure class="post-img">
+              <image-slot
+                id="post-seo-arch-diagram"
+                style="width:100%;height:320px;"
+                shape="rounded"
+                radius="12"
+                placeholder="Architecture diagram — drop image here"
+              ></image-slot>
+              <figcaption>Fig. 1: Build pipeline — RSS feed → data layer → static pages → CDN.</figcaption>
+            </figure>
+
+            <!-- H3: Content Engineering -->
+            <h3 id="content-engineering">Content Engineering for a Podcast Review Platform</h3>
+            <p>The real SEO work happened in the data layer. For each episode I pull the following data points and assemble them into a unique page signal:</p>
+
+            <!-- Unordered list -->
+            <ul>
+              <li>Title, description, and publication date from the RSS feed.</li>
+              <li>Duration and transcript availability from listening platforms.</li>
+              <li>A 200-word original review snippet, ghost-written by the host.</li>
+              <li>Chapter markers when available, generated from the transcript when not.</li>
+            </ul>
+
+            <!-- Callout — tip -->
+            <aside class="callout tip">
+              <span class="label">Practical Tip</span>
+              <p>Cache raw RSS XML aggressively and store snapshots. Feeds change formats, hosts disappear, and you will need to rebuild from your archives more often than you expect.</p>
+            </aside>
+
+            <!-- Callout — warning -->
+            <aside class="callout warning">
+              <span class="label">Watch Out</span>
+              <p>Don't mix <code>Article</code> schema with <code>PodcastEpisode</code> on the same page. Google treats them as conflicting page-type signals and often suppresses both rich results.</p>
+            </aside>
+
+            <!-- Callout — info -->
+            <aside class="callout info">
+              <span class="label">Context</span>
+              <p>Google's podcast carousel and star-rating snippets are separate search features. You need separate schema types to qualify for each — they don't share a schema entry point.</p>
+            </aside>
+
+            <!-- Callout — danger -->
+            <aside class="callout danger">
+              <span class="label">Never Do This</span>
+              <p>Don't serve episode pages from a URL pattern like <code>/episode?id=12345</code>. Crawlers treat query-string URLs as low-value, and pagination signals break. Use clean slugs: <code>/shows/[show-slug]/episodes/[episode-slug]</code>.</p>
+            </aside>
+
+            <!-- H2: Schema Markup -->
+            <h2 id="schema-markup">Schema Markup That Actually Helps</h2>
+
+            <!-- Ordered list (numbered steps) -->
+            <p>Implement schema in this exact order of priority:</p>
+            <ol class="steps">
+              <li><strong>BreadcrumbList</strong> — controls URL display in search results. Implement this first. Ships on every page.</li>
+              <li><strong>PodcastEpisode</strong> — qualifies pages for the podcast carousel. Include <code>associatedMedia</code> with audio URL, duration, and transcript link.</li>
+              <li><strong>Review</strong> — earns star rating snippets. Requires <code>reviewRating</code> with <code>ratingValue</code> and <code>bestRating</code>.</li>
+            </ol>
+
+            <!-- Code block -->
+            <pre><code>// Minimal PodcastEpisode + Review schema
+{
+  "@context": "https://schema.org",
+  "@type": ["PodcastEpisode", "Review"],
+  "name": "Episode Title",
+  "url": "https://yoursite.com/shows/show-name/ep-1",
+  "datePublished": "2026-05-01",
+  "associatedMedia": {
+    "@type": "AudioObject",
+    "contentUrl": "https://feeds.example.com/ep1.mp3",
+    "duration": "PT45M"
+  },
+  "reviewRating": {
+    "@type": "Rating",
+    "ratingValue": 4.5,
+    "bestRating": 5
+  },
+  "itemReviewed": {
+    "@type": "PodcastSeries",
+    "name": "The Podcast Name"
+  }
+}</code></pre>
+
+            <!-- H2: Crawl architecture (added section) -->
+            <h2 id="crawl-architecture">Crawl Architecture for a Podcast Review Platform</h2>
+            <p>Most of the ranking gains on this podcast review platform came from one unglamorous decision: making every page trivially easy for Google to crawl, render, and tell apart. A podcast review platform is mostly thousands of near-identical episode pages, so crawl efficiency is not a nice-to-have. It is the whole game.</p>
+            <p>I gave the platform a strict three-level hierarchy. The home page links to show hubs, each show hub links to its episodes, and every episode links back up to its show and across to two or three related episodes. No page sits more than three clicks from the home page, which keeps crawl depth shallow and spreads internal link equity evenly across the catalogue.</p>
+            <p>Every episode page ships a single canonical URL with a self-referencing canonical tag. That sounds obvious, but feed-driven sites generate duplicate URLs constantly: a guest appears on two shows, an episode is re-released, a platform appends tracking parameters. Without disciplined canonicalisation, a podcast review platform quietly splits its own ranking signals across a dozen URL variants.</p>
+
+            <h3 id="rendering">Rendering and Indexability</h3>
+            <p>Because the pages are statically generated, Google receives complete HTML on the first request, with the review copy, the rating, and the schema already in the markup. There is no client-side hydration gate between the crawler and the content. That is the single biggest reason episode pages on this podcast review platform began ranking within months rather than quarters.</p>
+            <p>I also kept the rendered DOM small. A bloated template forces the crawler to spend its render budget on layout instead of content, and on a catalogue this size that budget matters. Stripping unused CSS and deferring non-critical scripts pulled the median Largest Contentful Paint under 1.8 seconds on mobile, comfortably inside Google's threshold.</p>
+
+            <aside class="callout tip">
+              <span class="label">Practical Tip</span>
+              <p>Before you optimise a single line of copy, fix crawlability. On a templated podcast review platform, a clean URL hierarchy and self-referencing canonicals move more rankings than any individual content tweak.</p>
+            </aside>
+
+            <!-- H2: Results — with comparison table -->
+            <h2 id="results">Results</h2>
+            <p>Nine months from launch, the platform achieved the following measurable outcomes across organic search:</p>
+
+            <!-- Table -->
+            <div class="table-wrap">
+              <p class="table-caption">Table 1: Organic search performance — months 1 through 9 post-launch</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Month 3</th>
+                    <th>Month 6</th>
+                    <th>Month 9</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Monthly organic visits</strong></td>
+                    <td>4,200</td>
+                    <td>31,000</td>
+                    <td>60,000+</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Page-1 episode queries</strong></td>
+                    <td>180</td>
+                    <td>2,100</td>
+                    <td>4,200</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Show-level page-1 rankings</strong></td>
+                    <td>12</td>
+                    <td>80</td>
+                    <td>180</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Rich snippets active</strong></td>
+                    <td>Star ratings</td>
+                    <td>Star + Carousel</td>
+                    <td>Star + Carousel + Sitelinks</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Avg. CTR vs control</strong></td>
+                    <td>1.4×</td>
+                    <td>2.1×</td>
+                    <td><strong>2.5×</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- In-article image 2 -->
+            <figure class="post-img">
+              <image-slot
+                id="post-seo-results-chart"
+                style="width:100%;height:260px;"
+                shape="rounded"
+                radius="12"
+                placeholder="Traffic growth chart — drop screenshot here"
+              ></image-slot>
+              <figcaption>Fig. 2: Monthly organic traffic — months 1 to 9.</figcaption>
+            </figure>
+
+            <!-- Video embed placeholder -->
+            <div class="video-embed" aria-label="Video placeholder">
+              <div class="video-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </div>
+              <span class="video-embed-label">Drop YouTube embed or video URL here</span>
+            </div>
+
+            <!-- H2: Measuring (added) -->
+            <h2 id="measuring">Measuring What Actually Moved Rankings</h2>
+            <p>Vanity metrics will lie to you on a project like this. Total traffic climbs for all sorts of reasons, so I instrumented the podcast review platform to measure the things that actually predict durable growth: indexed-page count, the share of episode pages earning at least one click, and average position for show-level head terms. Those three told the real story long before the traffic line did.</p>
+            <p>The metric I watched most closely was coverage: of every episode page we published, how many had Google actually indexed and started serving? Early on it sat around 70%, and the gap was almost always a crawl or canonical problem rather than a content one. Closing that gap, page by page, is what turned the podcast review platform from a promising prototype into something that compounded month over month.</p>
+            <p>I also kept a manual eye on the search result itself. A page can rank well and still earn no clicks if its title and rating snippet look weak next to competitors. Reviewing the actual results page for our top queries each week, and tuning titles and review schema where the snippet looked flat, added a few points of click-through that pure ranking work never would have delivered.</p>
+            <p>None of this needs an expensive tool. Search Console plus a weekly spreadsheet covered it. The discipline is in looking at the same handful of numbers every week and resisting the urge to celebrate the ones that do not matter. For a content-heavy podcast review platform, index coverage and click-through are the leading indicators, and raw sessions are the lagging one.</p>
+
+            <!-- H2: Definition list example -->
+            <h2 id="glossary">Glossary of Terms Used</h2>
+            <dl>
+              <dt>ISR (Incremental Static Regeneration)</dt>
+              <dd>A Next.js feature that lets you update static pages after build time. The page is served stale from cache and revalidated in the background on the next request after the revalidation window.</dd>
+              <dt>PodcastEpisode</dt>
+              <dd>A Schema.org type that marks up individual podcast episode pages, qualifying them for Google's podcast carousel rich result.</dd>
+              <dt>TTFB (Time to First Byte)</dt>
+              <dd>The time between a browser making an HTTP request and receiving the first byte of a response. Under 200ms is considered excellent for SEO purposes.</dd>
+            </dl>
+
+            <!-- H2: Lessons -->
+            <h2 id="what-id-change">What I'd Do Differently</h2>
+            <p>Two things. I'd build the host review templates as a separate authoring tool from day one — I retrofitted them in month three and lost weeks rewriting old reviews. And I'd ship a JSON-LD validator in CI so a bad schema deploy doesn't sit on the live site for a week before anyone notices.</p>
+
+          </div><!-- /prose -->
+
+          <!-- ── FAQ SECTION (AEO — targets featured snippets + AI answers) ── -->
+          <section class="post-faq" aria-label="Frequently asked questions" itemscope itemtype="https://schema.org/FAQPage">
+            <p class="post-faq-title">Frequently Asked</p>
+
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <summary>
+                <span itemprop="name">What schema markup should a podcast review website use?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">Use three layers: <strong>PodcastEpisode</strong> (Google podcast carousel), <strong>Review</strong> (star-rating snippets), and <strong>BreadcrumbList</strong> (URL path control). Avoid <code>Article</code> schema — it confuses Google's page-type signal and often suppresses both rich results.</p>
+              </div>
+            </details>
+
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <summary>
+                <span itemprop="name">How long does it take a new podcast review site to rank on Google?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">With clean crawl architecture, original review content per episode, and correct schema, episode-specific long-tail queries begin ranking in <strong>3 to 4 months</strong>. Competitive show-level queries reach page one in <strong>6 to 9 months</strong> from launch.</p>
+              </div>
+            </details>
+
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <summary>
+                <span itemprop="name">Why use static generation instead of WordPress for a podcast platform?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">Static generation handles thousands of template-driven episode pages efficiently, pre-renders full HTML, serves from CDN at sub-200ms TTFB, and supports feed-driven pipelines CMS plugins cannot match. WordPress is better for editorial content, not programmatic page generation at scale.</p>
+              </div>
+            </details>
+
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <summary>
+                <span itemprop="name">How much does star rating schema improve click-through rate?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">Review schema star ratings in Google search results deliver approximately <strong>2 to 2.5× higher CTR</strong> compared to plain blue link results for the same query. For this project, CTR reached 2.5× by month nine.</p>
+              </div>
+            </details>
+
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <summary>
+                <span itemprop="name">What is the best URL structure for a podcast review site?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">Use clean hierarchical slugs: <code>/shows/[show-slug]/episodes/[episode-slug]</code>. Avoid query-string URLs like <code>/episode?id=12345</code>. Crawlers treat them as low-value, pagination signals break, and canonical management becomes error-prone at thousands of pages.</p>
+              </div>
+            </details>
+
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+              <summary>
+                <span itemprop="name">How should podcast review pages cache content at the CDN edge?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                <p itemprop="text">Set <code>Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400</code> on all episode pages. Stale content is served instantly while ISR revalidates in the background. New episodes go live on the first request after the 1-hour window expires.</p>
+              </div>
+            </details>
+          </section>
+
+          <!-- Tags -->
+          <div class="post-tags-section" aria-label="Post tags">
+            <span class="tags-label">Tags</span>
+            <a href="index.html?filter=seo" class="post-tag">SEO</a>
+            <span class="post-tag">Schema Markup</span>
+            <span class="post-tag">Web Architecture</span>
+            <span class="post-tag">Core Web Vitals</span>
+            <span class="post-tag">JSON-LD</span>
+            <span class="post-tag">Next.js</span>
+            <span class="post-tag">Podcast</span>
+          </div>
+
+          <!-- Share bar -->
+          <div class="post-share">
+            <span class="share-label">Share</span>
+            <button class="share-btn" id="copyLinkBtn" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Copy Link
+            </button>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmeetpatel.dev%2Fblog%2Fpodcast-review-platform-seo.html" rel="noopener" target="_blank" class="share-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.29 2.38 4.29 5.48v6.26zM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.27V1.73C24 .77 23.21 0 22.23 0z"/></svg>
+              Share on LinkedIn
+            </a>
+          </div>
+
+          <!-- Author bio card (large) -->
+          <div class="author-bio-card" itemscope itemtype="https://schema.org/Person">
+            <div class="abc-top">
+              <div class="abc-av" aria-hidden="true">MP</div>
+              <div>
+                <p class="abc-name" itemprop="name">Meet Patel</p>
+                <p class="abc-role" itemprop="jobTitle">Azure Solutions Architect · Web Developer · Data Analyst</p>
+                <div class="abc-certs">
+                  <span class="abc-cert">AZ-305</span>
+                  <span class="abc-cert">AZ-900</span>
+                  <span class="abc-cert">DP-900</span>
+                  <span class="abc-cert">AI-900</span>
+                  <span class="abc-cert">IBM Cloud</span>
+                </div>
+              </div>
+            </div>
+            <p class="abc-bio" itemprop="description">Azure-certified web developer and data analyst with 7+ years of hands-on experience building web systems, SEO platforms, and Power BI dashboards. Graduating NBCC April 2026 with a Postgraduate Diploma in IT Business and Advanced Analytics. Based in Saint John, NB. Writing about real architecture decisions on real projects.</p>
+            <div class="abc-links">
+              <a href="https://www.linkedin.com/in/meet-patel-a483501b4/" rel="noopener" target="_blank" class="abc-link primary" itemprop="sameAs">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.62 0 4.29 2.38 4.29 5.48v6.26zM5.34 7.43A2.06 2.06 0 1 1 5.34 3.3a2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45z"/></svg>
+                LinkedIn
+              </a>
+              <a href="mailto:patelmeet20112000@gmail.com" class="abc-link" itemprop="email">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Email
+              </a>
+              <a href="../about.html" class="abc-link">
+                More about Meet
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Post navigation -->
+          <nav class="post-bottom-nav" aria-label="Post navigation">
+            <div class="post-nav-grid">
+              <a href="index.html" class="pn-link back-all">
+                <span class="pn-dir">← Back to Blog</span>
+                <span class="pn-arr" aria-hidden="true">→</span>
+              </a>
+              <a href="ats-resume-optimizer-gpt4.html" class="pn-link">
+                <span class="pn-dir">Next Post</span>
+                <span class="pn-title">ATS Resume Optimization with GPT-4</span>
+              </a>
+              <a href="power-bi-financial-dashboard.html" class="pn-link">
+                <span class="pn-dir">Also Read</span>
+                <span class="pn-title">Power BI Dashboard for Financial Data</span>
+              </a>
+            </div>
+          </nav>
+
+        </article><!-- /post-main -->
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="post-sidebar" aria-label="Post sidebar" data-screen-label="Sidebar">
+
+          <!-- Table of Contents -->
+          <div class="widget toc-widget">
+            <div class="widget-head"><h3>Contents</h3></div>
+            <div class="widget-body">
+              <nav aria-label="Table of contents">
+                <ul class="toc-list" id="toc-list">
+                  <li><a href="#the-setup" class="toc-link">The Setup</a></li>
+                  <li><a href="#architecture" class="toc-link">Architecture Decisions</a></li>
+                  <li class="h3-item"><a href="#why-not-wp" class="toc-link">Why Not WordPress</a></li>
+                  <li class="h3-item"><a href="#content-engineering" class="toc-link">Content Engineering</a></li>
+                  <li><a href="#schema-markup" class="toc-link">Schema Markup</a></li>
+                  <li><a href="#results" class="toc-link">Results</a></li>
+                  <li><a href="#glossary" class="toc-link">Glossary</a></li>
+                  <li><a href="#what-id-change" class="toc-link">What I'd Change</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <!-- Author -->
+          <div class="widget">
+            <div class="widget-head"><h3>Author</h3></div>
+            <div class="widget-body">
+              <div class="sw-top">
+                <div class="sw-av" aria-hidden="true">MP</div>
+                <div>
+                  <p class="sw-name">Meet Patel</p>
+                  <p class="sw-role">Azure Architect · Developer · Analyst</p>
+                </div>
+              </div>
+              <p class="sw-bio">7+ years building web systems and data pipelines. Azure-certified, NBCC graduating April 2026. Writing about architecture, not abstractions.</p>
+              <div class="sw-certs">
+                <span class="sw-cert">AZ-305</span>
+                <span class="sw-cert">AZ-900</span>
+                <span class="sw-cert">DP-900</span>
+                <span class="sw-cert">AI-900</span>
+                <span class="sw-cert">IBM Cloud</span>
+              </div>
+              <a href="https://www.linkedin.com/in/meet-patel-a483501b4/" rel="noopener" target="_blank" class="sw-link">
+                LinkedIn
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Related posts -->
+          <div class="widget">
+            <div class="widget-head"><h3>Related Posts</h3></div>
+            <div class="widget-body" style="padding-top:10px;padding-bottom:10px;">
+              <div class="related-list">
+                <a href="ats-resume-optimizer-gpt4.html" class="related-post">
+                  <span class="rp-badge ai">AI</span>
+                  <div>
+                    <p class="rp-title">ATS Resume Optimization with GPT-4</p>
+                    <p class="rp-meta">Apr 28, 2026 · 6 min</p>
+                  </div>
+                </a>
+                <a href="power-bi-financial-dashboard.html" class="related-post">
+                  <span class="rp-badge bi">Power BI</span>
+                  <div>
+                    <p class="rp-title">Power BI Dashboard for Financial Data</p>
+                    <p class="rp-meta">Apr 9, 2026 · 10 min</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact CTA (dark widget) -->
+          <div class="widget" style="background:var(--feature-bg);border-color:transparent;">
+            <div class="widget-head" style="border-bottom-color:rgba(255,255,255,0.08);">
+              <h3 style="color:var(--feature-muted);">Work Together</h3>
+            </div>
+            <div class="widget-body">
+              <p style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--feature-fg);margin:0 0 8px;">Need an SEO build?</p>
+              <p style="font-size:13px;color:var(--feature-muted);line-height:1.6;margin:0 0 16px;">From schema audits to full platform builds, I design and ship web systems that rank.</p>
+              <div style="display:flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:11px;color:var(--feature-muted);margin-bottom:16px;">
+                <span class="wd" aria-hidden="true"></span>
+                Available for projects
+              </div>
+              <a href="mailto:patelmeet20112000@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:var(--feature-accent);color:#0C1F18;border-radius:100px;font-size:13px;font-weight:700;transition:gap 160ms;">
+                Get in Touch
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <section class="section tight" data-screen-label="AI Fluency Note">
+    <div class="container">
+      <div class="aif-note reveal" style="max-width:780px; margin:0 auto;">
+        <span class="eyebrow aif-eyebrow">Behind This Post</span>
+        <p>This platform is built across the modern content and AI stack: Whisper transcription, GPT-4 summarization, and SEO structure grounded in real ranking data. <strong>I work fluently end to end</strong>, from the model call to the schema markup that gets it indexed.</p>
+        <div class="aif-cloud"><span class="aif-tag">Whisper</span><span class="aif-tag">GPT-4</span><span class="aif-tag">SEO Schema</span><span class="aif-tag">Python</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-cta"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>window.__currentPage = "blog";</script>
+<script src="../scroll-fx.js"></script>
+<script src="../partials.js"></script>
+<script>
+  // Reading progress
+  const bar = document.getElementById('readingProgress');
+  const article = document.getElementById('post-article');
+  window.addEventListener('scroll', () => {
+    const top = article.getBoundingClientRect().top + window.scrollY;
+    const bottom = top + article.offsetHeight;
+    const pct = Math.min(100, Math.max(0, ((window.scrollY - top) / (bottom - top - window.innerHeight)) * 100));
+    bar.style.width = pct + '%';
+  }, { passive: true });
+
+  // TOC active section via IntersectionObserver
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headings = document.querySelectorAll('#post-article h2[id], #post-article h3[id]');
+  const tocObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector('.toc-link[href="#' + e.target.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px' });
+  headings.forEach(h => tocObs.observe(h));
+
+  // Copy link
+  document.getElementById('copyLinkBtn').addEventListener('click', function() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      this.textContent = 'Copied!';
+      this.classList.add('copied');
+      setTimeout(() => {
+        this.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link';
+        this.classList.remove('copied');
+      }, 2000);
+    });
+  });
+
+  // FAQ icon toggle
+  document.querySelectorAll('.faq-item').forEach(d => {
+    d.addEventListener('toggle', () => {
+      d.querySelector('.faq-icon').textContent = d.open ? '×' : '+';
+    });
+  });
+</script>
+
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+  const { useTweaks, TweaksPanel, TweakSection, TweakRadio } = window;
+
+  const BLOG_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "reading_mode": "Editorial",
+    "type_scale":   "Balanced",
+    "callout_style":"Tinted"
+  }/*EDITMODE-END*/;
+
+  function BlogTweaksApp() {
+    const [t, setTweak] = useTweaks(BLOG_TWEAK_DEFAULTS);
+    React.useEffect(() => {
+      const b = document.body;
+      b.dataset.readingMode  = (t.reading_mode  || 'Editorial').toLowerCase();
+      b.dataset.typeScale    = (t.type_scale    || 'Balanced').toLowerCase();
+      b.dataset.calloutStyle = (t.callout_style || 'Tinted').toLowerCase();
+    }, [t.reading_mode, t.type_scale, t.callout_style]);
+    return (
+      React.createElement(TweaksPanel, null,
+        React.createElement(TweakSection, { label: 'Reading Mode' }),
+        React.createElement(TweakRadio, {
+          label: 'Mode', value: t.reading_mode,
+          options: ['Editorial', 'Focus', 'Dark'],
+          onChange: v => setTweak('reading_mode', v)
+        }),
+        React.createElement(TweakSection, { label: 'Type Scale' }),
+        React.createElement(TweakRadio, {
+          label: 'Size', value: t.type_scale,
+          options: ['Compact', 'Balanced', 'Generous'],
+          onChange: v => setTweak('type_scale', v)
+        }),
+        React.createElement(TweakSection, { label: 'Callout Style' }),
+        React.createElement(TweakRadio, {
+          label: 'Callouts', value: t.callout_style,
+          options: ['Tinted', 'Outlined', 'Minimal'],
+          onChange: v => setTweak('callout_style', v)
+        })
+      )
+    );
+  }
+
+  const tweaksEl = document.getElementById('tweaks-root');
+  if (tweaksEl) ReactDOM.createRoot(tweaksEl).render(React.createElement(BlogTweaksApp));
+</script>
+</body>
+</html>

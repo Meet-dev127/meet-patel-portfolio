@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+  <title>AutoShare | WordPress Social Plugin | Meet Patel</title>
+  <meta name="description" content="A WordPress plugin that automatically posts new content to Twitter, LinkedIn, and Facebook with per-network formatting, scheduling, and a queue that respects each platform's API limits." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../scroll-fx.css">
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<main>
+  <section class="page-hero" data-screen-label="autoshare hero">
+    <div class="container">
+      <nav class="crumbs reveal" aria-label="Breadcrumb">
+        <a href="index.html">Projects</a><span class="sep">·</span><span>AutoShare Plugin</span>
+      </nav>
+      
+      <h1 class="reveal">AutoShare: <em>WordPress</em> Social Plugin</h1>
+      <p class="lede reveal">A WordPress plugin that automatically posts new content to Twitter, LinkedIn, and Facebook with per-network formatting, scheduling, and a queue that respects each platform's API limits.</p>
+
+      <div class="actions reveal">
+        <a href="#" class="btn btn-primary">Plugin Page ↗</a><a href="#" class="btn btn-outline">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-meta" data-screen-label="autoshare meta">
+    <div class="container">
+      <div class="cs-meta-grid">
+        <div class="cs-meta-item"><span class="label">Year</span><span class="val">2022</span></div><div class="cs-meta-item"><span class="label">Role</span><span class="val">Plugin Author</span></div><div class="cs-meta-item"><span class="label">Type</span><span class="val">WordPress Plugin</span></div><div class="cs-meta-item"><span class="label">Timeline</span><span class="val">8 weeks</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-screen-label="autoshare body">
+    <div class="container">
+      <article class="prose reveal">
+        <h2>Why Build Another One</h2>
+        <p>There are dozens of "share to social" plugins on the WordPress directory. Almost all of them fall into the same trap: they post the same text to every network, format it badly, and break when an API contract changes. AutoShare started as an annoyed Saturday afternoon and turned into a real plugin.</p>
+        <h2>Approach</h2>
+        <p>Three principles drove the design:</p>
+        <ul><li><strong>Per-network templates.</strong> Twitter gets a different format from LinkedIn. The plugin ships sensible defaults and exposes a template editor.</li><li><strong>A real queue.</strong> Schedule posts ahead, respect rate limits, retry on transient failures, and surface meaningful errors instead of swallowing them.</li><li><strong>OAuth without the headache.</strong> Setting up developer apps on three networks is the worst part of any social plugin. AutoShare uses a proxy auth flow so users authorize once with a single click.</li></ul>
+        <h3>The Stack</h3>
+        <div class="stack-grid"><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>PHP 8.1</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>WordPress Plugin API</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>OAuth 2.0</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>WP-Cron</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Vue 3 (admin UI)</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>REST API</div><div class="stack-pill"><span class="swatch" aria-hidden="true"></span>Composer</div></div>
+        <h2>What I Built</h2>
+        <ul><li>A Vue 3 admin panel inside WordPress for managing templates, schedules, and connected accounts.</li><li>A queue worker that runs through WP-Cron with a Redis-backed fallback for high-traffic sites.</li><li>Per-network formatters with handlebars-style templates and live previews.</li><li>Detailed logging with retry diagnostics on failures.</li><li>Multisite support and per-site account isolation.</li></ul>
+        <aside class="callout"><span class="label">Maintenance Reality</span><p>The hardest part of shipping a plugin isn't writing it, it's the year after. AutoShare has shipped 19 patch releases since launch, almost all of them in response to platform API changes.</p></aside>
+      </article>
+    </div>
+  </section>
+
+  <section class="results-strip" data-screen-label="autoshare results">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Results</span>
+        <h2 class="h2">What It Moved.</h2>
+      </div>
+      <div class="results-grid">
+        <div class="result-card reveal"><div class="num"><em>3.2</em>k+</div><div class="lbl">Active installs on the plugin directory</div></div><div class="result-card reveal"><div class="num"><em>4.8</em>★</div><div class="lbl">Average user rating across reviews</div></div><div class="result-card reveal"><div class="num"><em>19</em></div><div class="lbl">Patch releases shipped since launch</div></div><div class="result-card reveal"><div class="num"><em>3</em></div><div class="lbl">Networks supported with per-network formatting</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="next-project" data-screen-label="autoshare next">
+    <div class="container">
+      <a href="resumeats.html" class="np-card reveal">
+        <div>
+          <div class="dir">Next Project →</div>
+        </div>
+        <div>
+          <div class="title">ResumeATS: AI Resume Optimizer</div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <div id="site-cta"></div>
+</main>
+
+<div id="site-footer"></div>
+
+<script>window.__currentPage = "projects";</script>
+<script src="../scroll-fx.js"></script>
+<script src="../partials.js"></script>
+</body>
+</html>

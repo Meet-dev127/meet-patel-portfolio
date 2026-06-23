@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="./" />
+  <title>Services · Meet Patel | Web, Data &amp; AI Builds, End to End</title>
+  <meta name="description" content="Services by Meet Patel: web platforms, Power BI dashboards, AI automation, and SEO architecture. One cloud-certified developer handling the full build, from scoping to deployment." />
+  <link rel="canonical" href="https://meetpatel.dev/services" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="enhancements.css">
+  <link rel="stylesheet" href="scroll-fx.css">
+  <link rel="stylesheet" href="about-fx.css">
+  <script src="scroll-fx.js" defer></script>
+  <script src="about-fx.js" defer></script>
+  <script>window.__currentPage = 'services';</script>
+
+  <style>
+    /* ====================================================
+       SERVICES PAGE
+       Built on the shared ax- editorial system + Cloud tokens.
+       ==================================================== */
+
+    /* Flush-left, compact hero (matches About / Contact / Projects) */
+    .services-page .ax-hero { min-height: auto; padding: 158px 0 78px; }
+    .services-page .ax-hero .container { width: 100%; }
+    .services-page .ax-hero-ghost { bottom: -8vh; }
+    .services-page .ax-title { font-size: clamp(2.3rem, 5.4vw, 4.1rem); margin-bottom: 26px; }
+
+    /* ---- Section intro spacing ---- */
+    .svc-page-section { padding: 92px 0; }
+    .svc-page-section.tight { padding: 72px 0; }
+    .svc-page-section.mist { background: var(--cloud-mist); }
+
+    /* ====================================================
+       1 · DETAILED SERVICE BLOCKS
+       ==================================================== */
+    .svc-detail-list { display: flex; flex-direction: column; gap: 22px; margin-top: 8px; }
+    .svc-detail {
+      display: grid;
+      grid-template-columns: 1.04fr 1fr;
+      gap: 48px;
+      background: var(--cloud-surface);
+      border: 0.5px solid var(--card-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-cloud);
+      padding: 42px 46px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 380ms var(--ease-cloud), box-shadow 380ms var(--ease-cloud), border-color 380ms var(--ease-cloud);
+    }
+    .svc-detail:hover { transform: translateY(-4px); box-shadow: var(--shadow-cloud-hover); border-color: var(--accent-line); }
+    .svc-detail::before {
+      content: attr(data-ghost);
+      position: absolute; top: -18px; right: 20px;
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 7.5rem; line-height: 1; letter-spacing: -0.04em;
+      color: var(--accent); opacity: 0.05; pointer-events: none; user-select: none;
+    }
+    .svc-d-lead { position: relative; z-index: 1; }
+    .svc-d-icon {
+      width: 54px; height: 54px; border-radius: 15px;
+      background: var(--accent-soft); border: 1px solid var(--accent-line);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 22px;
+      transition: transform 320ms var(--ease-cloud);
+    }
+    .svc-detail:hover .svc-d-icon { transform: translateY(-3px) rotate(-4deg); }
+    .svc-d-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .svc-d-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 2.4vw, 1.7rem); letter-spacing: -0.02em; color: var(--cloud-ink); margin: 0 0 14px; line-height: 1.2; }
+    .svc-d-desc { font-size: 15.5px; line-height: 1.78; color: var(--cloud-slate); margin: 0 0 24px; max-width: 460px; }
+    .svc-d-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .svc-tag {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
+      color: var(--cloud-slate);
+      background: var(--cloud-mist); border: 1px solid var(--cloud-fog);
+      padding: 5px 11px; border-radius: 100px; white-space: nowrap;
+    }
+
+    .svc-d-spec { position: relative; z-index: 1; border-left: 1px solid var(--cloud-fog); padding-left: 40px; }
+    .svc-d-spec-head { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cloud-dusk); margin-bottom: 18px; }
+    .svc-checks { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 12px; }
+    .svc-checks li { display: grid; grid-template-columns: 20px 1fr; gap: 12px; font-size: 14.5px; color: var(--cloud-ink); line-height: 1.5; align-items: start; }
+    .svc-check-ic { width: 20px; height: 20px; flex: none; color: var(--accent); margin-top: 1px; }
+    .svc-d-cta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; }
+
+    /* ====================================================
+       2 · PROCESS STEPS (numbered timeline)
+       ==================================================== */
+    .svc-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 28px; position: relative; margin-top: 12px;
+    }
+    .svc-steps::before {
+      content: ""; position: absolute; top: 27px; left: 7%; right: 7%;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--accent-line) 12%, var(--accent-line) 88%, transparent);
+      z-index: 0;
+    }
+    .svc-step { position: relative; z-index: 1; }
+    .svc-step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--cloud-white); border: 1px solid var(--accent-line);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 700; font-size: 20px;
+      color: var(--accent); letter-spacing: -0.02em;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 16px -6px rgba(14,138,107,0.28);
+      transition: transform 320ms var(--ease-cloud), background 320ms var(--ease-cloud), color 320ms var(--ease-cloud);
+    }
+    .svc-step:hover .svc-step-num { transform: translateY(-4px); background: var(--accent); color: #fff; }
+    .svc-step-phase { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cloud-dusk); margin-bottom: 8px; }
+    .svc-step-title { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.015em; color: var(--cloud-ink); margin: 0 0 10px; }
+    .svc-step-desc { font-size: 14px; color: var(--cloud-slate); line-height: 1.7; margin: 0 0 16px; }
+    .svc-step-get {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em;
+      color: var(--accent-strong);
+    }
+    .svc-step-get svg { flex: none; }
+
+    /* ====================================================
+       3 · ENGAGEMENT MODELS
+       ==================================================== */
+    .svc-engage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 12px; }
+    .svc-engage {
+      background: var(--cloud-surface);
+      border: 0.5px solid var(--card-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-cloud);
+      padding: 32px 30px;
+      display: flex; flex-direction: column;
+      transition: transform 360ms var(--ease-cloud), box-shadow 360ms var(--ease-cloud), border-color 360ms var(--ease-cloud);
+    }
+    .svc-engage:hover { transform: translateY(-5px); box-shadow: var(--shadow-cloud-hover); border-color: var(--accent-line); }
+    .svc-engage.feat { border-color: var(--accent-line); background: linear-gradient(180deg, var(--accent-soft), var(--cloud-surface) 38%); }
+    .svc-engage-tag {
+      align-self: flex-start;
+      font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent-strong); background: var(--accent-soft); border: 1px solid var(--accent-line);
+      padding: 4px 10px; border-radius: 100px; margin-bottom: 18px;
+    }
+    .svc-engage-name { font-family: var(--font-display); font-weight: 700; font-size: 21px; letter-spacing: -0.02em; color: var(--cloud-ink); margin: 0 0 8px; }
+    .svc-engage-for { font-size: 13.5px; color: var(--cloud-dusk); line-height: 1.6; margin: 0 0 22px; min-height: 44px; }
+    .svc-engage-list { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 11px; border-top: 1px solid var(--cloud-fog); padding-top: 22px; }
+    .svc-engage-list li { display: grid; grid-template-columns: 18px 1fr; gap: 11px; font-size: 14px; color: var(--cloud-ink); line-height: 1.5; }
+    .svc-engage-list svg { color: var(--accent); margin-top: 2px; }
+    .svc-engage .btn { margin-top: auto; width: 100%; justify-content: center; }
+
+    /* ====================================================
+       4 · TECH STACK (dark band)
+       ==================================================== */
+    .svc-stack-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 8px; }
+    .svc-stack-col {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-card);
+      padding: 26px 24px;
+      transition: border-color 300ms var(--ease-cloud), background 300ms var(--ease-cloud);
+    }
+    .svc-stack-col:hover { border-color: rgba(52,211,153,0.30); background: rgba(52,211,153,0.05); }
+    .svc-stack-h { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .svc-stack-h .n { font-family: var(--font-mono); font-size: 11px; color: var(--feature-accent); letter-spacing: 0.08em; }
+    .svc-stack-h .t { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: var(--feature-fg); letter-spacing: -0.01em; }
+    .svc-stack-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+    .svc-stack-col li { font-size: 13.5px; color: var(--feature-muted); display: flex; align-items: center; gap: 9px; }
+    .svc-stack-col li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--feature-accent); opacity: 0.55; flex: none; }
+
+    /* ====================================================
+       5 · FAQ (reuses .faq-item from styles)
+       ==================================================== */
+    .svc-faq { max-width: 760px; margin: 0 auto; }
+
+    /* ---- entrance stagger for grids/lists ---- */
+    @media (prefers-reduced-motion: no-preference) {
+      .svc-detail-list > .reveal:nth-child(2) { transition-delay: 0.06s; }
+      .svc-detail-list > .reveal:nth-child(3) { transition-delay: 0.12s; }
+      .svc-detail-list > .reveal:nth-child(4) { transition-delay: 0.18s; }
+    }
+
+    /* ====================================================
+       RESPONSIVE
+       ==================================================== */
+    @media (max-width: 1024px) {
+      .svc-detail { grid-template-columns: 1fr; gap: 30px; padding: 36px 32px; }
+      .svc-d-spec { border-left: none; border-top: 1px solid var(--cloud-fog); padding-left: 0; padding-top: 28px; }
+      .svc-steps { grid-template-columns: 1fr 1fr; gap: 36px 28px; }
+      .svc-steps::before { display: none; }
+      .svc-engage-grid { grid-template-columns: 1fr; }
+      .svc-stack-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .svc-page-section { padding: 64px 0; }
+      .svc-detail { padding: 30px 22px; }
+      .svc-detail::before { font-size: 5.5rem; }
+      .svc-steps { grid-template-columns: 1fr; }
+      .svc-stack-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="services-page">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div id="site-nav"></div>
+
+<main id="main">
+
+<!-- ================================================== -->
+<!-- HERO                                                 -->
+<!-- ================================================== -->
+<section class="ax-hero" data-screen-label="Services Hero">
+  <div class="ax-aura" data-ax-parallax="0.05" aria-hidden="true"></div>
+  <div class="ax-hero-ghost" data-ax-parallax="0.14" aria-hidden="true">BUILD</div>
+
+  <div class="ax-hero-rail" aria-hidden="true">
+    <span class="ax-rail-text">Web · Data · AI · SEO</span>
+  </div>
+
+  <div class="container">
+    <div class="ax-hero-inner">
+      <nav class="ax-kicker reveal" aria-label="Breadcrumb">
+        <a href="Portfolio Animated v2.html" style="color:inherit;">Home</a>
+        <span aria-hidden="true">·</span>
+        <span>Services</span>
+      </nav>
+      <h1 class="ax-title reveal">
+        <span class="ax-tl"><span>From idea to deployment,</span></span>
+        <span class="ax-tl"><span>handled <em>end to end.</em></span></span>
+      </h1>
+      <p class="ax-lede reveal">
+        Three disciplines, one developer. <strong>No hand-offs, no coordination overhead, no gaps.</strong>
+        I scope, design, build, and ship web platforms, data dashboards, and AI automation, with the
+        cloud certifications to back the architecture decisions.
+      </p>
+
+      <div class="ax-hero-meta reveal">
+        <div class="ax-meta-item">
+          <span class="ax-meta-k">Disciplines</span>
+          <span class="ax-meta-v">Web · Data · AI · SEO</span>
+        </div>
+        <span class="ax-meta-sep"></span>
+        <div class="ax-meta-item">
+          <span class="ax-meta-k">Building since</span>
+          <span class="ax-meta-v">2018 · 7+ years</span>
+        </div>
+        <span class="ax-meta-sep"></span>
+        <div class="ax-meta-item">
+          <span class="ax-meta-k">Reply time</span>
+          <span class="ax-meta-v">Within 24 hours</span>
+        </div>
+      </div>
+
+      <div class="ax-hero-actions reveal">
+        <a href="contact.html" class="btn btn-primary" data-magnetic>
+          Start a Project
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="projects/index.html" class="btn btn-outline">See the Work</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- DETAILED SERVICES                                    -->
+<!-- ================================================== -->
+<section class="svc-page-section" data-screen-label="What I Build">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">What I Build</span>
+      <h2 class="h2">Four disciplines. One accountable owner.</h2>
+      <p style="color:var(--cloud-dusk);font-size:16px;line-height:1.7;max-width:560px;margin:14px 0 0;text-wrap:pretty;">Every engagement is delivered by the same person who scoped it, so nothing gets lost between strategy, build, and launch.</p>
+    </div>
+
+    <div class="svc-detail-list">
+
+      <!-- 01 Web Development -->
+      <article class="svc-detail reveal" data-ghost="01">
+        <div class="svc-d-lead">
+          <div class="svc-d-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div class="svc-d-label">01 · Web Development</div>
+          <h3 class="svc-d-title">WordPress &amp; Full-Stack Web Platforms</h3>
+          <p class="svc-d-desc">Custom themes, plugins, and complete web ecosystems engineered for performance, SEO, and a clean editor experience. Hand-coded where it counts, hosted on Azure.</p>
+          <div class="svc-d-tags">
+            <span class="svc-tag">PHP</span>
+            <span class="svc-tag">WordPress</span>
+            <span class="svc-tag">Node.js</span>
+            <span class="svc-tag">Django</span>
+            <span class="svc-tag">MySQL</span>
+            <span class="svc-tag">REST APIs</span>
+          </div>
+        </div>
+        <div class="svc-d-spec">
+          <div class="svc-d-spec-head">What's included</div>
+          <ul class="svc-checks">
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Custom WordPress themes &amp; plugins, no page-builder bloat</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Responsive front-end build with Core Web Vitals tuning</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Third-party API &amp; payment integrations</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Deployment, domain config &amp; a post-launch support window</span></li>
+          </ul>
+          <a href="contact.html" class="arrow-link svc-d-cta">Inquire about a build <span class="arrow">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 02 Data & Analytics -->
+      <article class="svc-detail reveal" data-ghost="02">
+        <div class="svc-d-lead">
+          <div class="svc-d-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="svc-d-label">02 · Data &amp; Analytics</div>
+          <h3 class="svc-d-title">Power BI Dashboards &amp; Python Analytics</h3>
+          <p class="svc-d-desc">Interactive dashboards that make complex data understandable, plus the cleaning and modelling pipelines behind them. From raw CSV to a board-ready view.</p>
+          <div class="svc-d-tags">
+            <span class="svc-tag">Power BI</span>
+            <span class="svc-tag">Tableau</span>
+            <span class="svc-tag">Python</span>
+            <span class="svc-tag">Pandas</span>
+            <span class="svc-tag">SQL</span>
+            <span class="svc-tag">Scikit-Learn</span>
+          </div>
+        </div>
+        <div class="svc-d-spec">
+          <div class="svc-d-spec-head">What's included</div>
+          <ul class="svc-checks">
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Data cleaning, normalization &amp; feature engineering in Python</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Interactive Power BI / Tableau dashboards with drill-downs</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Exploratory analysis &amp; supervised ML modelling</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>A written report translating findings into decisions</span></li>
+          </ul>
+          <a href="contact.html" class="arrow-link svc-d-cta">Request a dashboard <span class="arrow">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 03 AI Automation & Cloud -->
+      <article class="svc-detail reveal" data-ghost="03">
+        <div class="svc-d-lead">
+          <div class="svc-d-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4 4 0 1 1 .8-7.9A6 6 0 0 1 18 11a3.5 3.5 0 0 1 0 7H7z"/></svg>
+          </div>
+          <div class="svc-d-label">03 · AI Automation &amp; Cloud</div>
+          <h3 class="svc-d-title">Azure AI Workflows &amp; Automation</h3>
+          <p class="svc-d-desc">Intelligent workflows and AI-powered tools that remove repetitive work and scale, built on Azure OpenAI with the certifications to architect them properly.</p>
+          <div class="svc-d-tags">
+            <span class="svc-tag">Azure OpenAI</span>
+            <span class="svc-tag">Python</span>
+            <span class="svc-tag">Azure Functions</span>
+            <span class="svc-tag">Whisper</span>
+            <span class="svc-tag">RAG</span>
+            <span class="svc-tag">Webhooks</span>
+          </div>
+        </div>
+        <div class="svc-d-spec">
+          <div class="svc-d-spec-head">What's included</div>
+          <ul class="svc-checks">
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>LLM-powered tools: scoring, summarization, retrieval (RAG)</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Event-driven automations on webhooks &amp; scheduled triggers</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Azure resource setup, cost-aware architecture &amp; alerts</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Integration into your existing stack, not a walled garden</span></li>
+          </ul>
+          <a href="contact.html" class="arrow-link svc-d-cta">Discuss automation <span class="arrow">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 04 SEO & Content -->
+      <article class="svc-detail reveal" data-ghost="04">
+        <div class="svc-d-lead">
+          <div class="svc-d-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="svc-d-label">04 · SEO &amp; Content</div>
+          <h3 class="svc-d-title">SEO Architecture &amp; Content Strategy</h3>
+          <p class="svc-d-desc">Search and answer-engine strategy baked into the build, not bolted on after. Keyword research, content architecture, schema, and the analytics to measure it.</p>
+          <div class="svc-d-tags">
+            <span class="svc-tag">Technical SEO</span>
+            <span class="svc-tag">Schema.org</span>
+            <span class="svc-tag">Google Analytics</span>
+            <span class="svc-tag">GSC</span>
+            <span class="svc-tag">Content Strategy</span>
+          </div>
+        </div>
+        <div class="svc-d-spec">
+          <div class="svc-d-spec-head">What's included</div>
+          <ul class="svc-checks">
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Keyword research mapped to a content architecture</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Structured data (Schema.org) for rich &amp; AI answer results</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>On-page optimization &amp; technical audits</span></li>
+            <li><svg class="svc-check-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 5.5L8 14l-4-4"/></svg><span>Google Analytics &amp; Search Console setup and reporting</span></li>
+          </ul>
+          <a href="contact.html" class="arrow-link svc-d-cta">Improve my search presence <span class="arrow">&rarr;</span></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- PROCESS STEPS                                        -->
+<!-- ================================================== -->
+<section class="svc-page-section mist" data-screen-label="Process">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">How I Work</span>
+      <h2 class="h2">A process built for results.</h2>
+      <p style="color:var(--cloud-dusk);font-size:16px;line-height:1.7;max-width:520px;margin:14px 0 0;text-wrap:pretty;">Every engagement follows the same disciplined four-step flow, from first call to live product. You always know what you are getting at each stage.</p>
+    </div>
+
+    <div class="svc-steps">
+      <div class="svc-step reveal">
+        <div class="svc-step-phase">Understand</div>
+        <h3 class="svc-step-title">Listen before building</h3>
+        <p class="svc-step-desc">Goals, constraints, users, and success metrics. Deep research before a single line of code.</p>
+        <span class="svc-step-get"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="7" stroke="currentColor" stroke-opacity="0.4"/><path d="M4.5 7.8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Clear brief, scope &amp; plan</span>
+      </div>
+      <div class="svc-step reveal">
+        <div class="svc-step-phase">Architect</div>
+        <h3 class="svc-step-title">Design the system</h3>
+        <p class="svc-step-desc">Plan the stack, data flows, and integrations. Every decision documented before code starts.</p>
+        <span class="svc-step-get"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="7" stroke="currentColor" stroke-opacity="0.4"/><path d="M4.5 7.8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Architecture &amp; decision log</span>
+      </div>
+      <div class="svc-step reveal">
+        <div class="svc-step-phase">Build &amp; Iterate</div>
+        <h3 class="svc-step-title">Ship in loops</h3>
+        <p class="svc-step-desc">Clean code, tested features, and real feedback at every stage. No black-box builds.</p>
+        <span class="svc-step-get"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="7" stroke="currentColor" stroke-opacity="0.4"/><path d="M4.5 7.8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Working builds &amp; checkpoints</span>
+      </div>
+      <div class="svc-step reveal">
+        <div class="svc-step-phase">Deploy &amp; Optimize</div>
+        <h3 class="svc-step-title">Launch and measure</h3>
+        <p class="svc-step-desc">Ship to production, wire up analytics, then tune for performance and real-world results.</p>
+        <span class="svc-step-get"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><circle cx="7.5" cy="7.5" r="7" stroke="currentColor" stroke-opacity="0.4"/><path d="M4.5 7.8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Live product &amp; metrics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- ENGAGEMENT MODELS                                    -->
+<!-- ================================================== -->
+<section class="svc-page-section" data-screen-label="Engagement">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Ways to Work Together</span>
+      <h2 class="h2">Pick the engagement that fits.</h2>
+      <p style="color:var(--cloud-dusk);font-size:16px;line-height:1.7;max-width:520px;margin:14px 0 0;text-wrap:pretty;">Whether you have a one-off build, ongoing work, or a role to fill, there is a clear way in.</p>
+    </div>
+
+    <div class="svc-engage-grid">
+      <div class="svc-engage reveal">
+        <span class="svc-engage-tag">Most common</span>
+        <h3 class="svc-engage-name">Fixed-scope Project</h3>
+        <p class="svc-engage-for">Best for a defined build: a site, a dashboard, or an automation with a clear finish line.</p>
+        <ul class="svc-engage-list">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Scoping call &amp; written proposal</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Fixed timeline &amp; deliverables</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Source code handed over to you</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Post-launch support window</span></li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" data-magnetic>Scope a Project</a>
+      </div>
+
+      <div class="svc-engage feat reveal">
+        <span class="svc-engage-tag">Ongoing</span>
+        <h3 class="svc-engage-name">Build Partner</h3>
+        <p class="svc-engage-for">Best for teams that need continuous building and iteration without a full-time hire.</p>
+        <ul class="svc-engage-list">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Reserved monthly capacity</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Priority queue for new features</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Regular check-ins &amp; reporting</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Maintenance plus new builds</span></li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" data-magnetic>Become a Partner</a>
+      </div>
+
+      <div class="svc-engage reveal">
+        <span class="svc-engage-tag">Employers</span>
+        <h3 class="svc-engage-name">Full-time / Contract</h3>
+        <p class="svc-engage-for">Open to full-time IT roles across Canada, remote or hybrid. NB Graduate Stream (NBPNP) eligible.</p>
+        <ul class="svc-engage-list">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Available after NBCC grad (Apr 2026)</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Remote, hybrid, or NB in-person</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Azure-certified, analytics-ready</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>NBPNP Graduate Stream eligible</span></li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline">Discuss a Role</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- TECH STACK (dark band)                               -->
+<!-- ================================================== -->
+<section class="section feature svc-page-section" data-screen-label="Tech Stack">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">The Toolset</span>
+      <h2 class="h2">Tools I reach for, grouped by job.</h2>
+      <p style="max-width:520px;margin:14px 0 0;font-size:16px;line-height:1.7;text-wrap:pretty;">Fluency runs deep, not wide. These are the tools I actually ship with.</p>
+    </div>
+
+    <div class="svc-stack-grid">
+      <div class="svc-stack-col reveal">
+        <div class="svc-stack-h"><span class="t">Web</span></div>
+        <ul>
+          <li>PHP &amp; WordPress</li>
+          <li>Node.js</li>
+          <li>Python &amp; Django</li>
+          <li>HTML5 · CSS3 · JS</li>
+          <li>MySQL · REST APIs</li>
+        </ul>
+      </div>
+      <div class="svc-stack-col reveal">
+        <div class="svc-stack-h"><span class="t">Data &amp; BI</span></div>
+        <ul>
+          <li>Power BI</li>
+          <li>Tableau</li>
+          <li>SQL</li>
+          <li>Pandas · Matplotlib</li>
+          <li>Scikit-Learn</li>
+        </ul>
+      </div>
+      <div class="svc-stack-col reveal">
+        <div class="svc-stack-h"><span class="t">AI &amp; Cloud</span></div>
+        <ul>
+          <li>Azure OpenAI</li>
+          <li>Azure Functions</li>
+          <li>Whisper · RAG</li>
+          <li>GCP · IBM Cloud</li>
+          <li>AZ-305 Architect</li>
+        </ul>
+      </div>
+      <div class="svc-stack-col reveal">
+        <div class="svc-stack-h"><span class="t">SEO &amp; Growth</span></div>
+        <ul>
+          <li>Technical SEO</li>
+          <li>Schema.org</li>
+          <li>Google Analytics</li>
+          <li>Search Console</li>
+          <li>Content Strategy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== -->
+<!-- FAQ                                                  -->
+<!-- ================================================== -->
+<section class="svc-page-section tight" data-screen-label="Services FAQ" aria-labelledby="sfaq-heading">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Good to Know</span>
+      <h2 class="h2" id="sfaq-heading">Questions before we start.</h2>
+    </div>
+
+    <div class="svc-faq">
+      <div class="faq-list">
+        <details class="faq-item reveal" open>
+          <summary><span>How long does a typical project take?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>It depends on scope. A focused dashboard or automation can land in one to two weeks once scoped; a full web platform typically runs three to eight weeks. You get a fixed timeline in the proposal before any work begins.</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>How do you price work?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>Most projects are quoted as a fixed price against a defined scope, so there are no surprises. Ongoing work is a monthly capacity arrangement. Share your goal and budget range in the contact form and I will tell you honestly what fits.</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>Do you work remotely and with clients outside Canada?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>Yes. Freelance and contract work is fully remote, and I have worked across time zones since 2018. For full-time employment I am focused on Canadian-based roles (remote, hybrid, or in-person in New Brunswick).</p>
+          </div>
+        </details>
+        <details class="faq-item reveal">
+          <summary><span>I am not sure exactly what I need. Can you still help?</span><span class="faq-icon" aria-hidden="true">+</span></summary>
+          <div class="faq-answer">
+            <p>Absolutely. Describe the problem rather than the solution and we will scope it together on a short call. Often the right fix spans a couple of these disciplines, which is exactly why having one owner across web, data, and AI helps.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="center-cta reveal" style="margin-top:40px;">
+        <a href="contact.html" class="arrow-link horizon">Start the conversation <span class="arrow">&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="site-cta"></div>
+<div id="site-footer"></div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+</button>
+
+<script src="partials.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "portfolio-api",
+  "version": "1.0.0",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "@azure/data-tables": "^13.2.2",
+    "@azure/storage-blob": "^12.25.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

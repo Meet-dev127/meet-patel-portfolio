@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theme Suggestions | Meet Patel Portfolio</title>
+  <meta name="description" content="Three visual theme directions for Meet Patel's portfolio. Compare and choose." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #09090B;
+      --white: #FFFFFF;
+      --mist: #FAFAFA;
+      --fog: #E4E4E7;
+      --dusk: #71717A;
+      --slate: #3F3F46;
+      --radius: 16px;
+      --mono: "Geist Mono", monospace;
+      --sans: "Geist", system-ui, sans-serif;
+      --serif: "DM Serif Display", Georgia, serif;
+    }
+
+    html, body {
+      background: #F5F5F4;
+      font-family: var(--sans);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Page shell ── */
+    .page-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--fog);
+      padding: 32px 0;
+      text-align: center;
+    }
+    .page-header a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dusk);
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+    .page-header a:hover { color: var(--ink); }
+    .page-header h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .page-header p {
+      font-size: 16px;
+      color: var(--dusk);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .themes-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 60px 32px 96px;
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+    }
+
+    /* ── Theme card ── */
+    .theme-block { display: flex; flex-direction: column; gap: 24px; }
+    .theme-meta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .theme-label {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dusk);
+      margin-bottom: 6px;
+    }
+    .theme-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .theme-desc {
+      font-size: 14.5px;
+      color: var(--slate);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+    .theme-swatches {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .swatch {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0,0,0,0.12);
+    }
+    .swatch-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--dusk);
+      margin-right: 4px;
+    }
+
+    /* preview frame */
+    .theme-preview {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.10);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.04),
+        0 12px 32px rgba(0,0,0,0.08),
+        0 40px 80px rgba(0,0,0,0.06);
+      position: relative;
+    }
+
+    /* window chrome bar */
+    .win-chrome {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .win-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .win-dot.r { background: #FC625D; }
+    .win-dot.y { background: #FDBC40; }
+    .win-dot.g { background: #35CD4B; }
+    .win-url {
+      flex: 1;
+      height: 22px;
+      border-radius: 6px;
+      margin: 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ==============================
+       THEME 1 · CURRENT (MINIMAL)
+    ============================== */
+    .t1 .win-chrome { background: #FAFAFA; }
+    .t1 .win-url { background: #EFEFEF; color: #71717A; }
+    .t1-hero {
+      background: #FFFFFF;
+      padding: 52px 56px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .t1-hero::before {
+      content: "";
+      position: absolute;
+      width: 400px; height: 280px;
+      right: -80px; top: -80px;
+      background: #F4F4F5;
+      border-radius: 50% 60% 45% 55% / 55% 45% 55% 45%;
+      opacity: 0.7;
+    }
+    .t1-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 64px;
+      position: relative;
+      z-index: 1;
+    }
+    .t1-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; color: #09090B; }
+    .t1-links { display: flex; gap: 20px; font-size: 12px; color: #71717A; }
+    .t1-cta {
+      font-size: 11px; font-weight: 600;
+      border: 1px solid #09090B;
+      color: #09090B;
+      padding: 7px 14px;
+      border-radius: 7px;
+    }
+    .t1-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 48px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .t1-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #71717A;
+      margin-bottom: 14px;
+    }
+    .t1-h1 { font-size: clamp(2rem, 3.5vw, 2.6rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.03em; color: #09090B; margin-bottom: 16px; }
+    .t1-h1 em { font-family: var(--mono); font-style: normal; font-weight: 400; font-size: 0.88em; }
+    .t1-lede { font-size: 14px; color: #52525B; line-height: 1.75; margin-bottom: 24px; max-width: 420px; }
+    .t1-btn-row { display: flex; gap: 10px; }
+    .t1-btn-p { background: #09090B; color: #fff; font-size: 12px; font-weight: 600; padding: 10px 20px; border-radius: 7px; }
+    .t1-btn-o { border: 1px solid #E4E4E7; color: #3F3F46; font-size: 12px; padding: 10px 20px; border-radius: 7px; }
+    .t1-image-mock {
+      background: #F4F4F5;
+      border-radius: 14px;
+      border: 1px solid #E4E4E7;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      color: #A1A1AA;
+    }
+    .t1-image-mock .mock-icon { opacity: 0.4; }
+    .t1-image-mock span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.5; }
+    .t1-strip {
+      background: #FAFAFA;
+      border-top: 1px solid #E4E4E7;
+      padding: 18px 56px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #A1A1AA;
+    }
+    .t1-strip .dot { width: 3px; height: 3px; border-radius: 50%; background: #D4D4D8; }
+
+    /* ==============================
+       THEME 2 · DARK STUDIO
+    ============================== */
+    .t2 .win-chrome { background: #141414; }
+    .t2 .win-url { background: #1E1E1E; color: #666; }
+    .t2-hero {
+      background: #0C0C0C;
+      padding: 52px 56px 56px;
+      position: relative;
+      overflow: hidden;
+      min-height: 440px;
+    }
+    /* grain texture */
+    .t2-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    /* subtle radial glow */
+    .t2-hero::after {
+      content: "";
+      position: absolute;
+      width: 700px; height: 500px;
+      top: -200px; right: -200px;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .t2-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 72px;
+      position: relative;
+      z-index: 1;
+    }
+    .t2-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; color: #FAFAFA; }
+    .t2-brand-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #666; margin-top: 2px; }
+    .t2-links { display: flex; gap: 20px; font-size: 12px; color: #888; }
+    .t2-cta {
+      font-size: 11px; font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #FAFAFA;
+      padding: 7px 14px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.06);
+    }
+    .t2-content { position: relative; z-index: 1; }
+    .t2-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #555; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .t2-eyebrow::before {
+      content: "";
+      display: block;
+      width: 24px; height: 1px;
+      background: #444;
+    }
+    .t2-h1 { font-size: clamp(2.2rem, 3.8vw, 3rem); font-weight: 700; line-height: 1.06; letter-spacing: -0.04em; color: #F8F8F8; margin-bottom: 20px; max-width: 640px; }
+    .t2-h1 em { font-family: var(--mono); font-style: normal; font-weight: 300; color: #999; font-size: 0.86em; }
+    .t2-lede { font-size: 14px; color: #888; line-height: 1.8; max-width: 480px; margin-bottom: 32px; }
+    .t2-btn-row { display: flex; gap: 10px; align-items: center; }
+    .t2-btn-p {
+      background: #F8F8F8; color: #0C0C0C;
+      font-size: 12px; font-weight: 600; padding: 10px 20px; border-radius: 7px;
+    }
+    .t2-btn-o {
+      border: 1px solid rgba(255,255,255,0.14); color: #999;
+      font-size: 12px; padding: 10px 20px; border-radius: 7px;
+    }
+    .t2-pills {
+      display: flex; gap: 8px; margin-top: 36px;
+    }
+    .t2-pill {
+      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.06em;
+      padding: 5px 11px; border-radius: 100px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #888;
+    }
+    .t2-strip {
+      background: #111;
+      border-top: 1px solid #1E1E1E;
+      padding: 16px 56px;
+      display: flex; align-items: center; gap: 14px;
+      font-family: var(--mono); font-size: 10px; color: #444;
+    }
+    .t2-strip .dot { width: 3px; height: 3px; border-radius: 50%; background: #333; }
+
+    /* image slot mockup in dark theme */
+    .t2-image-area {
+      position: absolute;
+      right: 56px; top: 52px;
+      width: 300px; height: 320px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .t2-image-inner {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, #1A1A1A 0%, #141414 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; color: #333;
+    }
+    .t2-image-inner span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+    /* subtle scan lines on image area */
+    .t2-image-inner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px);
+      pointer-events: none;
+    }
+
+    /* ==============================
+       THEME 3 · WARM EDITORIAL
+    ============================== */
+    .t3 .win-chrome { background: #FBF8F3; }
+    .t3 .win-url { background: #F0EBE1; color: #9C8F7D; }
+    .t3-hero {
+      background: #FBF8F3;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    /* full-bleed image strip */
+    .t3-image-strip {
+      height: 320px;
+      background: linear-gradient(135deg, #2C2416 0%, #4A3728 40%, #6B4C38 70%, #8B6552 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .t3-image-strip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 60%, rgba(200,150,80,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(255,200,120,0.10) 0%, transparent 50%);
+    }
+    /* placeholder diagonal stripes suggesting photo */
+    .t3-image-strip::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.025) 40px,
+        rgba(255,255,255,0.025) 41px
+      );
+    }
+    .t3-photo-label {
+      position: absolute;
+      bottom: 16px; left: 56px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.35);
+      z-index: 1;
+    }
+    .t3-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(251,248,243,0.9) 0%, transparent 60%);
+    }
+    .t3-nav-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      padding: 22px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .t3-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; color: #FBF8F3; }
+    .t3-brand-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-top: 2px; }
+    .t3-links { display: flex; gap: 20px; font-size: 12px; color: rgba(255,255,255,0.65); }
+    .t3-cta {
+      font-size: 11px; font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #FBF8F3; padding: 7px 14px; border-radius: 7px;
+    }
+    .t3-below {
+      padding: 0 56px 52px;
+      background: #FBF8F3;
+      position: relative;
+      z-index: 1;
+      margin-top: -60px;
+    }
+    .t3-eyebrow {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #9C8F7D; margin-bottom: 14px;
+    }
+    .t3-h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 3.8vw, 3rem);
+      font-weight: 400;
+      line-height: 1.12;
+      color: #1C1007;
+      margin-bottom: 18px;
+      letter-spacing: -0.01em;
+    }
+    .t3-h1 em { font-style: italic; color: #6B4C38; }
+    .t3-lede { font-size: 14.5px; color: #6B5E4F; line-height: 1.8; max-width: 520px; margin-bottom: 28px; }
+    .t3-btn-row { display: flex; gap: 10px; }
+    .t3-btn-p {
+      background: #2C2416; color: #FBF8F3;
+      font-size: 12px; font-weight: 600; padding: 10px 22px; border-radius: 7px;
+    }
+    .t3-btn-o {
+      border: 1px solid #D4C9BA; color: #6B5E4F;
+      font-size: 12px; padding: 10px 22px; border-radius: 7px;
+    }
+    .t3-strip {
+      background: #F5F0E8;
+      border-top: 1px solid #E8E0D0;
+      padding: 16px 56px;
+      display: flex; align-items: center; gap: 14px;
+      font-family: var(--mono); font-size: 10px; color: #B0A090;
+    }
+    .t3-strip .dot { width: 3px; height: 3px; border-radius: 50%; background: #D4C9BA; }
+
+    /* ── Annotation pills ── */
+    .annotation-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .annotation {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.06em;
+      padding: 6px 12px;
+      border-radius: 100px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: var(--white);
+      color: var(--slate);
+    }
+    .annotation .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+    /* theme 1 annotations */
+    .t1-ann .dot { background: #09090B; }
+    /* theme 2 annotations */
+    .t2-ann .dot { background: #F8F8F8; border: 1px solid #333; }
+    .t2-ann { border-color: #E0E0E0; }
+    /* theme 3 annotations */
+    .t3-ann .dot { background: #6B4C38; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #E0DDD9;
+    }
+
+    /* ── CTA row ── */
+    .cta-row-bottom {
+      text-align: center;
+      padding: 0 0 20px;
+    }
+    .cta-row-bottom p {
+      font-size: 15px; color: var(--dusk); line-height: 1.7; margin-bottom: 20px;
+    }
+    .cta-row-bottom a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: box-shadow 200ms;
+    }
+    .cta-row-bottom a:hover { box-shadow: 0 8px 24px rgba(9,9,11,0.28); }
+
+    @media (max-width: 900px) {
+      .themes-wrap { padding: 40px 20px 72px; gap: 60px; }
+      .t1-hero-grid { grid-template-columns: 1fr; }
+      .t1-image-mock { height: 140px; }
+      .t2-image-area { display: none; }
+      .t2-hero { min-height: auto; }
+      .t3-nav-overlay { padding: 18px 28px; }
+      .t3-below { padding: 0 28px 40px; }
+      .t3-image-strip { height: 220px; }
+      .t1-hero, .t2-hero { padding: 36px 28px; }
+      .t1-nav, .t2-nav { margin-bottom: 40px; }
+      .t1-strip, .t2-strip, .t3-strip { padding: 14px 28px; }
+      .t1-links, .t2-links, .t3-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="Portfolio Animated v2.html">
+    ← Back to Portfolio
+  </a>
+  <h1>Visual Theme Suggestions</h1>
+  <p>Three distinct directions for how the portfolio could look. Each uses photography differently and carries a different mood.</p>
+</div>
+
+<div class="themes-wrap">
+
+  <!-- ================================================ -->
+  <!-- THEME 1 · CURRENT MINIMAL                        -->
+  <!-- ================================================ -->
+  <div class="theme-block">
+    <div class="theme-meta">
+      <div>
+        <p class="theme-label">Theme 01 · Current Direction</p>
+        <h2 class="theme-name">Clean Minimal</h2>
+        <p class="theme-desc">
+          White surfaces, ink-black type, subtle atmospheric shapes. Photography lives inside a contained card
+          on the right side of the hero. Professional, versatile, and highly readable. The current portfolio
+          uses this direction.
+        </p>
+      </div>
+      <div>
+        <p class="theme-label" style="margin-bottom: 10px;">Palette</p>
+        <div class="theme-swatches">
+          <div class="swatch" style="background: #FFFFFF;"></div>
+          <div class="swatch" style="background: #FAFAFA;"></div>
+          <div class="swatch" style="background: #E4E4E7;"></div>
+          <div class="swatch" style="background: #71717A;"></div>
+          <div class="swatch" style="background: #09090B;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-preview t1">
+      <div class="win-chrome">
+        <span class="win-dot r"></span>
+        <span class="win-dot y"></span>
+        <span class="win-dot g"></span>
+        <div class="win-url">meetpatel.dev</div>
+      </div>
+      <div class="t1-hero">
+        <div class="t1-nav">
+          <div>
+            <div class="t1-brand">Meet Patel</div>
+          </div>
+          <div class="t1-links">
+            <span>About</span><span>Projects</span><span>Blog</span><span>Services</span>
+          </div>
+          <div class="t1-cta">Let's Talk</div>
+        </div>
+        <div class="t1-hero-grid">
+          <div>
+            <p class="t1-eyebrow">✦ Meet Patel · Available for Work</p>
+            <h2 class="t1-h1">Digital Systems That<br><em>Rank</em>, <em>Convert</em> &amp; <em>Scale.</em></h2>
+            <p class="t1-lede">Data analyst &amp; web developer with international education across India, the USA &amp; Canada, specializing in analytics, machine learning &amp; front-end development.</p>
+            <div class="t1-btn-row">
+              <div class="t1-btn-p">View My Projects →</div>
+              <div class="t1-btn-o">Book an Appointment</div>
+            </div>
+          </div>
+          <div class="t1-image-mock">
+            <svg class="mock-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Hero image / screenshot</span>
+          </div>
+        </div>
+      </div>
+      <div class="t1-strip">
+        <span>WordPress</span><span class="dot"></span><span>Python</span><span class="dot"></span><span>Power BI</span><span class="dot"></span><span>Azure</span><span class="dot"></span><span>SQL</span><span class="dot"></span><span>SEO</span>
+      </div>
+    </div>
+
+    <div class="annotation-row">
+      <span class="annotation t1-ann"><span class="dot"></span>Ink black · #09090B</span>
+      <span class="annotation t1-ann"><span class="dot" style="background:#FAFAFA;border:1px solid #E4E4E7;"></span>Cloud mist · #FAFAFA</span>
+      <span class="annotation t1-ann"><span class="dot" style="background:#71717A;"></span>Dusk gray · #71717A</span>
+      <span class="annotation t1-ann"><span class="dot" style="background:transparent;border:1px solid #09090B;"></span>Geist Display + Geist Mono</span>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ================================================ -->
+  <!-- THEME 2 · DARK STUDIO                            -->
+  <!-- ================================================ -->
+  <div class="theme-block">
+    <div class="theme-meta">
+      <div>
+        <p class="theme-label">Theme 02 · Alternative Direction</p>
+        <h2 class="theme-name">Dark Studio</h2>
+        <p class="theme-desc">
+          Near-black surface (#0C0C0C) with a film-grain texture overlay. Photography lives in a framed card
+          with a subtle scan-line effect. Sharp contrast, technical tone. Suits developers, data scientists,
+          and anyone whose work feels closer to engineering than design.
+        </p>
+      </div>
+      <div>
+        <p class="theme-label" style="margin-bottom: 10px;">Palette</p>
+        <div class="theme-swatches">
+          <div class="swatch" style="background: #0C0C0C; border-color: rgba(255,255,255,0.1);"></div>
+          <div class="swatch" style="background: #1A1A1A; border-color: rgba(255,255,255,0.1);"></div>
+          <div class="swatch" style="background: #333333; border-color: rgba(255,255,255,0.1);"></div>
+          <div class="swatch" style="background: #888888;"></div>
+          <div class="swatch" style="background: #F8F8F8;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-preview t2">
+      <div class="win-chrome">
+        <span class="win-dot r"></span>
+        <span class="win-dot y"></span>
+        <span class="win-dot g"></span>
+        <div class="win-url">meetpatel.dev</div>
+      </div>
+      <div class="t2-hero">
+        <div class="t2-nav">
+          <div>
+            <div class="t2-brand">Meet Patel</div>
+            <div class="t2-brand-sub">web dev · data analyst · azure certified</div>
+          </div>
+          <div class="t2-links">
+            <span>About</span><span>Projects</span><span>Blog</span><span>Services</span>
+          </div>
+          <div class="t2-cta">Let's Talk</div>
+        </div>
+
+        <!-- floating image placeholder -->
+        <div class="t2-image-area">
+          <div class="t2-image-inner">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Your photo</span>
+          </div>
+        </div>
+
+        <div class="t2-content">
+          <p class="t2-eyebrow">Meet Patel · Available for Work</p>
+          <h2 class="t2-h1">Digital Systems That<br><em>Rank</em>, <em>Convert</em><br>&amp; Scale.</h2>
+          <p class="t2-lede">Data analyst &amp; web developer. Azure certified. NBCC graduating April 2026. Building ML pipelines, Power BI dashboards, and AI automation since 2018.</p>
+          <div class="t2-btn-row">
+            <div class="t2-btn-p">View My Projects →</div>
+            <div class="t2-btn-o">Book an Appointment</div>
+          </div>
+          <div class="t2-pills">
+            <span class="t2-pill">Azure · AZ-900</span>
+            <span class="t2-pill">Python</span>
+            <span class="t2-pill">Power BI</span>
+            <span class="t2-pill">7+ Years</span>
+          </div>
+        </div>
+      </div>
+      <div class="t2-strip">
+        <span>WordPress</span><span class="dot"></span><span>Python</span><span class="dot"></span><span>Power BI</span><span class="dot"></span><span>Azure</span><span class="dot"></span><span>SQL</span><span class="dot"></span><span>SEO</span>
+      </div>
+    </div>
+
+    <div class="annotation-row">
+      <span class="annotation t2-ann"><span class="dot" style="background:#0C0C0C;border:1px solid #333;"></span>Studio black · #0C0C0C</span>
+      <span class="annotation t2-ann"><span class="dot" style="background:#F8F8F8;border:1px solid #ddd;"></span>Off-white · #F8F8F8</span>
+      <span class="annotation t2-ann"><span class="dot" style="background:#888;"></span>Mid gray · #888</span>
+      <span class="annotation t2-ann"><span class="dot" style="background:transparent;border:1px solid #09090B;"></span>Geist Light/Mono on dark</span>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ================================================ -->
+  <!-- THEME 3 · WARM EDITORIAL                         -->
+  <!-- ================================================ -->
+  <div class="theme-block">
+    <div class="theme-meta">
+      <div>
+        <p class="theme-label">Theme 03 · Bold Alternative</p>
+        <h2 class="theme-name">Warm Editorial</h2>
+        <p class="theme-desc">
+          A full-bleed hero photograph sits behind the navigation, fading into a warm cream surface.
+          Serif display type (DM Serif Display) gives it an editorial, magazine feel. Warm earth tones
+          throughout. Works best with a strong, well-lit portrait or location photograph.
+        </p>
+      </div>
+      <div>
+        <p class="theme-label" style="margin-bottom: 10px;">Palette</p>
+        <div class="theme-swatches">
+          <div class="swatch" style="background: #FBF8F3; border-color: #D4C9BA;"></div>
+          <div class="swatch" style="background: #F5F0E8; border-color: #D4C9BA;"></div>
+          <div class="swatch" style="background: #D4C9BA;"></div>
+          <div class="swatch" style="background: #6B4C38;"></div>
+          <div class="swatch" style="background: #2C2416;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-preview t3">
+      <div class="win-chrome">
+        <span class="win-dot r"></span>
+        <span class="win-dot y"></span>
+        <span class="win-dot g"></span>
+        <div class="win-url" style="background: #F0EBE1; color: #9C8F7D;">meetpatel.dev</div>
+      </div>
+      <!-- full-bleed image strip -->
+      <div class="t3-image-strip">
+        <div class="t3-overlay"></div>
+        <span class="t3-photo-label">Hero photograph · 1920 × 1080 recommended</span>
+        <div class="t3-nav-overlay">
+          <div>
+            <div class="t3-brand">Meet Patel</div>
+            <div class="t3-brand-sub">web dev · data analyst · azure certified</div>
+          </div>
+          <div class="t3-links">
+            <span>About</span><span>Projects</span><span>Blog</span><span>Services</span>
+          </div>
+          <div class="t3-cta">Let's Talk</div>
+        </div>
+      </div>
+      <!-- content below image -->
+      <div class="t3-below">
+        <p class="t3-eyebrow">✦ Meet Patel · Available for Work</p>
+        <h2 class="t3-h1">Digital Systems That<br><em>Rank</em>, Convert &amp; Scale.</h2>
+        <p class="t3-lede">Data analyst &amp; web developer with international education across India, the USA &amp; Canada, specializing in analytics, machine learning &amp; front-end development.</p>
+        <div class="t3-btn-row">
+          <div class="t3-btn-p">View My Projects →</div>
+          <div class="t3-btn-o">Book an Appointment</div>
+        </div>
+      </div>
+      <div class="t3-strip">
+        <span>WordPress</span><span class="dot"></span><span>Python</span><span class="dot"></span><span>Power BI</span><span class="dot"></span><span>Azure</span><span class="dot"></span><span>SQL</span><span class="dot"></span><span>SEO</span>
+      </div>
+    </div>
+
+    <div class="annotation-row">
+      <span class="annotation t3-ann"><span class="dot" style="background:#2C2416;"></span>Deep walnut · #2C2416</span>
+      <span class="annotation t3-ann"><span class="dot" style="background:#FBF8F3;border:1px solid #D4C9BA;"></span>Warm cream · #FBF8F3</span>
+      <span class="annotation t3-ann"><span class="dot" style="background:#6B4C38;"></span>Terracotta · #6B4C38</span>
+      <span class="annotation t3-ann"><span class="dot" style="background:transparent;border:1px solid #09090B;"></span>DM Serif Display + Geist Mono</span>
+      <span class="annotation t3-ann"><span class="dot" style="background:transparent; border:1px dashed #9C8F7D;"></span>Requires a full-bleed portrait photo</span>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- CTA -->
+  <div class="cta-row-bottom">
+    <p>Pick a direction and I'll apply it to the full portfolio, including the About, Contact, and project pages.</p>
+    <a href="Portfolio Animated v2.html">Back to Portfolio →</a>
+  </div>
+
+</div>
+
+</body>
+</html>
