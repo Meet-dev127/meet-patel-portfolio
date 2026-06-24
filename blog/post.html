@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-root" content="../" />
+  <title id="page-title">Loading… | Meet Patel</title>
+  <meta id="meta-desc"        name="description"              content="" />
+  <meta id="meta-canonical"   name="canonical"                content="" />
+  <meta id="og-title"         property="og:title"             content="" />
+  <meta id="og-desc"          property="og:description"       content="" />
+  <meta id="og-type"          property="og:type"              content="article" />
+  <meta id="og-url"           property="og:url"               content="" />
+  <meta id="article-tag"      property="article:tag"          content="" />
+  <meta name="author" content="Meet Patel" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="post.css" />
+  <style>
+    .post-loading { display: flex; align-items: center; justify-content: center; min-height: 60vh; flex-direction: column; gap: 16px; color: var(--cloud-slate); }
+    .post-loading .spinner { width: 32px; height: 32px; border: 3px solid var(--cloud-mist); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .post-404 { text-align: center; padding: 80px 24px; }
+    .post-404 h1 { font-size: clamp(28px, 5vw, 40px); margin-bottom: 16px; }
+    .post-404 p  { color: var(--cloud-slate); margin-bottom: 32px; }
+    .post-body-wrap { display: none; }
+  </style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<!-- Loading state -->
+<div class="post-loading" id="postLoading">
+  <div class="spinner"></div>
+  <span>Loading post…</span>
+</div>
+
+<!-- 404 state -->
+<div class="post-404" id="post404" style="display:none">
+  <h1>Post not found</h1>
+  <p>This post may have moved or hasn't been published yet.</p>
+  <a href="index.html" class="btn btn-primary">Back to Blog</a>
+</div>
+
+<!-- Post content (hidden until loaded) -->
+<div class="post-body-wrap" id="postWrap">
+<main>
+
+  <header class="post-hero" data-screen-label="Post hero">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="sep">·</span>
+        <a href="index.html">Blog</a>
+        <span class="sep">·</span>
+        <span id="crumb-cat" aria-current="page"></span>
+      </nav>
+
+      <span class="badge" id="post-badge"></span>
+      <h1 id="post-title"></h1>
+      <p class="lede" id="post-lede"></p>
+
+      <div class="post-author-row">
+        <span class="post-av" aria-hidden="true">MP</span>
+        <div class="post-author-stack">
+          <span class="post-author-name">Meet Patel</span>
+          <span class="post-author-creds">AZ-305 · Data Analyst · Web Developer</span>
+        </div>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item" id="post-date">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="post-date-text"></span>
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="post-readmin"></span> min read
+        </span>
+        <span class="post-meta-sep" aria-hidden="true"></span>
+        <span class="post-meta-item" id="post-words-meta"></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-layout">
+    <div class="container">
+      <div class="post-cols">
+        <article class="post-main" data-screen-label="Post content" id="post-article">
+          <div class="prose" id="post-prose"></div>
+        </article>
+
+        <aside class="post-sidebar" aria-label="Post sidebar">
+          <div class="toc-card" id="toc-card" style="display:none">
+            <p class="toc-label">In this post</p>
+            <nav id="toc-nav" aria-label="Table of contents"></nav>
+          </div>
+
+          <div class="sidebar-cta">
+            <p class="sidebar-cta-label">Work with Meet</p>
+            <p class="sidebar-cta-body">Web platforms, Power BI dashboards, Azure architecture, AI automation. Based in Saint John, NB.</p>
+            <a href="../contact.html" class="btn btn-primary" style="width:100%;justify-content:center">Get in touch</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="../partials.js"></script>
+<script src="../scroll-fx.js"></script>
+<script>
+(async function () {
+  const API = "https://meetpatel-api.azurewebsites.net/api";
+
+  // Resolve slug from URL: /blog/my-slug or ?slug=my-slug
+  function getSlug() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("slug")) return params.get("slug");
+    const parts = window.location.pathname.replace(/\/$/, "").split("/");
+    const last  = parts[parts.length - 1];
+    return (last && last !== "post.html" && last !== "blog") ? last : null;
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    try {
+      return new Date(iso).toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric" });
+    } catch { return iso.slice(0, 10); }
+  }
+
+  function buildToc(prose) {
+    const headings = prose.querySelectorAll("h2, h3");
+    if (headings.length < 2) return;
+    const nav  = document.getElementById("toc-nav");
+    const card = document.getElementById("toc-card");
+    headings.forEach((h, i) => {
+      if (!h.id) h.id = "h-" + i;
+      const a = document.createElement("a");
+      a.href = "#" + h.id;
+      a.textContent = h.textContent;
+      a.className = h.tagName === "H3" ? "toc-sub" : "";
+      nav.appendChild(a);
+    });
+    card.style.display = "";
+  }
+
+  const slug = getSlug();
+  const loading = document.getElementById("postLoading");
+  const wrap    = document.getElementById("postWrap");
+  const err404  = document.getElementById("post404");
+
+  if (!slug) { loading.style.display = "none"; err404.style.display = ""; return; }
+
+  let post;
+  try {
+    const res = await fetch(API + "/posts/" + slug);
+    if (!res.ok) throw new Error("not found");
+    post = await res.json();
+  } catch {
+    loading.style.display = "none";
+    err404.style.display  = "";
+    return;
+  }
+
+  // Populate meta tags
+  document.title = (post.metaTitle || post.title) + " | Meet Patel";
+  document.getElementById("meta-desc").content       = post.metaDesc    || post.excerpt || "";
+  document.getElementById("og-title").content        = post.metaTitle   || post.title;
+  document.getElementById("og-desc").content         = post.metaDesc    || post.excerpt || "";
+  document.getElementById("og-url").content          = window.location.href;
+  document.getElementById("article-tag").content     = post.cat         || "";
+
+  // JSON-LD
+  const ld = document.createElement("script");
+  ld.type = "application/ld+json";
+  ld.text = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline":       post.metaTitle || post.title,
+    "url":            window.location.href,
+    "datePublished":  post.updatedAt || new Date().toISOString(),
+    "description":    post.metaDesc  || post.excerpt || "",
+    "keywords":       [post.keyword, post.cat].filter(Boolean),
+    "timeRequired":   post.readMin ? "PT" + post.readMin + "M" : undefined,
+    "wordCount":      post.words || undefined,
+    "author": {
+      "@type": "Person", "name": "Meet Patel", "url": "https://meetpatel.dev/"
+    },
+    "publisher": { "@type": "Person", "name": "Meet Patel" }
+  });
+  document.head.appendChild(ld);
+
+  // Populate UI
+  document.getElementById("crumb-cat").textContent   = post.cat || post.category || "Blog";
+  document.getElementById("post-badge").textContent  = post.cat ? post.cat + " · " + (post.keyword || "") : "";
+  document.getElementById("post-badge").className    = "badge " + (post.category || "");
+  document.getElementById("post-title").textContent  = post.title;
+  document.getElementById("post-lede").textContent   = post.excerpt || "";
+  document.getElementById("post-date-text").textContent = fmtDate(post.updatedAt);
+  document.getElementById("post-readmin").textContent   = post.readMin || "5";
+  document.getElementById("post-words-meta").textContent = post.words ? "~" + post.words.toLocaleString() + " words" : "";
+
+  // Render body (stored as markdown-ish HTML or plain text)
+  const prose = document.getElementById("post-prose");
+  if (post.body) {
+    prose.innerHTML = post.body;
+  } else {
+    prose.innerHTML = "<p class='post-placeholder'>Full post content coming soon. " +
+      "<a href='../contact.html'>Get notified</a> when it publishes.</p>";
+  }
+
+  buildToc(prose);
+
+  loading.style.display    = "none";
+  wrap.style.display       = "";
+})();
+</script>
+</body>
+</html>

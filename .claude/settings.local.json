@@ -35,7 +35,13 @@
       "Bash(npm install *)",
       "Bash(func azure *)",
       "Bash(curl -s -X POST https://meetpatel-api.azurewebsites.net/api/seed -H 'x-seed-key: ab1ba716a488935edeebee5fa80b9749' -H 'Content-Type: application/json')",
-      "Bash(python3 -m json.tool)"
+      "Bash(python3 -m json.tool)",
+      "Bash(vercel login *)",
+      "Bash(vercel --prod --yes)",
+      "Bash(vercel --prod --yes --name meet-patel-portfolio)",
+      "Bash(vercel ls *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://meet-patel-portfolio-omega.vercel.app/\")",
+      "Bash(node *)"
     ]
   }
 }

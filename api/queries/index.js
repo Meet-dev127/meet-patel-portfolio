@@ -1,6 +1,7 @@
 "use strict";
 const { requireAuth, cors } = require("../_shared/auth");
 const { listAll, getOne, upsert } = require("../_shared/db");
+const { draftReply } = require("../_shared/groq");
 
 const TABLE = "Queries";
 const PK    = "query";
@@ -14,12 +15,13 @@ module.exports = async function (context, req) {
     return;
   }
 
-  // Public: accept new contact submissions
+  // Public: accept new contact form submissions
   if (req.method === "POST" && !id) {
     try {
-      const q = req.body || {};
+      const q      = req.body || {};
       const rowKey = "q-" + Date.now();
-      await upsert(TABLE, {
+
+      const entry = {
         partitionKey: PK,
         rowKey,
         name:      q.name      || "",
@@ -27,12 +29,19 @@ module.exports = async function (context, req) {
         company:   q.company   || "",
         subject:   q.subject   || "",
         body:      q.body      || q.message || "",
-        tag:       "Lead",
+        tag:       q.tag       || "Lead",
         budget:    q.budget    || "",
         unread:    true,
         time:      "just now",
         createdAt: new Date().toISOString(),
-      });
+        draftReply: "",
+      };
+
+      // Generate auto-draft reply (non-blocking: don't fail if Groq is down)
+      const draft = await draftReply(entry);
+      if (draft) entry.draftReply = draft;
+
+      await upsert(TABLE, entry);
       context.res = { status: 201, headers: h, body: { ok: true } };
     } catch (e) {
       context.res = { status: 500, headers: h, body: { error: e.message } };
@@ -40,13 +49,15 @@ module.exports = async function (context, req) {
     return;
   }
 
-  // All other methods require auth
+  // All other methods require admin auth
   if (!requireAuth(context, req)) return;
 
   try {
     if (req.method === "GET" && !id) {
-      const rows = await listAll(TABLE);
-      const queries = rows.map(rowToQuery).sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+      const rows    = await listAll(TABLE);
+      const queries = rows
+        .map(rowToQuery)
+        .sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
       context.res = { status: 200, headers: h, body: queries };
 
     } else if (req.method === "GET" && id) {
@@ -55,9 +66,14 @@ module.exports = async function (context, req) {
 
     } else if (req.method === "PUT" && id) {
       const existing = await getOne(TABLE, PK, id).catch(() => ({}));
-      const merged = { ...existing, ...req.body };
+      const merged   = { ...existing, ...req.body };
       await upsert(TABLE, { partitionKey: PK, rowKey: id, ...merged });
       context.res = { status: 200, headers: h, body: rowToQuery({ partitionKey: PK, rowKey: id, ...merged }) };
+
+    } else if (req.method === "DELETE" && id) {
+      const { remove } = require("../_shared/db");
+      await remove(TABLE, PK, id);
+      context.res = { status: 204, headers: h, body: "" };
 
     } else {
       context.res = { status: 405, headers: h, body: { error: "Method not allowed" } };
@@ -69,16 +85,17 @@ module.exports = async function (context, req) {
 
 function rowToQuery(r) {
   return {
-    id:        r.rowKey,
-    name:      r.name,
-    email:     r.email,
-    company:   r.company,
-    subject:   r.subject,
-    body:      r.body,
-    tag:       r.tag,
-    budget:    r.budget,
-    unread:    r.unread,
-    time:      r.time,
-    createdAt: r.createdAt,
+    id:         r.rowKey,
+    name:       r.name,
+    email:      r.email,
+    company:    r.company,
+    subject:    r.subject,
+    body:       r.body,
+    tag:        r.tag,
+    budget:     r.budget,
+    unread:     r.unread,
+    time:       r.time,
+    createdAt:  r.createdAt,
+    draftReply: r.draftReply || "",
   };
 }

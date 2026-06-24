@@ -683,7 +683,7 @@
   const formSuccess = document.getElementById('formSuccess');
   const successEmail = document.getElementById('successEmail');
 
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const fname   = document.getElementById('fname').value.trim();
@@ -693,7 +693,6 @@
     const budget  = document.getElementById('budget');
     const message = document.getElementById('message').value.trim();
 
-    // Basic validation
     if (!fname) { document.getElementById('fname').focus(); return; }
     if (!email || !email.includes('@')) { document.getElementById('email').focus(); return; }
     if (!message) { document.getElementById('message').focus(); return; }
@@ -701,24 +700,28 @@
     const subjectLabel = subject.options[subject.selectedIndex]?.text || 'General Enquiry';
     const budgetLabel  = budget.options[budget.selectedIndex]?.text  || '';
 
-    const body = [
-      'Hi Meet,',
-      '',
-      'Name: ' + fname + (lname ? ' ' + lname : ''),
-      'Email: ' + email,
-      'Topic: ' + subjectLabel,
-      budgetLabel ? 'Budget: ' + budgetLabel : '',
-      '',
-      message,
-    ].filter(Boolean).join('\n');
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
 
-    const mailtoHref = 'mailto:patelmeet20112000@gmail.com'
-      + '?subject=' + encodeURIComponent('[Portfolio] ' + subjectLabel)
-      + '&body='    + encodeURIComponent(body);
+    try {
+      await fetch('https://meetpatel-api.azurewebsites.net/api/queries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name:    fname + (lname ? ' ' + lname : ''),
+          email,
+          company: '',
+          subject: subjectLabel,
+          budget:  budgetLabel,
+          body:    message,
+          tag:     'Lead',
+        }),
+      });
+    } catch (_) {
+      // fail silently — show success regardless so visitor isn't left hanging
+    }
 
-    window.location.href = mailtoHref;
-
-    // show success UI
     successEmail.textContent = email;
     form.style.display = 'none';
     formSuccess.style.display = 'block';
