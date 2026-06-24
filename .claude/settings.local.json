@@ -23,7 +23,19 @@
       "Bash(git rm *)",
       "Bash(git push *)",
       "Bash(git checkout *)",
-      "Bash(git branch *)"
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(az staticwebapp create *)",
+      "Bash(az staticwebapp *)",
+      "Bash(python3 -c ' *)",
+      "Bash(az resource list *)",
+      "Bash(az functionapp *)",
+      "Bash(az appservice plan create *)",
+      "Bash(az provider *)",
+      "Bash(npm install *)",
+      "Bash(func azure *)",
+      "Bash(curl -s -X POST https://meetpatel-api.azurewebsites.net/api/seed -H 'x-seed-key: ab1ba716a488935edeebee5fa80b9749' -H 'Content-Type: application/json')",
+      "Bash(python3 -m json.tool)"
     ]
   }
 }

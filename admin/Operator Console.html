@@ -969,8 +969,8 @@ a { color: inherit; text-decoration: none; }
     { id: "published", name: "Published",   tag: "auto",   icon: "globe",    desc: "Live on the public site." },
   ];
 
-  // ---- Posts moving through (and out of) the pipeline ----
-  const POSTS = [
+  // ---- Trend radar (static seed; real data comes from API) ----
+  const POSTS_PLACEHOLDER = [
     {
       id: "p-azure-cost",
       title: "How I Cut an Azure Bill 38% Without Touching a Single App",
@@ -1136,8 +1136,7 @@ a { color: inherit; text-decoration: none; }
     { id: "t6", title: "ATS resume keywords for tech 2026", source: "LinkedIn · spike", volume: "22.6K", growth: "+39%", difficulty: 46, relevance: 5, why: "Your ATS optimizer post is already ranking #2, extend the cluster.", queued: false, cat: "AI" },
   ];
 
-  // ---- Query inbox: contact form submissions ----
-  const QUERIES = [
+  const QUERIES_PLACEHOLDER = [
     { id: "q1", name: "Sarah Whitman", email: "s.whitman@northbridge.ca", company: "Northbridge Analytics", subject: "Power BI embedded for a 40-person team", time: "12m", unread: true, tag: "Lead", budget: "$8–12K", body: "Hi Meet, found your Power BI dashboard write-up and it's exactly the approach we need. We have ~40 staff and can't justify Pro per-user. Could you scope a multi-tenant embedded setup with row-level security? Timeline is Q3. What would discovery look like?" },
     { id: "q2", name: "Devon Park", email: "devon@parklabs.io", company: "Park Labs", subject: "Azure cost audit: quick question", time: "1h", unread: true, tag: "Lead", budget: "TBD", body: "Read your Azure cost piece. Our monthly spend jumped 60% after a migration. Do you do one-off audits, or is it retainer only? Roughly what do idle-resource audits run?" },
     { id: "q3", name: "Aleksandra Nowak", email: "a.nowak@gmail.com", company: "·", subject: "NBCC capstone collaboration?", time: "5h", unread: true, tag: "Networking", budget: "·", body: "Hi! I'm also at NBCC (analytics, graduating Dec 2026). Loved your SBA 504 project. Would you be open to a quick coffee chat about ML project structure? No agenda, just learning." },
@@ -1146,8 +1145,7 @@ a { color: inherit; text-decoration: none; }
     { id: "q6", name: "Priya Sharma", email: "priya.s@datco.in", company: "DatCo", subject: "Telecom churn methodology", time: "3d", unread: false, tag: "Networking", budget: "·", body: "Your churn analysis across Airtel/BSNL/Jio was thorough. Which features ended up most predictive? Working on something similar and would value a pointer." },
   ];
 
-  // ---- Projects manager (the 12+ roadmap) ----
-  const PROJECTS = [
+  const PROJECTS_PLACEHOLDER = [
     { id: 1,  num: "01", title: "SBA 504 Loan ML Analysis", status: "live", statusLabel: "In progress", cat: "AI", desc: "500k+ federal loan records · predicts outcomes & regional impact", stack: ["Python", "Scikit-Learn", "Power BI"], visible: true },
     { id: 2,  num: "02", title: "Airbnb Pricing & Occupancy Dashboard", status: "live", statusLabel: "Shipped", cat: "Power BI", desc: "Cleaned public dataset, BI for hosts", stack: ["Python", "Pandas", "Power BI"], visible: true },
     { id: 3,  num: "03", title: "Telecom Customer Churn Analysis", status: "live", statusLabel: "Shipped", cat: "AI", desc: "Airtel, BSNL, Vodafone, Jio segmentation", stack: ["Python", "Matplotlib", "EDA"], visible: true },
@@ -1194,8 +1192,7 @@ a { color: inherit; text-decoration: none; }
     ]},
   ];
 
-  // ---- Media library ----
-  const MEDIA = [
+  const MEDIA_PLACEHOLDER = [
     { id: "m1", name: "azure-cost-hero.png", kind: "needed", post: "Azure Cost", size: "·", dim: "1600×900", cat: "cloud" },
     { id: "m2", name: "dax-patterns-hero.png", kind: "needed", post: "DAX Patterns", size: "·", dim: "1600×900", cat: "bi" },
     { id: "m3", name: "podcast-platform-og.png", kind: "image", post: "Podcast SEO", size: "284 KB", dim: "1200×630", cat: "seo" },
@@ -1206,8 +1203,7 @@ a { color: inherit; text-decoration: none; }
     { id: "m8", name: "meet-headshot.png", kind: "image", post: "Brand", size: "340 KB", dim: "800×800", cat: "seo" },
   ];
 
-  // ---- Activity feed (the automation log) ----
-  const ACTIVITY = [
+  const ACTIVITY_PLACEHOLDER = [
     { ic: "globe",   color: "green",  tx: "Auto-published <b>Power BI Financial Dashboard</b> after your approval", tm: "3d" },
     { ic: "eye",     color: "warn",   tx: "<b>Azure Cost</b> moved to <b>Review</b>, needs image + publish", tm: "4m" },
     { ic: "gauge",   color: "accent", tx: "SEO pass on <b>RAG Pipelines</b> · score 64, 3 fixes suggested", tm: "just now" },
@@ -1230,6 +1226,9 @@ a { color: inherit; text-decoration: none; }
     ],
   };
 
+  // Azure Functions backend URL
+  var API_BASE = "https://meetpatel-api.azurewebsites.net/api";
+
   // Fetch live data from the Azure Functions API
   async function loadAdminData() {
     const token = sessionStorage.getItem("mp-jwt");
@@ -1237,10 +1236,10 @@ a { color: inherit; text-decoration: none; }
     const h = { "Authorization": "Bearer " + token };
     try {
       const [posts, projects, queries, media] = await Promise.all([
-        fetch("/api/posts",    { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
-        fetch("/api/projects", { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
-        fetch("/api/queries",  { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
-        fetch("/api/media",    { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch(API_BASE + "/posts",    { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch(API_BASE + "/projects", { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch(API_BASE + "/queries",  { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
+        fetch(API_BASE + "/media",    { headers: h }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; }),
       ]);
       window.ADMIN.POSTS    = posts;
       window.ADMIN.PROJECTS = projects;
@@ -1772,7 +1771,7 @@ a { color: inherit; text-decoration: none; }
       var result = await _login.call(window.Auth, email, pw);
       if (result && result.ok) {
         try {
-          var r = await fetch("/api/login", {
+          var r = await fetch("https://meetpatel-api.azurewebsites.net/api/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, password: pw }),
