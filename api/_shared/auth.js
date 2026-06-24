@@ -1,9 +1,13 @@
 "use strict";
 const jwt = require("jsonwebtoken");
 
-const SECRET        = process.env.JWT_SECRET   || "dev-secret-change-in-prod";
-const ADMIN_EMAIL   = process.env.ADMIN_EMAIL  || "patelmeet20112000@gmail.com";
-const ADMIN_PW      = process.env.ADMIN_PW     || "admin1234";
+const SECRET      = process.env.JWT_SECRET;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PW    = process.env.ADMIN_PW;
+
+if (!SECRET || !ADMIN_EMAIL || !ADMIN_PW) {
+  throw new Error("Missing required env vars: JWT_SECRET, ADMIN_EMAIL, ADMIN_PW");
+}
 
 function createToken(email, name) {
   return jwt.sign({ email, name }, SECRET, { expiresIn: "12h" });
